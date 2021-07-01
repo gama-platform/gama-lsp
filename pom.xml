@@ -15,7 +15,7 @@
 	<modules>
 		<module>gama.core.lang</module>
 		<module>gama.core.lang.ide</module>
-		<module>gama.core.lang.tests</module>
+		<!-- <module>gama.core.lang.tests</module> -->
 	</modules>
 	<dependencyManagement>
 		<dependencies>
