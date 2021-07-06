@@ -27,7 +27,7 @@ public class GamaField extends GamaFloatMatrix implements IField {
 	GamaPoint worldDimensions = null;
 	GamaPoint cellDimensions = null;
 	double epsilon, noDataValue;
-	IList<IField> bands = GamaListFactory.create(Types.FIELD);
+	IList<IField> bands = null;
 
 	public GamaField(final IScope scope, final IFieldMatrixProvider provider) {
 		this(scope, provider.getCols(scope), provider.getRows(scope), provider.getFieldData(scope),

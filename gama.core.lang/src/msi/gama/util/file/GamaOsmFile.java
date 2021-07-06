@@ -76,7 +76,6 @@ public class GamaOsmFile extends GamaGisFile {
 			this.itemNumber = 0;
 			this.height = 0;
 			this.width = 0;
-			this.attributes = null;
 			this.crs = null;
 		}
 
@@ -88,7 +87,6 @@ public class GamaOsmFile extends GamaGisFile {
 			this.itemNumber = 0;
 			this.height = 0;
 			this.width = 0;
-			this.attributes = null;
 			this.crs = null;
 		}
 

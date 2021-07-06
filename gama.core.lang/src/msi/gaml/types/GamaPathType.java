@@ -60,26 +60,6 @@ public class GamaPathType extends GamaType<IPath> {
 	}
 
 	public static IPath staticCast(final IScope scope, final Object obj, final Object param, final boolean copy) {
-		if (obj instanceof IPath) { return (IPath) obj; }
-		if (obj instanceof IShape) { 
-			IShape shape = ((IShape) obj);
-			return PathFactory.newInstance(scope, (IList<IShape>) shape.getPoints(), false);
-		}
-		 
-		if (obj instanceof List) {
-			// List<ILocation> list = new GamaList();
-			final List<IShape> list = GamaListFactory.create(Types.GEOMETRY);
-			boolean isEdges = true;
-
-			for (final Object p : (List) obj) {
-				list.add(Cast.asPoint(scope, p));
-				if (isEdges && !(p instanceof IShape && ((IShape) p).isLine())) {
-					isEdges = false;
-				}
-			}
-			// return new GamaPath(scope.getTopology(), list);
-			return PathFactory.newInstance(scope, isEdges ? (IList<IShape>) obj : (IList<IShape>) list, isEdges);
-		}
 		return null;
 	}
 

@@ -30,6 +30,10 @@ public abstract class GamaFileMetaData implements IGamaFileMetaData {
 	public long fileModificationStamp;
 	boolean hasFailed;
 
+	public GamaFileMetaData() {
+		this.fileModificationStamp = 0;
+	}
+
 	public GamaFileMetaData(final long stamp) {
 		this.fileModificationStamp = stamp;
 	}

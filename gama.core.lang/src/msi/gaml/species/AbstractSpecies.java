@@ -486,15 +486,13 @@ public abstract class AbstractSpecies extends Symbol implements ISpecies {
 	@Override
 	public IMatrix<? extends IAgent> matrixValue(final IScope scope, final IType contentsType, final boolean copy)
 			throws GamaRuntimeException {
-		final IPopulation<? extends IAgent> pop = getPopulation(scope);
-		return pop == null ? null : pop.matrixValue(scope, contentsType, copy);
+		return null;
 	}
 
 	@Override
 	public IMatrix<? extends IAgent> matrixValue(final IScope scope, final IType contentsType,
 			final ILocation preferredSize, final boolean copy) throws GamaRuntimeException {
-		final IPopulation<? extends IAgent> pop = getPopulation(scope);
-		return pop == null ? null : pop.matrixValue(scope, contentsType, preferredSize, copy);
+		return null;
 	}
 
 	@Override

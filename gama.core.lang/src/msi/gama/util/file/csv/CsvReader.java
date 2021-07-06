@@ -518,41 +518,7 @@ public class CsvReader {
 		}
 
 		private String[] processFirstLine(final String line, final String CSVsep) {
-			if (CSVsep != null && !CSVsep.isEmpty()) {
-				delimiter = CSVsep.charAt(0);
-			} else {
-				String[] s = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, ",");
-				if (s.length == 1) {
-					if (s[0].indexOf(' ') == -1 && s[0].indexOf(';') == -1 && s[0].indexOf(Letters.TAB) == -1) {
-						// We are likely dealing with a unicolum file
-						delimiter = Letters.COMMA;
-					} else {
-						// there should be another delimiter
-						s = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, ";");
-						if (s.length == 1) {
-							// Try with tab
-							s = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, "" + Letters.TAB);
-							if (s.length == 1) {
-								s = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, "" + Letters.SPACE);
-								if (s.length == 1) {
-									delimiter = Letters.PIPE;
-								} else {
-									delimiter = Letters.SPACE;
-								}
-							} else {
-								delimiter = Letters.TAB;
-							}
-						} else {
-							delimiter = ';';
-						}
-					}
-				} else {
-					delimiter = Letters.COMMA;
-				}
-			}
-			final String[] s2 = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, delimiter.toString());
-			firstLineType = processRecord(s2);
-			return s2;
+			return null;
 		}
 
 		private class StringAnalysis {
@@ -1354,7 +1320,7 @@ public class CsvReader {
 			isQualified = qualifiedHolder;
 		}
 
-		values[columnsCount] = StringUtils.trimToEmpty(currentValue);
+		values[columnsCount] = null;
 
 		isQualified[columnsCount] = startedWithQualifier;
 
