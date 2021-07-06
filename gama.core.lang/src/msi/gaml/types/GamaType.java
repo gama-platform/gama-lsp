@@ -13,8 +13,6 @@ package msi.gaml.types;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import msi.gama.common.interfaces.IValue;
 import msi.gama.precompiler.GamlAnnotations.doc;
 import msi.gama.precompiler.GamlAnnotations.type;
@@ -230,7 +228,9 @@ public abstract class GamaType<Support> implements IType<Support> {
 
 	@Override
 	public String asPattern() {
-		final boolean vowel = StringUtils.startsWithAny(name, vowels);
+//		import org.apache.commons.lang.StringUtils;
+//		gaml.additions.corefinal boolean vowel = StringUtils.startsWithAny(name, vowels);
+		final boolean vowel = true;
 		return "${" + (vowel ? "an_" : "a_") + name + "}";
 	}
 

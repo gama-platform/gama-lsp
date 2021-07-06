@@ -27,11 +27,6 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.cycle.CycleDetector;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.traverse.TopologicalOrderIterator;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
@@ -317,14 +312,14 @@ public abstract class TypeDescription extends SymbolDescription {
 	public Collection<String> getOrderedAttributeNames(final Set<String> facetsToConsider) {
 		// AD Revised in Aug 2019 for Issue #2869: keep constraints between superspecies and subspecies
 		
-		final DefaultDirectedGraph<String, Object> dependencies = new DefaultDirectedGraph<>(Object.class);
+//		final DefaultDirectedGraph<String, Object> dependencies = new DefaultDirectedGraph<>(Object.class);
 		final Map<String, VariableDescription> all = new HashMap<>();
 		this.visitAllAttributes((d) -> {
 			all.put(d.getName(), (VariableDescription) d);
 			return true;
 		});
 		
-		Graphs.addAllVertices(dependencies, all.keySet());
+//		Graphs.addAllVertices(dependencies, all.keySet());
 		final VariableDescription shape = getAttribute(SHAPE);
 		final Collection<VariableDescription> shapeDependencies =
 				shape == null ? Collections.EMPTY_LIST : shape.getDependencies(facetsToConsider, false, true);
@@ -333,14 +328,14 @@ public abstract class TypeDescription extends SymbolDescription {
 			for (final VariableDescription newVar : var.getDependencies(facetsToConsider, false, true)) {
 				final String other = newVar.getName();
 				// AD Revision in April 2019 for Issue #2624: prevent cycles when building the graph
-				if (!dependencies.containsEdge(an, other)) {
-					
-					dependencies.addEdge(other, an);
-				}
+//				if (!dependencies.containsEdge(an, other)) {
+//					
+//					dependencies.addEdge(other, an);
+//				}
 			}
 			// Adding a constraint between the shape of the macrospecies and the populations of microspecies
 			if (var.isSyntheticSpeciesContainer() && !shapeDependencies.contains(var)) {
-				dependencies.addEdge(SHAPE, an);
+//				dependencies.addEdge(SHAPE, an);
 			}
 		});
 		
@@ -348,37 +343,37 @@ public abstract class TypeDescription extends SymbolDescription {
 		
 		// June 2021: Temporary patch remove cycles to avoid infinite loop in TopologicalOrderIterator and add variables after
 		Set<String> varToAdd = new HashSet<>();
-		while (true) {
-			CycleDetector c  = new CycleDetector<>(dependencies);
-			if (c.detectCycles()) {
-				Set<String> cycle = c.findCycles();
-				for(String s : cycle) {
-					dependencies.removeVertex(s);
-					varToAdd.add(s);
-					break;
-				}
-			} else {
-				break;
-			}
-			
-		}
+//		while (true) {
+//			CycleDetector c  = new CycleDetector<>(dependencies);
+//			if (c.detectCycles()) {
+//				Set<String> cycle = c.findCycles();
+//				for(String s : cycle) {
+//					dependencies.removeVertex(s);
+//					varToAdd.add(s);
+//					break;
+//				}
+//			} else {
+//				break;
+//			}
+//			
+//		}
 			
 		// June 2020: moving (back) to Iterables instead of Streams.
 		//ArrayList<String> list = Lists.newArrayList((dependencies.vertexSet()));
-		ArrayList<String> list = Lists.newArrayList(new TopologicalOrderIterator<>(dependencies));
+//		ArrayList<String> list = Lists.newArrayList(new TopologicalOrderIterator<>(dependencies));
 		
 		// March 2021: Temporary patch for #3068 - just add missing variables. TopologicalOrderIterator have to be fixed
-		for (String s : dependencies.vertexSet()) {
-			if (!list.contains(s)) {
-				list.add(s);
-			}
-		}
-		for (String s : varToAdd) {
-			if (!list.contains(s)) {
-				list.add(s);
-			}
-		}
-		return list;
+//		for (String s : dependencies.vertexSet()) {
+//			if (!list.contains(s)) {
+//				list.add(s);
+//			}
+//		}
+//		for (String s : varToAdd) {
+//			if (!list.contains(s)) {
+//				list.add(s);
+//			}
+//		}
+//		return list;
 		// return StreamEx.of(new TopologicalOrderIterator<>(dependencies)).toList();
 	}
 
@@ -388,78 +383,7 @@ public abstract class TypeDescription extends SymbolDescription {
 	 * @return
 	 */
 	protected boolean verifyAttributeCycles() {
-		if (attributes == null || attributes.size() <= 1)
-			return true;
-		final VariableDescription shape = attributes.get(SHAPE);
-		final DefaultDirectedGraph<VariableDescription, Object> dependencies = new DefaultDirectedGraph<>(Object.class);
-		if (shape != null) {
-			dependencies.addVertex(shape);
-		}
-		final Collection<VariableDescription> shapeDependencies =
-				shape == null ? Collections.EMPTY_SET : shape.getDependencies(INIT_DEPENDENCIES_FACETS, false, true);
-
-		attributes.forEachPair((aName, var) -> {
-			dependencies.addVertex(var);
-			if (shape != null && var.isSyntheticSpeciesContainer() && !shapeDependencies.contains(var)) {
-				dependencies.addEdge(shape, var);
-			}
-
-			for (final VariableDescription newVar : var.getDependencies(INIT_DEPENDENCIES_FACETS, false, true)) {
-				if (attributes.containsValue(newVar)) {
-					dependencies.addVertex(newVar);
-					dependencies.addEdge(newVar, var);
-				}
-			}
-			return true;
-		});
-
-		final CycleDetector cycleDetector = new CycleDetector<>(dependencies);
-		if (cycleDetector.detectCycles()) {
-			final Set<VariableDescription> inCycles = cycleDetector.findCycles();
-			for (final VariableDescription vd : inCycles) {
-				if (vd.isSyntheticSpeciesContainer() || vd.isBuiltIn()) {
-					continue;
-				}
-				final Collection<String> strings = new HashSet(Collections2.transform(inCycles, TO_NAME));
-				strings.remove(vd.getName());
-				vd.error("Cycle detected between " + vd.getName() + " and " + strings
-						+ ". These attributes or sub-species depend on each other for the computation of their value. Consider moving one of the initializations to the 'init' section of the "
-						+ getKeyword());
-			}
-			return false;
-		}
-
-		final DefaultDirectedGraph<VariableDescription, Object> fDependencies = new DefaultDirectedGraph<>(Object.class);
-		attributes.forEachPair((aName, var) -> {
-			if (!var.hasFacet(FUNCTION))
-				return true;
-			fDependencies.addVertex(var);
-			for (final VariableDescription newVar : var.getDependencies(FUNCTION_DEPENDENCIES_FACETS, true, false)) {
-				if (attributes.containsValue(newVar)) {
-					fDependencies.addVertex(newVar);
-					fDependencies.addEdge(newVar, var);
-				}
-			}
-			return true;
-		});
-
-		if (!fDependencies.vertexSet().isEmpty()) {
-			final CycleDetector functionCycleDetector = new CycleDetector<>(fDependencies);
-			if (functionCycleDetector.detectCycles()) {
-				final Set<VariableDescription> inCycles = functionCycleDetector.findCycles();
-				for (final VariableDescription vd : inCycles) {
-					if (vd.isSyntheticSpeciesContainer() || vd.isBuiltIn()) {
-						continue;
-					}
-					final Collection<String> strings = new HashSet(Collections2.transform(inCycles, TO_NAME));
-					vd.error("Cycle detected between " + vd.getName() + " and " + strings
-							+ "; attributes declared as functions cannot contain references to themselves in their function");
-				}
-				return false;
-
-			}
-		}
-		return true;
+		return false;
 	}
 
 	public void setParent(final TypeDescription parent) {

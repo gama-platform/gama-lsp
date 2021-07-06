@@ -14,9 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.WKTWriter;
-
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.interfaces.IAttributed;
 import msi.gama.common.interfaces.ILocated;
@@ -140,7 +137,7 @@ public interface IShape extends ILocated, IValue, IAttributed {
 		}
 	}
 
-	WKTWriter SHAPE_WRITER = new WKTWriter();
+	Object SHAPE_WRITER = new Object();
 
 	@Override
 	IShape copy(IScope scope);
@@ -170,7 +167,7 @@ public interface IShape extends ILocated, IValue, IAttributed {
 
 	IShape getGeometry();
 
-	Geometry getInnerGeometry();
+	Object getInnerGeometry();
 
 	boolean intersects(IShape g);
 
@@ -182,7 +179,7 @@ public interface IShape extends ILocated, IValue, IAttributed {
 
 	void setGeometry(IShape g);
 
-	void setInnerGeometry(Geometry intersection);
+	void setInnerGeometry(Object intersection);
 
 	void setDepth(double depth);
 
