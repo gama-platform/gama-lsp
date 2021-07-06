@@ -12,7 +12,6 @@ package msi.gama.outputs.layers;
 
 import java.awt.Color;
 
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.interfaces.IGraphics;
 import msi.gama.common.interfaces.IKeyword;

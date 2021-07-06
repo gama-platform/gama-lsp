@@ -17,16 +17,6 @@ import static msi.gama.common.geometry.GeometryUtils.translate;
 import static msi.gama.util.GamaListFactory.create;
 import static msi.gaml.types.Types.POINT;
 
-import org.locationtech.jts.algorithm.PointLocator;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryCollection;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.MultiLineString;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.geom.TopologyException;
-import org.locationtech.jts.util.AssertionFailedException;
 
 import msi.gama.common.geometry.AxisAngle;
 import msi.gama.common.geometry.Envelope3D;

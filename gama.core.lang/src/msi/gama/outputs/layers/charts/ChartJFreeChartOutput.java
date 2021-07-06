@@ -19,14 +19,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.event.ChartProgressEvent;
-import org.jfree.chart.event.ChartProgressListener;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.renderer.AbstractRenderer;
-import org.jfree.chart.renderer.xy.XYErrorRenderer;
 import org.jfree.data.general.Dataset;
 
 import msi.gama.common.interfaces.IKeyword;

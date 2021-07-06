@@ -191,7 +191,6 @@ public class TypeConverter {
 		hm.put("msi.gaml.extensions.fipa.Conversation", "conversation");
 		hm.put("msi.gaml.extensions.fipa.Message", "message");
 		
-		hm.put("msi.gama.extensions.messaging.GamaMessage", "message");
 		
 
 		hm.put("msi.gama.util.IPath", "path");

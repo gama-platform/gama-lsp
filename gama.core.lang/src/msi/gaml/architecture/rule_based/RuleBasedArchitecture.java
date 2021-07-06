@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gaml.architecture.rule_based;
 
-import static one.util.streamex.StreamEx.of;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,6 @@
 package msi.gama.kernel.batch;
 
 import static java.lang.Double.compare;
-import static one.util.streamex.StreamEx.of;
 
 import java.util.Collections;
 import java.util.List;

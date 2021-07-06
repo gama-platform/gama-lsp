@@ -228,7 +228,6 @@ public abstract class GamaType<Support> implements IType<Support> {
 
 	@Override
 	public String asPattern() {
-//		import org.apache.commons.lang.StringUtils;
 //		gaml.additions.corefinal boolean vowel = StringUtils.startsWithAny(name, vowels);
 		final boolean vowel = true;
 		return "${" + (vowel ? "an_" : "a_") + name + "}";

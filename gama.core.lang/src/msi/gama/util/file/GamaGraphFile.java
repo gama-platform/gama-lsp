@@ -11,10 +11,6 @@
 package msi.gama.util.file;
 
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.nio.GraphImporter;
-import org.jgrapht.util.SupplierUtil;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.runtime.IScope;

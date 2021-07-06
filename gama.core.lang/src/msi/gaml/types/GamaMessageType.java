@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gaml.types;
 
-import msi.gama.extensions.messaging.GamaMessage;
 import msi.gama.precompiler.GamlAnnotations.doc;
 import msi.gama.precompiler.GamlAnnotations.no_test;
 import msi.gama.precompiler.GamlAnnotations.operator;

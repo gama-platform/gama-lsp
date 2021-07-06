@@ -24,7 +24,6 @@ import static msi.gaml.types.Types.POINT;
 
 import java.awt.Point;
 
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.interfaces.IGraphics;
 import msi.gama.metamodel.shape.GamaPoint;

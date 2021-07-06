@@ -27,8 +27,6 @@ import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
-import org.locationtech.jts.geom.Envelope;
-import org.opengis.referencing.FactoryException;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.util.ImageUtils;

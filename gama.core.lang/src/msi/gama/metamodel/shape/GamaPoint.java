@@ -297,7 +297,6 @@ public class GamaPoint implements ILocation {
 	public void setAgent(final IAgent agent) {}
 
 	/**
-	 * @see msi.gama.common.interfaces.IObject#setInnerObject(org.locationtech.jts.geom.Object)
 	 */
 	public void setInnerObject(final Object point) {
 		return;

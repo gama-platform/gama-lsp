@@ -12,18 +12,6 @@ package msi.gama.metamodel.shape;
 
 import java.util.Objects;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateFilter;
-import org.locationtech.jts.geom.CoordinateSequence;
-import org.locationtech.jts.geom.CoordinateSequenceComparator;
-import org.locationtech.jts.geom.CoordinateSequenceFilter;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryComponentFilter;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.GeometryFilter;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
 import msi.gama.common.geometry.GeometryUtils;
 
@@ -72,7 +60,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getGeometryType()
 	 */
 	@Override
 	public String getGeometryType() {
@@ -82,7 +69,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getCoordinate()
 	 */
 	@Override
 	public Coordinate getCoordinate() {
@@ -92,7 +78,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getCoordinates()
 	 */
 	@Override
 	public Coordinate[] getCoordinates() {
@@ -108,7 +93,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getNumPoints()
 	 */
 	@Override
 	public int getNumPoints() {
@@ -118,7 +102,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#isEmpty()
 	 */
 	@Override
 	public boolean isEmpty() {
@@ -128,7 +111,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getDimension()
 	 */
 	@Override
 	public int getDimension() {
@@ -138,7 +120,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getBoundary()
 	 */
 	@Override
 	public Geometry getBoundary() {
@@ -158,7 +139,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#getBoundaryDimension()
 	 */
 	@Override
 	public int getBoundaryDimension() {
@@ -168,7 +148,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#reverse()
 	 */
 	@Override
 	public LineString reverse() {
@@ -178,7 +157,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#equalsExact(org.locationtech.jts. geom.Geometry, double)
 	 */
 	@Override
 	public boolean equalsExact(final Geometry other, final double tolerance) {
@@ -198,7 +176,6 @@ public class DynamicLineString extends LineString {
 		/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#apply(org.locationtech.jts.geom. CoordinateFilter)
 	 */
 	@Override
 	public void apply(final CoordinateFilter filter) {
@@ -209,7 +186,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#apply(org.locationtech.jts.geom. CoordinateSequenceFilter)
 	 */
 	@Override
 	public void apply(final CoordinateSequenceFilter filter) {
@@ -225,7 +201,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#apply(org.locationtech.jts.geom. GeometryFilter)
 	 */
 	@Override
 	public void apply(final GeometryFilter filter) {
@@ -235,7 +210,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#apply(org.locationtech.jts.geom. GeometryComponentFilter)
 	 */
 	@Override
 	public void apply(final GeometryComponentFilter filter) {
@@ -255,7 +229,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#normalize()
 	 */
 	@Override
 	public void normalize() {}
@@ -270,7 +243,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#computeEnvelopeInternal()
 	 */
 	@Override
 	protected Envelope computeEnvelopeInternal() {
@@ -281,7 +253,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#compareToSameClass(java.lang.Object)
 	 */
 	@Override
 	protected int compareToSameClass(final Object o) {
@@ -294,8 +265,6 @@ public class DynamicLineString extends LineString {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.locationtech.jts.geom.Geometry#compareToSameClass(java.lang.Object,
-	 * org.locationtech.jts.geom.CoordinateSequenceComparator)
 	 */
 	@Override
 	protected int compareToSameClass(final Object o, final CoordinateSequenceComparator comp) {

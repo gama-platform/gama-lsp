@@ -15,7 +15,6 @@ import java.awt.Font;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jfree.chart.JFreeChart;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.preferences.GamaPreferences;

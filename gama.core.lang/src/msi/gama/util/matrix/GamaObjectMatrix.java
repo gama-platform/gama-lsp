@@ -13,7 +13,6 @@ package msi.gama.util.matrix;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
 
@@ -32,7 +31,6 @@ import msi.gaml.types.GamaMatrixType;
 import msi.gaml.types.GamaType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.StreamEx;
 
 public class GamaObjectMatrix extends GamaMatrix<Object> {
 

@@ -88,7 +88,6 @@ public class GamaRuntimeException extends RuntimeException {
 
 	protected static String getExceptionName(final Throwable ex) {
 		final String s = ex.getClass().getName();
-		if (s.contains("geotools") || s.contains("opengis")) {
 			return "exception in GeoTools library";
 		} else if (s.contains("jts")) {
 			return "exception in JTS library";

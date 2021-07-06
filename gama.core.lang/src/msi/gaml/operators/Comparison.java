@@ -10,11 +10,9 @@
  ********************************************************************************************************/
 package msi.gaml.operators;
 
-import static org.locationtech.jts.index.quadtree.IntervalSize.isZeroWidth;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.locationtech.jts.index.quadtree.IntervalSize;
 
 import msi.gama.common.interfaces.IGamlIssue;
 import msi.gama.metamodel.shape.GamaPoint;

@@ -19,7 +19,6 @@ import msi.gama.metamodel.shape.IShape;
 import msi.gaml.operators.Comparison;
 import msi.gaml.types.GamaGeometryType;
 
-// import org.opengis.geometry.MismatchedDimensionException;
 
 /**
  * A 3D envelope that extends the 2D JTS Envelope.

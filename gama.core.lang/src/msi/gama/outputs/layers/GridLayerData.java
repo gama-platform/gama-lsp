@@ -16,7 +16,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.interfaces.IGraphics;
 import msi.gama.common.interfaces.IKeyword;

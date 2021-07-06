@@ -18,13 +18,7 @@ import static msi.gama.common.geometry.GeometryUtils.getPointsOf;
 import static msi.gama.common.geometry.GeometryUtils.split_at;
 import static msi.gaml.operators.Spatial.Punctal._closest_point_to;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.jgrapht.Graph;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
 import msi.gama.common.geometry.GeometryUtils;
 import msi.gama.common.geometry.ICoordinates;

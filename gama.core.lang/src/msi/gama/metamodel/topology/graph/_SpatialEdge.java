@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.metamodel.topology.graph;
 
-import org.locationtech.jts.geom.Coordinate;
 
 import msi.gama.common.util.StringUtils;
 import msi.gama.metamodel.shape.GamaPoint;

@@ -13,18 +13,6 @@ package msi.gama.outputs.layers.charts;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringUtils;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.entity.CategoryItemEntity;
-import org.jfree.chart.entity.ChartEntity;
-import org.jfree.chart.entity.PieSectionEntity;
-import org.jfree.chart.entity.XYItemEntity;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.AbstractRenderer;
-import org.jfree.chart.renderer.DefaultPolarItemRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;

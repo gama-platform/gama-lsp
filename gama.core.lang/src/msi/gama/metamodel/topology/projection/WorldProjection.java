@@ -11,12 +11,9 @@
 package msi.gama.metamodel.topology.projection;
 
 
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import javax.measure.UnitConverter;
 
-import org.locationtech.jts.geom.CoordinateFilter;
-import org.locationtech.jts.geom.Geometry;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.runtime.IScope;

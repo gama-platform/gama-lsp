@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.metamodel.agent.IAgent;
@@ -97,7 +95,6 @@ public class AmorphousTopology implements ITopology {
 
 	/**
 	 * @see msi.gama.environment.ITopology#updateAgent(msi.gama.interfaces.IAgent, boolean, msi.gama.util.GamaPoint,
-	 *      org.locationtech.jts.geom.Envelope)
 	 */
 	// @Override
 	// public void updateAgent(final IAgent agent, final boolean

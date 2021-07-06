@@ -13,11 +13,6 @@ package msi.gama.outputs.layers.charts;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.CategoryItemEntity;
-import org.jfree.chart.entity.ChartEntity;
-import org.jfree.chart.plot.SpiderWebPlot;
-import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;

@@ -20,8 +20,6 @@ import msi.gama.util.file.IFieldMatrixProvider;
 import msi.gaml.operators.Cast;
 import msi.gaml.types.GamaPointType;
 import msi.gaml.types.Types;
-import one.util.streamex.DoubleStreamEx;
-import one.util.streamex.StreamEx;
 
 public class GamaField extends GamaFloatMatrix implements IField {
 

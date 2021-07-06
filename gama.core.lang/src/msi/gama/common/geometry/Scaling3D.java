@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.common.geometry;
 
-import org.locationtech.jts.geom.Coordinate;
 
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.ILocation;

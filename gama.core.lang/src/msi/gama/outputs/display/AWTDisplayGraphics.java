@@ -41,13 +41,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import org.locationtech.jts.awt.PointTransformation;
-import org.locationtech.jts.awt.ShapeWriter;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryCollection;
-import org.locationtech.jts.geom.Lineal;
-import org.locationtech.jts.geom.Puntal;
 
 import msi.gama.common.geometry.AxisAngle;
 import msi.gama.common.geometry.GeometryUtils;

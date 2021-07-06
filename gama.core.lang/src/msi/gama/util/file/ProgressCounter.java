@@ -1,8 +1,6 @@
 package msi.gama.util.file;
 
 import org.geotools.util.SimpleInternationalString;
-import org.opengis.util.InternationalString;
-import org.opengis.util.ProgressListener;
 
 import msi.gama.common.interfaces.IStatusDisplayer;
 import msi.gama.runtime.GAMA;

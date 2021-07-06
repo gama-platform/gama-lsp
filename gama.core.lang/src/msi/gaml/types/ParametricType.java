@@ -16,7 +16,6 @@ import static msi.gaml.types.Types.builtInTypes;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 
 import com.google.common.cache.Cache;
 

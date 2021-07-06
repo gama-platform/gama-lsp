@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gaml.skills;
 
-import static org.locationtech.jts.algorithm.CGAlgorithms.distancePointLine;
 import static msi.gama.common.geometry.GeometryUtils.getFirstPointOf;
 import static msi.gama.common.geometry.GeometryUtils.getLastPointOf;
 import static msi.gama.common.geometry.GeometryUtils.getPointsOf;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.jts.geom.Coordinate;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.metamodel.agent.IAgent;

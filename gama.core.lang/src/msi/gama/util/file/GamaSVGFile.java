@@ -16,13 +16,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 
-import org.locationtech.jts.awt.ShapeReader;
-import org.locationtech.jts.geom.Geometry;
 
 import msi.gama.common.geometry.GeometryUtils;
 import msi.gama.common.geometry.Scaling3D;
-import msi.gama.ext.svgsalamander.SVGRoot;
-import msi.gama.ext.svgsalamander.SVGUniverse;
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.GamaShape;
 import msi.gama.metamodel.shape.IShape;

@@ -22,7 +22,6 @@ import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.util.HashMap;
 
-import org.apache.commons.lang.StringUtils;
 
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;

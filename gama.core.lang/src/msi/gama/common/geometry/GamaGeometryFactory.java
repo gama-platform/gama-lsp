@@ -12,16 +12,7 @@ package msi.gama.common.geometry;
 
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateSequence;
-import org.locationtech.jts.geom.CoordinateSequenceFactory;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory;
 
 import msi.gama.metamodel.shape.GamaPoint;
 

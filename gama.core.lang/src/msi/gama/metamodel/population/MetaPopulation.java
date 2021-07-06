@@ -36,7 +36,6 @@ import msi.gaml.species.ISpecies;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.StreamEx;
 
 /**
  * Class MetaPopulation. A list of IPopulation, ISpecies or MetaPopulation that behaves like a list of agents (also to

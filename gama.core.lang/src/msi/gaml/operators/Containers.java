@@ -76,8 +76,6 @@ import msi.gaml.species.ISpecies;
 import msi.gaml.types.GamaType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.IntStreamEx;
-import one.util.streamex.StreamEx;
 
 /**
  * Written by drogoul Modified on 31 juil. 2010

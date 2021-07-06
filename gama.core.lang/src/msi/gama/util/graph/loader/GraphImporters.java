@@ -18,16 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.nio.GraphImporter;
-import org.jgrapht.nio.csv.CSVImporter;
-import org.jgrapht.nio.dimacs.DIMACSImporter;
-import org.jgrapht.nio.dot.DOTImporter;
-import org.jgrapht.nio.gexf.SimpleGEXFImporter;
-import org.jgrapht.nio.gml.GmlImporter;
-import org.jgrapht.nio.graph6.Graph6Sparse6Importer;
-import org.jgrapht.nio.graphml.GraphMLImporter;
-import org.jgrapht.nio.json.JSONImporter;
-import org.jgrapht.nio.tsplib.TSPLIBImporter;
 
 import msi.gama.runtime.GAMA;
 import msi.gama.runtime.exceptions.GamaRuntimeException;

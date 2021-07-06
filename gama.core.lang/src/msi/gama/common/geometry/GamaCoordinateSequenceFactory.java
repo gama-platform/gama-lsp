@@ -10,9 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.common.geometry;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateSequence;
-import org.locationtech.jts.geom.CoordinateSequenceFactory;
 
 import msi.gama.metamodel.shape.GamaPoint;
 
@@ -21,7 +18,6 @@ public class GamaCoordinateSequenceFactory implements CoordinateSequenceFactory 
 	/**
 	 * Method create()
 	 *
-	 * @see org.locationtech.jts.geom.CoordinateSequenceFactory#create(org.locationtech.jts.geom.Coordinate[])
 	 */
 	@Override
 	public ICoordinates create(final Coordinate[] coordinates) {
@@ -37,7 +33,6 @@ public class GamaCoordinateSequenceFactory implements CoordinateSequenceFactory 
 	/**
 	 * Method create()
 	 *
-	 * @see org.locationtech.jts.geom.CoordinateSequenceFactory#create(org.locationtech.jts.geom.CoordinateSequence)
 	 */
 	@Override
 	public ICoordinates create(final CoordinateSequence cs) {
@@ -49,7 +44,6 @@ public class GamaCoordinateSequenceFactory implements CoordinateSequenceFactory 
 	/**
 	 * Method create()
 	 *
-	 * @see org.locationtech.jts.geom.CoordinateSequenceFactory#create(int, int)
 	 */
 	@Override
 	public ICoordinates create(final int size, final int dimension) {

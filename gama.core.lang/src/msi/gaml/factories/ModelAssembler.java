@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.traverse.TopologicalOrderIterator;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

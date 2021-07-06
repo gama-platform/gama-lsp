@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.geotools.referencing.CRS;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class GISUtils {
 

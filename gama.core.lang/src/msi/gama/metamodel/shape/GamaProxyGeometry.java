@@ -12,9 +12,6 @@ package msi.gama.metamodel.shape;
 
 import static msi.gama.common.geometry.GeometryUtils.translate;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.geometry.GeometryUtils;
@@ -354,7 +351,6 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	/**
 	 * Method setInnerGeometry()
 	 *
-	 * @see msi.gama.metamodel.shape.IShape#setInnerGeometry(org.locationtech.jts.geom.Geometry)
 	 */
 	@Override
 	public void setInnerGeometry(final Geometry intersection) {}

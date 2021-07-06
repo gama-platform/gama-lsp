@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.util.path;
 
-import org.jgrapht.GraphPath;
 
 import msi.gama.metamodel.agent.IAgent;
 import msi.gama.metamodel.shape.IShape;

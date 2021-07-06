@@ -39,8 +39,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 
 import msi.gama.common.preferences.GamaPreferences;
-import msi.gama.ext.webb.Webb;
-import msi.gama.ext.webb.WebbException;
 import msi.gama.kernel.experiment.IExperimentAgent;
 import msi.gama.kernel.model.IModel;
 import msi.gama.runtime.IScope;

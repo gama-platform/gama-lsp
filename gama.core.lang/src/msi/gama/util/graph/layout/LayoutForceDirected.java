@@ -3,7 +3,6 @@ package msi.gama.util.graph.layout;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import org.jgrapht.Graph;
 
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.IShape;

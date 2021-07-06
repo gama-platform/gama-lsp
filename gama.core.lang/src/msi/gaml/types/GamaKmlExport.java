@@ -15,30 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.MultiLineString;
-import org.locationtech.jts.geom.MultiPoint;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
 
-import msi.gama.ext.kml.AltitudeMode;
-import msi.gama.ext.kml.ColorMode;
-import msi.gama.ext.kml.Document;
-import msi.gama.ext.kml.Feature;
-import msi.gama.ext.kml.Folder;
-import msi.gama.ext.kml.IconStyle;
-import msi.gama.ext.kml.Kml;
-import msi.gama.ext.kml.Link;
-import msi.gama.ext.kml.Location;
-import msi.gama.ext.kml.Model;
-import msi.gama.ext.kml.MultiGeometry;
-import msi.gama.ext.kml.Orientation;
-import msi.gama.ext.kml.Placemark;
-import msi.gama.ext.kml.Scale;
-import msi.gama.ext.kml.Style;
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.ILocation;
 import msi.gama.metamodel.shape.IShape;
@@ -240,7 +217,6 @@ public class GamaKmlExport {
 				final String name, final String description, final String styleName) {
 			final Placemark placemark = fold.createAndAddPlacemark().withStyleUrl("#" + styleName);
 			placemark.createAndSetTimeSpan().withBegin(beginDate).withEnd(endDate);
-			final msi.gama.ext.kml.Point ls = placemark.createAndSetPoint();
 			ls.setExtrude(true);
 			ls.setAltitudeMode(AltitudeMode.RELATIVE_TO_GROUND);
 			final GamaPoint locTM = Spatial.Projections.transform_CRS(scope, loc, "EPSG:4326").getCentroid();
@@ -316,11 +292,9 @@ public class GamaKmlExport {
 		}
 
 		public void addPoint(final Placemark pm, final Point point, final double height) {
-			final msi.gama.ext.kml.Point kmlpoint = pm.createAndSetPoint();
 			fillPoint(kmlpoint, point, height);
 		}
 
-		public void fillPoint(final msi.gama.ext.kml.Point kmlpoint, final Point point,
 				final double height) {
 			final Coordinate pos = point.getCoordinate();
 			if (height > 0.0) {
@@ -333,11 +307,9 @@ public class GamaKmlExport {
 		}
 
 		public void addLine(final Placemark pm, final LineString line, final double height) {
-			final msi.gama.ext.kml.LineString kmlline = pm.createAndSetLineString();
 			fillLine(kmlline, line, height);
 		}
 
-		public void fillLine(final msi.gama.ext.kml.LineString kmlline, final LineString line,
 				final double height) {
 			if (height > 0.0) {
 				kmlline.setExtrude(true);
@@ -353,15 +325,12 @@ public class GamaKmlExport {
 		}
 
 		public void addPolygon(final Placemark pm, final Polygon poly, final double height) {
-			final msi.gama.ext.kml.Polygon kmlpoly = pm.createAndSetPolygon();
 			fillPolygon(kmlpoly, poly, height);
 		}
 
-		public void fillPolygon(final msi.gama.ext.kml.Polygon kmlpoly, final Polygon poly,
 				final double height) {
 
 			// Shell ring
-			final msi.gama.ext.kml.LinearRing kmlring =
 					kmlpoly.createAndSetOuterBoundaryIs().createAndSetLinearRing();
 			if (height > 0.0) {
 				kmlpoly.setExtrude(true);
@@ -378,7 +347,6 @@ public class GamaKmlExport {
 
 			// Holes
 			for (int hi = 0; hi < poly.getNumInteriorRing(); hi++) {
-				final msi.gama.ext.kml.LinearRing kmlhole =
 						kmlpoly.createAndAddInnerBoundaryIs().createAndSetLinearRing();
 				if (height > 0.0) {
 					kmlpoly.setExtrude(true);
@@ -400,7 +368,6 @@ public class GamaKmlExport {
 			final int ng = mpoint.getNumGeometries();
 			final MultiGeometry mg = pm.createAndSetMultiGeometry();
 			for (int gx = 0; gx < ng; gx++) {
-				final msi.gama.ext.kml.Point kmlpoint = mg.createAndAddPoint();
 				fillPoint(kmlpoint, (Point) mpoint.getGeometryN(gx), height);
 			}
 		}
@@ -409,7 +376,6 @@ public class GamaKmlExport {
 			final int ng = mline.getNumGeometries();
 			final MultiGeometry mg = pm.createAndSetMultiGeometry();
 			for (int gx = 0; gx < ng; gx++) {
-				final msi.gama.ext.kml.LineString kmlline = mg.createAndAddLineString();
 				fillLine(kmlline, (LineString) mline.getGeometryN(gx), height);
 			}
 		}
@@ -418,7 +384,6 @@ public class GamaKmlExport {
 			final int ng = mpoly.getNumGeometries();
 			final MultiGeometry mg = pm.createAndSetMultiGeometry();
 			for (int gx = 0; gx < ng; gx++) {
-				final msi.gama.ext.kml.Polygon kmlpoly = mg.createAndAddPolygon();
 				fillPolygon(kmlpoly, (Polygon) mpoly.getGeometryN(gx), height);
 			}
 		}

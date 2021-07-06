@@ -12,8 +12,6 @@ package msi.gama.common.geometry;
 
 import java.util.Iterator;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
 
 import com.google.common.collect.Iterators;
 

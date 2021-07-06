@@ -40,7 +40,6 @@ import msi.gaml.expressions.IExpression;
 import msi.gaml.species.GamlSpecies.SpeciesValidator;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
-import one.util.streamex.StreamEx;
 
 /**
  * The Class GamlSpecies. A species specified by GAML attributes

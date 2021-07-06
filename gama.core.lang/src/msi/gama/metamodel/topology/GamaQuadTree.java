@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.Ordering;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.metamodel.agent.IAgent;

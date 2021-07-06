@@ -149,7 +149,6 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @see msi.gama.common.interfaces.IGeometry#setInnerGeometry(org.locationtech.jts.geom.Geometry)
 	 */
 	@Override
 	public void setInnerGeometry(final Object geom) {
