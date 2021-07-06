@@ -10,10 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.metamodel.topology.projection;
 
-import org.geotools.geometry.jts.DefaultCoordinateSequenceTransformer;
-import org.geotools.geometry.jts.GeometryCoordinateSequenceTransformer;
-import org.geotools.geometry.jts.JTS;
-import org.geotools.referencing.CRS;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.geometry.GeometryUtils;

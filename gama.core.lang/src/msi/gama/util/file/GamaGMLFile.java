@@ -15,9 +15,6 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.wfs.GML;
-import org.geotools.wfs.GML.Version;
 import org.xml.sax.SAXException;
 
 import msi.gama.common.geometry.Envelope3D;

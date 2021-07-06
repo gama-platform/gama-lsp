@@ -13,10 +13,6 @@ package msi.gama.outputs.layers.charts;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.xy.XYDataset;
 
 import msi.gama.common.interfaces.IDisplaySurface;
 import msi.gama.common.interfaces.IKeyword;

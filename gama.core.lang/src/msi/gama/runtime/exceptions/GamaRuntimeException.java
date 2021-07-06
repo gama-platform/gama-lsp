@@ -27,7 +27,8 @@ import msi.gaml.operators.Strings;
 /**
  * Written by drogoul Modified on 7 janv. 2011
  *
- * A kind of exception thrown when an abnormal situation happens while running a model.
+ * A kind of exception thrown when an abnormal situation happens while running a
+ * model.
  *
  */
 
@@ -51,7 +52,9 @@ public class GamaRuntimeException extends RuntimeException {
 	 */
 
 	public static GamaRuntimeException create(final Throwable ex, final IScope scope) {
-		if (ex instanceof GamaRuntimeException) { return (GamaRuntimeException) ex; }
+		if (ex instanceof GamaRuntimeException) {
+			return (GamaRuntimeException) ex;
+		}
 		if (ex instanceof IOException || ex instanceof FileNotFoundException) {
 			return new GamaRuntimeFileException(scope, ex);
 		}
@@ -88,8 +91,7 @@ public class GamaRuntimeException extends RuntimeException {
 
 	protected static String getExceptionName(final Throwable ex) {
 		final String s = ex.getClass().getName();
-			return "exception in GeoTools library";
-		} else if (s.contains("jts")) {
+		if (s.contains("jts")) {
 			return "exception in JTS library";
 		} else if (s.contains("rcaller")) {
 			return "exception in RCaller library";
@@ -97,7 +99,9 @@ public class GamaRuntimeException extends RuntimeException {
 			return "exception in JOGL library";
 		} else if (s.contains("weka")) {
 			return "exception in Weka library";
-		} else if (s.contains("math3")) { return "exception in Math library"; }
+		} else if (s.contains("math3")) {
+			return "exception in Math library";
+		}
 		if (ex instanceof NullPointerException) {
 			return "nil value detected";
 		} else if (ex instanceof IndexOutOfBoundsException) {
@@ -108,7 +112,9 @@ public class GamaRuntimeException extends RuntimeException {
 			return "exception in Eclipse";
 		} else if (ex instanceof ClassCastException) {
 			return "wrong casting";
-		} else if (ex instanceof IllegalArgumentException) { return "illegal argument"; }
+		} else if (ex instanceof IllegalArgumentException) {
+			return "illegal argument";
+		}
 
 		return ex.getClass().getSimpleName();
 	}
@@ -170,7 +176,9 @@ public class GamaRuntimeException extends RuntimeException {
 
 	public void addAgent(final String agent) {
 		occurrences++;
-		if (agentsNames.contains(agent)) { return; }
+		if (agentsNames.contains(agent)) {
+			return;
+		}
 		agentsNames.add(agent);
 	}
 
@@ -205,7 +213,9 @@ public class GamaRuntimeException extends RuntimeException {
 		final List<String> result = new ArrayList<>();
 		result.addAll(context);
 		final int size = agentsNames.size();
-		if (size == 0) { return result; }
+		if (size == 0) {
+			return result;
+		}
 		if (size == 1) {
 			result.add("in agent " + agentsNames.get(0));
 		} else {

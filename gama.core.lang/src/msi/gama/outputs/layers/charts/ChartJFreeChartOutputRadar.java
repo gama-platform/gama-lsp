@@ -13,9 +13,6 @@ package msi.gama.outputs.layers.charts;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.Dataset;
 
 import msi.gama.common.interfaces.IDisplaySurface;
 import msi.gama.runtime.IScope;

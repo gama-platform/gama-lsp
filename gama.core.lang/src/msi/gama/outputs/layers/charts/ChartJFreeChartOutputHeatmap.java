@@ -18,11 +18,6 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.xy.MatrixSeries;
-import org.jfree.data.xy.MatrixSeriesCollection;
-import org.jfree.data.xy.XYDataset;
 
 import msi.gama.common.interfaces.IDisplaySurface;
 import msi.gama.common.interfaces.IKeyword;

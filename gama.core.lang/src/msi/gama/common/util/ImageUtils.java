@@ -26,12 +26,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
-import javax.media.jai.JAI;
-import javax.media.jai.RenderedOp;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.sun.media.jai.codec.FileSeekableStream;
 
 import msi.gama.runtime.GAMA;
 import msi.gama.runtime.IScope;

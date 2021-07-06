@@ -1,6 +1,5 @@
 package msi.gama.util.file;
 
-import org.geotools.util.SimpleInternationalString;
 
 import msi.gama.common.interfaces.IStatusDisplayer;
 import msi.gama.runtime.GAMA;

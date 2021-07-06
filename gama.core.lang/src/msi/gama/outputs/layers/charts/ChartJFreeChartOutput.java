@@ -19,7 +19,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jfree.data.general.Dataset;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.util.ImageUtils;

@@ -21,13 +21,6 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYIntervalDataItem;
-import org.jfree.data.xy.XYIntervalSeries;
-import org.jfree.data.xy.XYIntervalSeriesCollection;
 
 import msi.gama.common.interfaces.IDisplaySurface;
 import msi.gama.common.interfaces.IKeyword;

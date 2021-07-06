@@ -30,21 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.media.jai.RasterFactory;
 
-import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.coverage.grid.GridCoverageFactory;
-import org.geotools.data.DataUtilities;
-import org.geotools.data.FeatureWriter;
-import org.geotools.data.Transaction;
-import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.feature.DefaultFeatureCollection;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.gce.geotiff.GeoTiffFormat;
-import org.geotools.geojson.feature.FeatureJSON;
-import org.geotools.geometry.Envelope2D;
-import org.geotools.referencing.CRS;
 
 import msi.gama.common.geometry.GeometryUtils;
 import msi.gama.common.interfaces.IGamlIssue;

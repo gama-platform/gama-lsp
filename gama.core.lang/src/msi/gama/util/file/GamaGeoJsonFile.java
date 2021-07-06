@@ -14,8 +14,6 @@ import java.io.FileReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.geojson.feature.FeatureJSON;
 
 import msi.gama.metamodel.shape.IShape;
 import msi.gama.precompiler.GamlAnnotations.doc;
