@@ -24,12 +24,6 @@ public class SelectionBest implements Selection {
 	@Override
 	public List<Chromosome> select(final IScope scope, final List<Chromosome> population, final int populationDim,
 			final boolean maximize) {
-
-		final List<Chromosome> nextGen =
-				of(population).sorted((e1, e2) -> compare(e1.getFitness(), e2.getFitness())).toList();
-		if (maximize) {
-			Collections.reverse(nextGen);
-		}
-		return nextGen.subList(0, populationDim);
+		return null;
 	}
 }

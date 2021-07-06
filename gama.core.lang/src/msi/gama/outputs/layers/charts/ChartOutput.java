@@ -494,7 +494,7 @@ public abstract class ChartOutput {
 		this.gap = range;
 	}
 
-	public JFreeChart getJFChart() {
+	public Object getJFChart() {
 		return null;
 	}
 

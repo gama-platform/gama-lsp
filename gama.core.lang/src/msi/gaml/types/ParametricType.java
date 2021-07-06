@@ -448,8 +448,7 @@ public class ParametricType implements IContainerType<IContainer<?, ?>> {
 
 	@Override
 	public String asPattern() {
-		final boolean vowel = StringUtils.startsWithAny(type.getName(), vowels);
-		return "${" + (vowel ? "an_" : "a_") + serialize(true) + "}";
+		return null;
 	}
 
 	@Override

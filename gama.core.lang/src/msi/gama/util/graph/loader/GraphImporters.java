@@ -31,26 +31,7 @@ import msi.gama.runtime.exceptions.GamaRuntimeException;
  */
 public class GraphImporters {
 
-	private static final Map<String, Class<? extends GraphImporter>> name2parser =
-		new HashMap<String, Class<? extends GraphImporter>>() {
-
-			{
-				// we store both the default version (ex. forcedirected is implemented by default by prefuse,
-				// but also a prefixed version for disambiguation (like "prefuse.forcedirected")
-
-				// default
-				//put("csv", CSVImporter.class); 
-				put("dimacs", DIMACSImporter.class);
-				put("dot", DOTImporter.class); 
-				put("gexf", SimpleGEXFImporter.class);
-				put("graphml", GraphMLImporter.class);
-				put("graph6", Graph6Sparse6Importer.class);
-				put("gml", GmlImporter.class);
-				//put("json", JSONImporter.class);
-				put("tsplib", TSPLIBImporter.class);
-
-			}
-		};
+	private static final Map<String, Class<? >> name2parser = null;
 
 	/**
 	 * contains the name of parsers for automatic detection. Should only contain
@@ -96,38 +77,10 @@ public class GraphImporters {
 		return parsersForAutomaticDetection;
 	}
 
-	private static Map<String, GraphImporter> name2singleton = new HashMap<String, GraphImporter>();
+	private static Map<String, Object> name2singleton = new HashMap<String, Object>();
 
-	public static GraphImporter getGraphImporter(final String fileType) {
-		GraphImporter res = name2singleton.get(fileType);
-
-		if ( res == null ) {
-			// no singleton created
-			Class<? extends GraphImporter> clazz = name2parser.get(fileType);
-			if ( clazz == null ) { throw GamaRuntimeException.error(
-				"unknown parser name: " + fileType + "; please choose one of " + getAvailableLoaders().toString(),
-				GAMA.getRuntimeScope()); }
-			Constructor<?> ctor;
-			try {
-				ctor = clazz.getConstructor();
-				res = (GraphImporter) ctor.newInstance();
-				name2singleton.put(fileType, res);
-				return res;
-			} catch (NoSuchMethodException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (SecurityException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (IllegalArgumentException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (InvocationTargetException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (InstantiationException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (IllegalAccessException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			}
-		}
-		return res;
+	public static Object getGraphImporter(final String fileType) {
+		return null;
 	}
 
 }

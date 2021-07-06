@@ -361,20 +361,7 @@ public class ExperimentParameter extends Symbol implements IParameter.Batch {
 	}
 
 	private Object filterWithAmong(final IScope scope, final Object newValue) {
-		getAmongValue(scope);
-		if (amongValue == null || amongValue.isEmpty()) return newValue;
-		if (Types.FLOAT.equals(this.getType())) {
-			final double newDouble = Cast.asFloat(scope, newValue);
-			for (final Object o : amongValue) {
-				final Double d = Cast.asFloat(scope, o);
-				final Double tolerance = 0.0000001d;
-				if (NumberUtil.equalsWithTolerance(d, newDouble, tolerance)) return d;
-			}
-
-		} else {
-			if (amongValue.contains(newValue)) return newValue;
-		}
-		return amongValue.get(0);
+		return null;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class LayerData extends AttributeHolder implements ILayerData {
 	protected final Point sizeInPixels = new Point();
 	protected double addedElevation;
 	boolean positionIsInPixels, sizeIsInPixels;
-	Envelope visibleRegion;
+	Object visibleRegion;
 
 	Attribute<ILocation> size;
 	Attribute<ILocation> position;
@@ -253,12 +253,12 @@ public class LayerData extends AttributeHolder implements ILayerData {
 	}
 
 	@Override
-	public void setVisibleRegion(final Envelope e) {
+	public void setVisibleRegion(final Object e) {
 		visibleRegion = e;
 	}
 
 	@Override
-	public Envelope getVisibleRegion() {
+	public Object getVisibleRegion() {
 		return visibleRegion;
 	}
 

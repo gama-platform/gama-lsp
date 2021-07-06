@@ -13,7 +13,7 @@ package msi.gama.common.geometry;
 
 import msi.gama.metamodel.shape.GamaPoint;
 
-public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
+public interface ICoordinates extends Iterable<GamaPoint> {
 
 	/**
 	 * An interface used to visit pairs of coordinates in a sequence
@@ -44,7 +44,7 @@ public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
 	/**
 	 * The empty coordinate sequence
 	 */
-	ICoordinates EMPTY = new GamaCoordinateSequence(3, new GamaPoint[] {});
+	ICoordinates EMPTY = null;
 
 	/**
 	 * Returns the geometric center of this sequence of points
@@ -62,10 +62,9 @@ public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
 		addCenterTo(center);
 	}
 
-	@Override
 	@Deprecated
-	default CoordinateSequence clone() {
-		return copy();
+	default Object clone() {
+		return null;
 	}
 
 	/**
@@ -76,7 +75,6 @@ public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
 	 */
 	void addCenterTo(final GamaPoint other);
 
-	@Override
 	GamaPoint getCoordinate(int i);
 
 	/**
@@ -86,8 +84,7 @@ public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
 	 * @return a point or null
 	 */
 	default GamaPoint at(final int i) {
-		if (i > size() || i < 0) return null;
-		return getCoordinate(i);
+		return null;
 	}
 
 	/**
@@ -102,7 +99,6 @@ public interface ICoordinates extends CoordinateSequence, Iterable<GamaPoint> {
 	 * directly affect the sequence and possibly change its properties (i.e. clockwiseness or ring), which cannot
 	 * therefore be verified
 	 */
-	@Override
 	GamaPoint[] toCoordinateArray();
 
 	/**

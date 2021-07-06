@@ -52,18 +52,7 @@ public class RuleBasedArchitecture extends ReflexArchitecture {
 
 	@Override
 	public Object executeOn(final IScope scope) throws GamaRuntimeException {
-		// we let a chance to the reflexes, etc. to execute
-		super.executeOn(scope);
-		final Map<RuleStatement, Double> priorities = of(rules).toMap(r -> r.computePriority(scope));
-		final List<RuleStatement> rulesToRun = of(rules).filter(r -> r.computeCondition(scope))
-				.reverseSorted((o1, o2) -> priorities.get(o1).compareTo(priorities.get(o2))).toList();
-		Object result = null;
-		for (final RuleStatement rule : rulesToRun) {
-			final ExecutionResult er = scope.execute(rule);
-			if (!er.passed()) { return result; }
-			result = er.getValue();
-		}
-		return result;
+		return null;
 	}
 
 	@Override

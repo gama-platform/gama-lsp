@@ -425,9 +425,8 @@ public class GamlSpecies extends AbstractSpecies {
 	}
 
 	@Override
-	public StreamEx<IAgent> stream(final IScope scope) {
-		final IPopulation<IAgent> pop = getPopulation(scope);
-		return pop == null ? StreamEx.empty() : pop.stream(scope);
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	/**

@@ -12,7 +12,6 @@ package msi.gama.metamodel.shape;
 
 import java.util.Objects;
 
-
 import msi.gama.common.geometry.GeometryUtils;
 
 /**
@@ -21,7 +20,7 @@ import msi.gama.common.geometry.GeometryUtils;
  * @author drogoul
  *
  */
-public class DynamicLineString extends LineString {
+public class DynamicLineString {
 
 	// static {
 	// try {
@@ -48,11 +47,9 @@ public class DynamicLineString extends LineString {
 
 	/**
 	 * @param factory
-	 * @param source,
-	 *            target Should not be null !
+	 * @param source, target Should not be null !
 	 */
-	public DynamicLineString(final GeometryFactory factory, final IShape source, final IShape target) {
-		super(null, factory);
+	public DynamicLineString(final Object factory, final IShape source, final IShape target) {
 		this.source = source;
 		this.target = target;
 	}
@@ -61,7 +58,7 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	public String getGeometryType() {
 		return "LineString";
 	}
@@ -70,8 +67,8 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public Coordinate getCoordinate() {
+
+	public Object getCoordinate() {
 		return GeometryUtils.toCoordinate(source.getLocation());
 	}
 
@@ -79,22 +76,20 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public Coordinate[] getCoordinates() {
-		return new Coordinate[] { GeometryUtils.toCoordinate(source.getLocation()),
-				GeometryUtils.toCoordinate(target.getLocation()) };
+
+	public Object[] getCoordinates() {
+		return null;
 	}
 
-	@Override
-	public CoordinateSequence getCoordinateSequence() {
-		return getFactory().getCoordinateSequenceFactory().create(getCoordinates());
+	public Object getCoordinateSequence() {
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	public int getNumPoints() {
 		return 2;
 	}
@@ -103,7 +98,7 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	public boolean isEmpty() {
 		return false;
 	}
@@ -112,7 +107,7 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	public int getDimension() {
 		return 1;
 	}
@@ -121,26 +116,24 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public Geometry getBoundary() {
-		return getFactory().createMultiPoint(new Point[] { getStartPoint(), getEndPoint() });
+
+	public Object getBoundary() {
+		return null;
 	}
 
-	@Override
-	public Point getStartPoint() {
-		return getFactory().createPoint(getCoordinate());
+	public Object getStartPoint() {
+		return null;
 	}
 
-	@Override
-	public Point getEndPoint() {
-		return getFactory().createPoint(GeometryUtils.toCoordinate(target.getLocation()));
+	public Object getEndPoint() {
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	public int getBoundaryDimension() {
 		return 0;
 	}
@@ -149,23 +142,24 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public LineString reverse() {
-		return new DynamicLineString(getFactory(), target, source);
+
+	public Object reverse() {
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public boolean equalsExact(final Geometry other, final double tolerance) {
-		if (!(other instanceof DynamicLineString)) { return false; }
+
+	public boolean equalsExact(final Object other, final double tolerance) {
+		if (!(other instanceof DynamicLineString)) {
+			return false;
+		}
 		final DynamicLineString dls = (DynamicLineString) other;
 		return Objects.equals(dls.source, source) && Objects.equals(dls.target, target);
 	}
 
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = ((source == null) ? 0 : source.hashCode());
@@ -173,55 +167,19 @@ public class DynamicLineString extends LineString {
 		return result;
 	}
 
-		/*
-	 * (non-Javadoc)
-	 *
-	 */
-	@Override
-	public void apply(final CoordinateFilter filter) {
-		filter.filter(getCoordinate());
-		filter.filter(GeometryUtils.toCoordinate(target.getLocation()));
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public void apply(final CoordinateSequenceFilter filter) {
-		final CoordinateSequence points = getCoordinateSequence();
-		filter.filter(points, 0);
-		if (filter.isDone()) { return; }
-		filter.filter(points, 1);
-		if (filter.isGeometryChanged()) {
-			geometryChanged();
-		}
+
+	public void apply(final Object filter) {
+		return;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 */
-	@Override
-	public void apply(final GeometryFilter filter) {
-		filter.filter(this);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 */
-	@Override
-	public void apply(final GeometryComponentFilter filter) {
-		filter.filter(this);
-	}
-
-	@Override
 	public boolean isSimple() {
 		return true;
 	}
 
-	@Override
 	public boolean isValid() {
 		return true;
 	}
@@ -230,35 +188,34 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	public void normalize() {}
 
-	@Override
+	public void normalize() {
+	}
+
 	public final Object clone() {
-		final DynamicLineString s = new DynamicLineString(getFactory(), source, target);
-		s.setUserData(getUserData());
-		return s;
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	protected Envelope computeEnvelopeInternal() {
-		final CoordinateSequence points = getFactory().getCoordinateSequenceFactory().create(getCoordinates());
-		return points.expandEnvelope(new Envelope());
+
+	protected Object computeEnvelopeInternal() {
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
+
 	protected int compareToSameClass(final Object o) {
 		final DynamicLineString line = (DynamicLineString) o;
 		final int comparison = source.getLocation().compareTo(line.source.getLocation());
-		if (comparison != 0) { return comparison; }
+		if (comparison != 0) {
+			return comparison;
+		}
 		return target.getLocation().compareTo(line.target.getLocation());
 	}
 
@@ -266,38 +223,40 @@ public class DynamicLineString extends LineString {
 	 * (non-Javadoc)
 	 *
 	 */
-	@Override
-	protected int compareToSameClass(final Object o, final CoordinateSequenceComparator comp) {
-		final DynamicLineString line = (DynamicLineString) o;
-		return comp.compare(getCoordinateSequence(), line.getCoordinateSequence());
+
+	protected int compareToSameClass(final Object o, final Object comp) {
+		return 0;
 	}
 
-	@Override
-	protected boolean isEquivalentClass(final Geometry other) {
+	protected boolean isEquivalentClass(final Object other) {
 		return other instanceof DynamicLineString;
 	}
 
-	@Override
 	public boolean isRing() {
 		return false;
 	}
 
-	@Override
 	public boolean isClosed() {
 		return false;
 	}
 
-	@Override
-	public Point getPointN(final int n) {
-		if (n == 0) { return getFactory().createPoint(getCoordinate()); }
-		if (n == 1) { return getFactory().createPoint(GeometryUtils.toCoordinate(target.getLocation())); }
+	public Object getPointN(final int n) {
+		if (n == 0) {
+			return null;
+		}
+		if (n == 1) {
+			return null;
+		}
 		return null;
 	}
 
-	@Override
-	public Coordinate getCoordinateN(final int n) {
-		if (n == 0) { return getCoordinate(); }
-		if (n == 1) { return GeometryUtils.toCoordinate(target.getLocation()); }
+	public Object getCoordinateN(final int n) {
+		if (n == 0) {
+			return getCoordinate();
+		}
+		if (n == 1) {
+			return GeometryUtils.toCoordinate(target.getLocation());
+		}
 		return null;
 
 	}

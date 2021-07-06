@@ -156,12 +156,6 @@ public class AStar<V, E> {
 	}
 
 	protected double heuristic(final Object node1, final Object node2) {
-		if (isSpatialGraph) {
-			final GamaPoint pt1 = (GamaPoint) ((IShape) node1).getLocation();
-			final GamaPoint pt2 = (GamaPoint) ((IShape) node2).getLocation();
-			return pt1.distance(pt2);
-
-		}
 		return 0;
 	}
 

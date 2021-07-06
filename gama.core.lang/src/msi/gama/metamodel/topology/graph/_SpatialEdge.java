@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.metamodel.topology.graph;
 
-
 import msi.gama.common.util.StringUtils;
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.IShape;
@@ -28,37 +27,27 @@ public class _SpatialEdge extends _Edge<IShape, IShape> {
 	@Override
 	protected void init(final IScope scope, final Object edge, final Object source, final Object target)
 			throws GamaRuntimeException {
-		if (!(edge instanceof IShape)) { throw GamaRuntimeException
-				.error(StringUtils.toGaml(edge, false) + " is not a geometry", scope); }
+		if (!(edge instanceof IShape)) {
+			throw GamaRuntimeException.error(StringUtils.toGaml(edge, false) + " is not a geometry", scope);
+		}
 		super.init(scope, edge, source, target);
 	}
 
 	@Override
 	protected void buildSource(final Object edge, final Object source) {
-		Object s = source;
-		final IShape g = (IShape) edge;
-		if (s == null) {
-			final Coordinate c1 = g.getGeometry().getInnerGeometry().getCoordinates()[0];
-			s = findVertexWithCoordinates(c1);
-		}
-		super.buildSource(edge, s);
+		return;
 	}
 
 	@Override
 	protected void buildTarget(final Object edge, final Object target) {
-		Object s = target;
-		final IShape g = (IShape) edge;
-		if (s == null) {
-			final Coordinate[] points = g.getGeometry().getInnerGeometry().getCoordinates();
-			final Coordinate c1 = points[points.length - 1];
-			s = findVertexWithCoordinates(c1);
-		}
-		super.buildTarget(edge, s);
+		return;
 	}
 
-	private Object findVertexWithCoordinates(final Coordinate c) {
+	private Object findVertexWithCoordinates(final Object c) {
 		IShape vertex = ((GamaSpatialGraph) graph).getBuiltVertex(c);
-		if (vertex != null) { return vertex; }
+		if (vertex != null) {
+			return vertex;
+		}
 		vertex = new GamaPoint(c);
 		graph.addVertex(vertex);
 		((GamaSpatialGraph) graph).addBuiltVertex(vertex);

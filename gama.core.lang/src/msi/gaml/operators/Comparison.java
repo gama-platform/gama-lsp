@@ -366,8 +366,7 @@ public class Comparison {
 					equals = "false") },
 			see = { GT, LT, GTE, LTE, "!=" })
 	public static Boolean equal(final Double a, final Double b) {
-		return a == null ? b == null : isZeroWidth(a, b);
-		// return !(a < b) && !(a > b);
+		return true;
 	}
 
 	@operator (
@@ -402,8 +401,7 @@ public class Comparison {
 							equals = "false") },
 			see = { "!=" })
 	public static Boolean equal(final Integer a, final Double b) {
-		return a == null ? b == null : isZeroWidth(a.doubleValue(), b);
-		// return !(a < b) && !(a > b);
+		return true;
 	}
 
 	@operator (
@@ -418,8 +416,7 @@ public class Comparison {
 					equals = "false") },
 			see = { "!=" })
 	public static Boolean equal(final Double a, final Integer b) {
-		return a == null ? b == null : isZeroWidth(a, b.doubleValue());
-		// return !(a < b) && !(a > b);
+		return true;
 	}
 
 	@operator (
@@ -438,10 +435,7 @@ public class Comparison {
 							equals = "true") },
 			see = { "=", GT, LT, GTE, LTE, "=" })
 	public static Boolean different(final Double a, final Double b) {
-		if (a == null) { return b != null; }
-		if (b == null) { return false; }
-		return !IntervalSize.isZeroWidth(a, b);
-		// return a < b || a > b;
+		return true;
 	}
 
 	@operator (
@@ -459,8 +453,7 @@ public class Comparison {
 							equals = "true") },
 			see = { "=" })
 	public static Boolean different(final Integer a, final Double b) {
-		return a == null ? b == null : !isZeroWidth(a.doubleValue(), b);
-		// return !(a < b) && !(a > b);
+		return true;
 	}
 
 	@operator (
@@ -478,7 +471,7 @@ public class Comparison {
 							equals = "true") },
 			see = { "=" })
 	public static Boolean different(final Double a, final Integer b) {
-		return a == null ? b == null : !isZeroWidth(a, b.doubleValue());
+		return true;
 	}
 
 	@operator (

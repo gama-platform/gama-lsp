@@ -12,7 +12,6 @@ package msi.gama.common.geometry;
 
 import java.util.Iterator;
 
-
 import com.google.common.collect.Iterators;
 
 import msi.gama.metamodel.shape.GamaPoint;
@@ -28,7 +27,7 @@ public class UniqueCoordinateSequence implements ICoordinates {
 	final GamaPoint point;
 	final int dimension;
 
-	public UniqueCoordinateSequence(final int dimension, final Coordinate coord) {
+	public UniqueCoordinateSequence(final int dimension, final Object coord) {
 		this.dimension = dimension;
 		point = new GamaPoint(coord);
 	}
@@ -38,7 +37,6 @@ public class UniqueCoordinateSequence implements ICoordinates {
 		point = gamaPoint;
 	}
 
-	@Override
 	public int getDimension() {
 		return dimension;
 	}
@@ -48,40 +46,30 @@ public class UniqueCoordinateSequence implements ICoordinates {
 		return point;
 	}
 
-	@Override
-	public Coordinate getCoordinateCopy(final int i) {
+	public Object getCoordinateCopy(final int i) {
 		return new GamaPoint(point);
 	}
 
-	@Override
-	public void getCoordinate(final int index, final Coordinate coord) {
-		coord.x = point.x;
-		coord.y = point.y;
-		coord.z = point.z;
-
+	public void getCoordinate(final int index, final Object coord) {
+		return;
 	}
 
-	@Override
 	public double getX(final int index) {
 		return point.x;
 	}
 
-	@Override
 	public double getY(final int index) {
 		return point.y;
 	}
 
-	@Override
 	public double getOrdinate(final int index, final int ordinateIndex) {
 		return point.getOrdinate(ordinateIndex);
 	}
 
-	@Override
 	public int size() {
 		return 1;
 	}
 
-	@Override
 	public void setOrdinate(final int index, final int ordinateIndex, final double value) {
 		point.setOrdinate(ordinateIndex, value);
 
@@ -92,10 +80,8 @@ public class UniqueCoordinateSequence implements ICoordinates {
 		return new GamaPoint[] { point };
 	}
 
-	@Override
-	public Envelope expandEnvelope(final Envelope env) {
-		env.expandToInclude(point);
-		return env;
+	public Object expandEnvelope(final Object env) {
+		return null;
 	}
 
 	@Override
@@ -108,7 +94,6 @@ public class UniqueCoordinateSequence implements ICoordinates {
 		return new UniqueCoordinateSequence(dimension, false, point.yNegated());
 	}
 
-	@Override
 	public final UniqueCoordinateSequence copy() {
 		return new UniqueCoordinateSequence(dimension, new GamaPoint(point));
 	}
@@ -121,7 +106,8 @@ public class UniqueCoordinateSequence implements ICoordinates {
 
 	@Override
 	public void visit(final IndexedVisitor v, final int max, final boolean reversed) {
-		if (max == 0) return;
+		if (max == 0)
+			return;
 		v.process(0, point.x, point.y, point.z);
 	}
 
@@ -142,7 +128,8 @@ public class UniqueCoordinateSequence implements ICoordinates {
 
 	@Override
 	public ICoordinates setTo(final GamaPoint... points) {
-		if (points.length == 0) return this;
+		if (points.length == 0)
+			return this;
 		final GamaPoint p = points[0];
 		point.x = p.x;
 		point.y = p.y;
@@ -152,8 +139,10 @@ public class UniqueCoordinateSequence implements ICoordinates {
 
 	@Override
 	public ICoordinates setTo(final int index, final double... points) {
-		if (index > 0) return this;
-		if (points.length < 3) return this;
+		if (index > 0)
+			return this;
+		if (points.length < 3)
+			return this;
 		point.x = points[0];
 		point.y = points[1];
 		point.z = points[2];
@@ -184,7 +173,8 @@ public class UniqueCoordinateSequence implements ICoordinates {
 
 	@Override
 	public void replaceWith(final int i, final double x, final double y, final double z) {
-		if (i != 0) return;
+		if (i != 0)
+			return;
 		point.setLocation(x, y, z);
 
 	}
@@ -239,7 +229,8 @@ public class UniqueCoordinateSequence implements ICoordinates {
 	}
 
 	@Override
-	public void completeRing() {}
+	public void completeRing() {
+	}
 
 	@Override
 	public void translateBy(final double i, final double j, final double k) {

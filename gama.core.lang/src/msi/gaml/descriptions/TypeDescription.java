@@ -357,6 +357,7 @@ public abstract class TypeDescription extends SymbolDescription {
 //			}
 //			
 //		}
+		return varToAdd;
 			
 		// June 2020: moving (back) to Iterables instead of Streams.
 		//ArrayList<String> list = Lists.newArrayList((dependencies.vertexSet()));

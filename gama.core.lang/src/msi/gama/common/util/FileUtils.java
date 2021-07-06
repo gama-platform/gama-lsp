@@ -56,7 +56,7 @@ import ummisco.gama.dev.utils.DEBUG;
 @SuppressWarnings ("deprecation")
 public class FileUtils {
 
-	public static ThreadLocal<Webb> WEB = ThreadLocal.withInitial(() -> Webb.create());
+	public static ThreadLocal<Object> WEB = null;
 	public static final String URL_SEPARATOR_REPLACEMENT = "+_+";
 	public static final String COPY_OF = "copy of ";
 	public static final String HOME = "~";
@@ -389,31 +389,7 @@ public class FileUtils {
 
 	@SuppressWarnings ("deprecation")
 	public static String fetchToTempFile(final IScope scope, final URL url) {
-		String pathName = constructRelativeTempFilePath(scope, url);
-		final String urlPath = url.toExternalForm();
-		final String status = "Downloading file " + urlPath.substring(urlPath.lastIndexOf(SEPARATOR));
-		scope.getGui().getStatus(scope).beginSubStatus(status);
-		final Webb web = WEB.get();
-		try {
-			try (InputStream in = web.get(urlPath).ensureSuccess()
-					.connectTimeout(GamaPreferences.External.CORE_HTTP_CONNECT_TIMEOUT.getValue())
-					.readTimeout(GamaPreferences.External.CORE_HTTP_READ_TIMEOUT.getValue())
-					.retry(GamaPreferences.External.CORE_HTTP_RETRY_NUMBER.getValue(), false).asStream().getBody();) {
-				// final java.net.URI uri = URIUtil.toURI(pathName);
-				pathName = ROOT.getPathVariableManager().resolvePath(new Path(pathName)).toOSString();
-				// pathName = ROOT.getPathVariableManager().resolveURI(uri).getPath();
-				final java.nio.file.Path p = new File(pathName).toPath();
-				if (Files.exists(p)) {
-					Files.delete(p);
-				}
-				Files.copy(in, p);
-			}
-		} catch (final IOException | WebbException e) {
-			throw GamaRuntimeException.create(e, scope);
-		} finally {
-			scope.getGui().getStatus(scope).endSubStatus(status);
-		}
-		return pathName;
+		return null;
 	}
 
 }

@@ -19,14 +19,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.util.ImageUtils;
 import msi.gama.runtime.IScope;
 import msi.gaml.expressions.IExpression;
 import msi.gaml.operators.Cast;
 
-public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressListener {
+public class ChartJFreeChartOutput extends ChartOutput {
 
 	private BufferedImage createCompatibleImage(final int sizeX, final int sizeY) {
 		if ((int) r.getWidth() != sizeX || (int) r.getHeight() != sizeY) {
@@ -39,35 +38,35 @@ public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressL
 		return cache;
 	}
 
-	public static final Shape[] defaultmarkers =
-			org.jfree.chart.plot.DefaultDrawingSupplier.createStandardSeriesShapes();
+	public static final Shape[] defaultmarkers = null;
 	boolean oldAntiAlias;
 
-	public ChartRenderingInfo info;
-	ArrayList<Dataset> jfreedataset = new ArrayList<>();
-	JFreeChart chart = null;
+	public Object info;
+	ArrayList<Object> jfreedataset = new ArrayList<>();
+	Object chart = null;
 	Rectangle2D r = new Rectangle2D.Double();
 	BufferedImage cache;
-	AbstractRenderer defaultrenderer;
+	Object defaultrenderer;
 	HashMap<String, Integer> IdPosition = new HashMap<>(); // serie
 															// id-nb
 															// for
 															// arraylists/table
 															// requirements
-	HashMap<String, AbstractRenderer> RendererSet = new HashMap<>(); // one
-																		// renderer
-																		// for
-																		// each
-																		// serie
+	HashMap<String, Object> RendererSet = new HashMap<>(); // one
+															// renderer
+															// for
+															// each
+															// serie
 	int nbseries = 0; // because there is always one dataset, so it is difficult
-	// A filed aiming at controlling the rate at which charts can be produced. Directly controlled by the
+	// A filed aiming at controlling the rate at which charts can be produced.
+	// Directly controlled by the
 	// ChartProgressListener
 	private volatile boolean ready = true;
 	// to count...
 
 	public ChartJFreeChartOutput(final IScope scope, final String name, final IExpression typeexp) {
 		super(scope, name, typeexp);
-		info = new ChartRenderingInfo();
+		info = new Object();
 	}
 
 	public static ChartJFreeChartOutput createChartOutput(final IScope scope, final String name,
@@ -79,35 +78,37 @@ public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressL
 		if (string1 != null) {
 			final String t = Cast.asString(scope, string1.value(scope));
 			type = IKeyword.SERIES.equals(t) ? SERIES_CHART
-					: IKeyword.HISTOGRAM.equals(t) ? HISTOGRAM_CHART : IKeyword.PIE.equals(t) ? PIE_CHART
-							: IKeyword.RADAR.equals(t) ? RADAR_CHART
-									: IKeyword.HEATMAP.equals(t) ? HEATMAP_CHART : IKeyword.BOX_WHISKER.equals(t)
-											? BOX_WHISKER_CHART : IKeyword.SCATTER.equals(t) ? SCATTER_CHART : XY_CHART;
+					: IKeyword.HISTOGRAM.equals(t) ? HISTOGRAM_CHART
+							: IKeyword.PIE.equals(t) ? PIE_CHART
+									: IKeyword.RADAR.equals(t) ? RADAR_CHART
+											: IKeyword.HEATMAP.equals(t) ? HEATMAP_CHART
+													: IKeyword.BOX_WHISKER.equals(t) ? BOX_WHISKER_CHART
+															: IKeyword.SCATTER.equals(t) ? SCATTER_CHART : XY_CHART;
 
 		}
 
 		switch (type) {
 
-			case PIE_CHART: {
-				newChart = new ChartJFreeChartOutputPie(scope, name, typeexp);
-				break;
-			}
-			case HISTOGRAM_CHART:
-			case BOX_WHISKER_CHART: {
-				newChart = new ChartJFreeChartOutputHistogram(scope, name, typeexp);
-				break;
-			}
-			case RADAR_CHART: {
-				newChart = new ChartJFreeChartOutputRadar(scope, name, typeexp);
-				break;
-			}
-			case HEATMAP_CHART: {
-				newChart = new ChartJFreeChartOutputHeatmap(scope, name, typeexp);
-				break;
-			}
-			default: {
-				newChart = new ChartJFreeChartOutputScatter(scope, name, typeexp);
-			}
+		case PIE_CHART: {
+			newChart = new ChartJFreeChartOutputPie(scope, name, typeexp);
+			break;
+		}
+		case HISTOGRAM_CHART:
+		case BOX_WHISKER_CHART: {
+			newChart = new ChartJFreeChartOutputHistogram(scope, name, typeexp);
+			break;
+		}
+		case RADAR_CHART: {
+			newChart = new ChartJFreeChartOutputRadar(scope, name, typeexp);
+			break;
+		}
+		case HEATMAP_CHART: {
+			newChart = new ChartJFreeChartOutputHeatmap(scope, name, typeexp);
+			break;
+		}
+		default: {
+			newChart = new ChartJFreeChartOutputScatter(scope, name, typeexp);
+		}
 		}
 		return newChart;
 	}
@@ -118,45 +119,24 @@ public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressL
 
 	@Override
 	public BufferedImage getImage(final int sizeX, final int sizeY, final boolean antiAlias) {
-		if (!ready) { return cache; }
-		if (antiAlias != oldAntiAlias) {
-			oldAntiAlias = antiAlias;
-			getJFChart().setAntiAlias(antiAlias);
-			getJFChart().setTextAntiAlias(antiAlias);
-		}
-		final Graphics2D g2D = getGraphics(sizeX, sizeY);
-		try {
-			chart.draw(g2D, r, info);
-		} catch (IndexOutOfBoundsException | IllegalArgumentException | NullPointerException e) {
-			// Do nothing. See #1605
-			// e.printStackTrace();
-		} finally {
-			g2D.dispose();
-		}
-		return cache;
-
+		return null;
 	}
 
-	@Override
-	public void chartProgress(final ChartProgressEvent event) {
-		ready = event.getType() == ChartProgressEvent.DRAWING_FINISHED;
+	public void chartProgress(final Object event) {
+		return;
 	}
 
 	@Override
 	public void draw(final Graphics2D g2D, final Rectangle2D area, final boolean antiAlias) {
-		// if (!ready) { return; }
-		if (antiAlias != oldAntiAlias) {
-			oldAntiAlias = antiAlias;
-			chart.setAntiAlias(antiAlias);
-			chart.setTextAntiAlias(antiAlias);
-		}
-		chart.draw(g2D, area, info);
+		return;
 	}
 
 	@Override
 	public void step(final IScope scope) {
 		chartdataset.updatedataset(scope, getChartCycle(scope));
-		if (!ready) { return; }
+		if (!ready) {
+			return;
+		}
 		updateOutput(scope);
 	}
 
@@ -167,62 +147,16 @@ public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressL
 
 	@Override
 	public void initChart(final IScope scope, final String chartname) {
-		super.initChart(scope, chartname);
-
-		initRenderer(scope);
-		final Plot plot = chart.getPlot();
-
-		chart.setBorderVisible(false);
-		plot.setOutlineVisible(false);
-		chart.setTitle(this.getName());
-		chart.getTitle().setVisible(true);
-		chart.getTitle().setFont(getTitleFont());
-		if (!this.getTitleVisible(scope)) {
-			chart.getTitle().setVisible(false);
-		}
-		if (textColor != null) {
-			chart.getTitle().setPaint(textColor);
-		}
-
-		if (backgroundColor == null) {
-			plot.setBackgroundPaint(null);
-			chart.setBackgroundPaint(null);
-			chart.setBorderPaint(null);
-			if (chart.getLegend() != null) {
-				chart.getLegend().setBackgroundPaint(null);
-			}
-		} else {
-			final Color bg = backgroundColor;
-			chart.setBackgroundPaint(bg);
-			plot.setBackgroundPaint(bg);
-			chart.setBorderPaint(bg);
-			if (chart.getLegend() != null) {
-				chart.getLegend().setBackgroundPaint(bg);
-			}
-		}
-		if (chart.getLegend() != null) {
-			chart.getLegend().setItemFont(getLegendFont());
-			chart.getLegend().setFrame(BlockBorder.NONE);
-			if (textColor != null) {
-				chart.getLegend().setItemPaint(textColor);
-			}
-		}
-
-		chart.addProgressListener(this);
-
+		return;
 	}
 
-	AbstractRenderer getOrCreateRenderer(final IScope scope, final String serieid) {
-		if (RendererSet.containsKey(serieid)) { return RendererSet.get(serieid); }
-		final AbstractRenderer newrenderer = createRenderer(scope, serieid);
-		RendererSet.put(serieid, newrenderer);
-		return newrenderer;
-
+	Object getOrCreateRenderer(final IScope scope, final String serieid) {
+		return null;
 	}
 
-	protected AbstractRenderer createRenderer(final IScope scope, final String serieid) {
+	protected Object createRenderer(final IScope scope, final String serieid) {
 		// TODO Auto-generated method stub
-		return new XYErrorRenderer();
+		return new Object();
 
 	}
 
@@ -248,7 +182,7 @@ public class ChartJFreeChartOutput extends ChartOutput implements ChartProgressL
 	}
 
 	@Override
-	public JFreeChart getJFChart() {
+	public Object getJFChart() {
 		return chart;
 	}
 

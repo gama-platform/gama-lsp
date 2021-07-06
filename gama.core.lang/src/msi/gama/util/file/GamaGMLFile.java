@@ -116,15 +116,8 @@ public class GamaGMLFile extends GamaGisFile {
 	}
 
 	@Override
-	protected SimpleFeatureCollection getFeatureCollection(final IScope scope) {
-		final var gml = new GML(Version.GML3);
-		try {
-			SimpleFeatureCollection collection = gml.decodeFeatureCollection(new FileInputStream(getFile(scope)));
-			computeProjection(scope, Envelope3D.of(collection.getBounds()));
-			return collection;
-		} catch (IOException | SAXException | ParserConfigurationException e) {
-			throw GamaRuntimeException.create(e, scope);
-		}
+	protected Object getFeatureCollection(final IScope scope) {
+		return null;
 	}
 
 }

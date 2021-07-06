@@ -67,9 +67,9 @@ public interface ILayerData {
 
 	void addElevation(double currentElevation);
 
-	void setVisibleRegion(Envelope e);
+	void setVisibleRegion(Object e);
 
-	Envelope getVisibleRegion();
+	Object getVisibleRegion();
 
 	double getAddedElevation();
 

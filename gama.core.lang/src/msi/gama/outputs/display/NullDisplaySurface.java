@@ -334,7 +334,7 @@ public class NullDisplaySurface implements IDisplaySurface {
 	 * @see msi.gama.common.interfaces.IDisplaySurface#getVisibleRegionForLayer(msi.gama.common.interfaces.ILayer)
 	 */
 	@Override
-	public Envelope getVisibleRegionForLayer(final ILayer currentLayer) {
+	public Object getVisibleRegionForLayer(final ILayer currentLayer) {
 		return null;
 	}
 

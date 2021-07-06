@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 import msi.gama.runtime.GAMA;
 import msi.gama.runtime.exceptions.GamaRuntimeException;
 
@@ -28,53 +27,21 @@ import msi.gama.runtime.exceptions.GamaRuntimeException;
  */
 public class GraphExporters {
 
-	private static final Map<String, Class<? extends GraphExporter>> name2writer =
-			new HashMap<String, Class<? extends GraphExporter>>() {
+	private static final Map<String, Class<? extends Object>> name2writer = new HashMap<String, Class<? extends Object>>() {
 
-				{
-					put("dimacs", DIMACSExporter.class);
-					put("dot", DOTExporter.class); 
-					put("gexf", GEXFExporter.class);
-					put("graphml", GraphMLExporter.class);
-					put("graph6", Graph6Sparse6Exporter.class);
-					put("gml", GmlExporter.class);
-				}
-			};
+	};
 
 	public static Set<String> getAvailableWriters() {
 		return name2writer.keySet();
 	}
 
-	private static Map<String, GraphExporter> name2singleton = new HashMap<>();
+	private static Map<String, Object> name2singleton = new HashMap<>();
 
-	public static GraphExporter getGraphWriter(final String name) {
-		GraphExporter res = name2singleton.get(name);
-		
-		if ( res == null ) {
-			// no singleton created
-			Class<? extends GraphExporter> clazz = name2writer.get(name);
-			if ( clazz == null ) { throw GamaRuntimeException.error(
-				"unknown exporter name: " + name + "; please choose one of " + getAvailableWriters().toString(),
-				GAMA.getRuntimeScope()); }
-			Constructor<?> ctor;
-			try {
-				ctor = clazz.getConstructor();
-				res = (GraphExporter) ctor.newInstance();
-				name2singleton.put(name, res);
-				return res;
-			} catch (NoSuchMethodException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (SecurityException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (IllegalArgumentException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (InvocationTargetException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (InstantiationException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			} catch (IllegalAccessException e) {
-				throw GamaRuntimeException.create(e, GAMA.getRuntimeScope());
-			}
+	public static Object getGraphWriter(final String name) {
+		Object res = name2singleton.get(name);
+
+		if (res == null) {
+			return null;
 		}
 		return res;
 	}

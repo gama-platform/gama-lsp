@@ -104,21 +104,7 @@ public class ImageLayer extends AbstractLayer {
 
 	@Override
 	public void privateDraw(final IScope scope, final IGraphics dg) {
-		final GamaImageFile file = buildImage(scope);
-		if (file == null) { return; }
-		final FileDrawingAttributes attributes = new FileDrawingAttributes(null, true);
-		attributes.setUseCache(!getData().getRefresh());
-		if (env != null) {
-			final GamaPoint loc;
-			if (dg.is2D()) {
-				loc = new GamaPoint(env.getMinX(), env.getMinY());
-			} else {
-				loc = new GamaPoint(env.getWidth() / 2 + env.getMinX(), env.getHeight() / 2 + env.getMinY());
-			}
-			attributes.setLocation(loc);
-			attributes.setSize(Scaling3D.of(env.getWidth(), env.getHeight(), 0));
-		}
-		dg.drawFile(file, attributes);
+
 	}
 
 	@Override

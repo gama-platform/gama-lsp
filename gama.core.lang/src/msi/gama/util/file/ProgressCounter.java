@@ -6,7 +6,7 @@ import msi.gama.runtime.GAMA;
 import msi.gama.runtime.IScope;
 import msi.gama.runtime.exceptions.GamaRuntimeException;
 
-class ProgressCounter implements ProgressListener {
+class ProgressCounter {
 
 	final IScope scope;
 	final String name;
@@ -21,56 +21,45 @@ class ProgressCounter implements ProgressListener {
 		return scope.getGui().getStatus(scope);
 	}
 
-	@Override
 	public void complete() {
 		getDisplayer().setSubStatusCompletion(1d);
 	}
 
-	@Override
 	public void dispose() {
 		getDisplayer().endSubStatus(name.toString());
 	}
 
-	@Override
 	public void exceptionOccurred(final Throwable arg0) {
 		GAMA.reportAndThrowIfNeeded(scope, GamaRuntimeException.create(arg0, scope), true);
 	}
 
-	@Override
 	public float getProgress() {
 		return progress;
 	}
 
-	@Override
-	public InternationalString getTask() {
-		return new SimpleInternationalString(name);
+	public Object getTask() {
+		return null;
 	}
 
-	@Override
 	public boolean isCanceled() {
 		return scope.interrupted();
 	}
 
-	@Override
 	public void progress(final float p) {
 		progress = p;
 		getDisplayer().setSubStatusCompletion(progress);
 	}
 
-	@Override
 	public void setCanceled(final boolean cancel) {
 		getDisplayer().endSubStatus(name.toString());
 	}
 
-	@Override
-	public void setTask(final InternationalString n) {}
+	public void setTask(final Object n) {}
 
-	@Override
 	public void started() {
 		getDisplayer().beginSubStatus(name.toString());
 	}
 
-	@Override
 	public void warningOccurred(final String source, final String location, final String warning) {
 		GAMA.reportAndThrowIfNeeded(scope, GamaRuntimeException.warning(warning, scope), false);
 	}

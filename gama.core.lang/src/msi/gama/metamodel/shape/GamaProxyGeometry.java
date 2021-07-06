@@ -104,7 +104,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public String stringValue(final IScope scope) throws GamaRuntimeException {
-		return SHAPE_WRITER.write(getInnerGeometry());
+		return null;
 	}
 
 	/**
@@ -257,10 +257,8 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 * @see msi.gama.metamodel.shape.IShape#getInnerGeometry()
 	 */
 	@Override
-	public Geometry getInnerGeometry() {
-		final Geometry copy = (Geometry) getReferenceGeometry().getInnerGeometry().clone();
-		translate(copy, getReferenceGeometry().getLocation().toGamaPoint(), getLocation().toGamaPoint());
-		return copy;
+	public Object getInnerGeometry() {
+		return null;
 	}
 
 	/**
@@ -288,8 +286,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public boolean covers(final IShape g) {
-		// TODO Use prepared geometries like in GamaShape ?
-		return getInnerGeometry().covers(g.getInnerGeometry());
+		return true;
 	}
 
 	/**
@@ -299,7 +296,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public boolean crosses(final IShape g) {
-		return getInnerGeometry().crosses(g.getInnerGeometry());
+		return true;
 	}
 
 	/**
@@ -309,8 +306,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public double euclidianDistanceTo(final IShape g) {
-		if (isPoint() && g.isPoint()) { return g.getLocation().euclidianDistanceTo(getLocation()); }
-		return getInnerGeometry().distance(g.getInnerGeometry());
+		return 0.0;
 	}
 
 	/**
@@ -320,12 +316,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public double euclidianDistanceTo(final ILocation g) {
-		if (isPoint()) { return g.euclidianDistanceTo(getLocation()); }
-		return getInnerGeometry().distance(g.getInnerGeometry());
-		// GamaShape.ppd.initialize();
-		// DistanceToPoint.computeDistance(getInnerGeometry(), (Coordinate) g,
-		// GamaShape.ppd);
-		// return GamaShape.ppd.getDistance();
+		return 0.0;
 	}
 
 	/**
@@ -335,7 +326,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public boolean intersects(final IShape g) {
-		return getInnerGeometry().intersects(g.getInnerGeometry());
+		return true;
 	}
 
 	/**
@@ -353,7 +344,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 *
 	 */
 	@Override
-	public void setInnerGeometry(final Geometry intersection) {}
+	public void setInnerGeometry(final Object intersection) {}
 
 	/**
 	 * Method dispose()
@@ -380,12 +371,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public IList<? extends ILocation> getPoints() {
-		final IList<GamaPoint> result = GamaListFactory.create(Types.POINT);
-		final Coordinate[] points = getInnerGeometry().getCoordinates();
-		for (final Coordinate c : points) {
-			result.add(new GamaPoint(c));
-		}
-		return result;
+		return null;
 	}
 
 	/**
@@ -425,17 +411,7 @@ public abstract class GamaProxyGeometry implements IShape, Cloneable {
 	 */
 	@Override
 	public IList<GamaShape> getHoles() {
-		final IList<GamaShape> holes = GamaListFactory.create(Types.GEOMETRY);
-		final Geometry g = getInnerGeometry();
-		if (g instanceof Polygon) {
-			final Polygon p = (Polygon) g;
-			final int n = p.getNumInteriorRing();
-			for (int i = 0; i < n; i++) {
-				holes.add(new GamaShape(
-						GeometryUtils.GEOMETRY_FACTORY.createPolygon(p.getInteriorRingN(i).getCoordinates())));
-			}
-		}
-		return holes;
+		return null;
 	}
 
 	/**

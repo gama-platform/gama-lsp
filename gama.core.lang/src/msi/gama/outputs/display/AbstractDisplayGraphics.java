@@ -169,7 +169,7 @@ public abstract class AbstractDisplayGraphics implements IGraphics {
 	}
 
 	@Override
-	public Envelope getVisibleRegion() {
+	public Object getVisibleRegion() {
 		return surface.getVisibleRegionForLayer(currentLayer);
 	}
 

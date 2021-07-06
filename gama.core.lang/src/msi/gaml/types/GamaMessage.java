@@ -1,3 +1,4 @@
+package msi.gaml.types;
 /*******************************************************************************************************
  *
  * is part of the source code of the GAMA modeling and simulation platform (v. 1.8.1)

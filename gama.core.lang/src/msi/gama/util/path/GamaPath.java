@@ -29,7 +29,7 @@ import msi.gaml.types.Types;
 // Si construit � partir d'un graphe spatial, cr�e la g�om�trie � partir des edges pass�s.
 // Si
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaPath<V, E, G extends IGraph<V, E>> implements Comparable, GraphPath<V, E>, IPath<V, E, G> {
+public class GamaPath<V, E, G extends IGraph<V, E>> implements Comparable, IPath<V, E, G> {
 
 	V source, target;
 	IList<E> edges;
@@ -102,9 +102,6 @@ public class GamaPath<V, E, G extends IGraph<V, E>> implements Comparable, Graph
 		}
 		edges = GamaListFactory.create();
 
-		for (int i = 0, n = nodes.size(); i < n - 1; i++) {
-			edges.add(g.getEdge(nodes.get(i), nodes.get(i + 1)));
-		}
 		graph = g;
 	}
 
@@ -167,8 +164,7 @@ public class GamaPath<V, E, G extends IGraph<V, E>> implements Comparable, Graph
 
 	@Override
 	public IList<V> getVertexList() {
-		if (graph == null) { return GamaListFactory.EMPTY_LIST; }
-		return GamaListFactory.<V> wrap(getGamlType().getKeyType(), GraphPath.super.getVertexList());
+		return null;
 	}
 
 	// TODO :to check

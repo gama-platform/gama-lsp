@@ -22,21 +22,7 @@ public class LayoutCircle {
 	}
 
 	public void applyLayout(final IScope scope, final boolean shuffle) {
-
-		final double radius = envelopeGeometry.getCentroid().euclidianDistanceTo(Spatial.Punctal
-				._closest_point_to(envelopeGeometry.getCentroid(), envelopeGeometry.getExteriorRing(scope)));
-
-		// Optimize node ordering
-		final List<IShape> orderedNodes = this.minimizeEdgeLength(graph, shuffle);
-
-		int i = 0;
-		for (final IShape v : orderedNodes) {
-			final double angle = 360 * i++ / (double) graph.vertexSet().size();
-			final double x = Maths.cos(angle) * radius + envelopeGeometry.getCentroid().x;
-			final double y = Maths.sin(angle) * radius + envelopeGeometry.getCentroid().x;
-			v.setLocation(new GamaPoint(x, y));
-		}
-
+		return;
 	}
 
 	private List<IShape> minimizeEdgeLength(final IGraph<IShape, IShape> graph, final boolean shuffle) {

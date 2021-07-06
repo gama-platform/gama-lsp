@@ -101,12 +101,14 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	}
 
 	/**
-	 * The agent hosting this population which is considered as the direct macro-agent.
+	 * The agent hosting this population which is considered as the direct
+	 * macro-agent.
 	 */
 	protected IMacroAgent host;
 
 	/**
-	 * The object describing how the agents of this population are spatially organized
+	 * The object describing how the agents of this population are spatially
+	 * organized
 	 */
 	protected ITopology topology;
 	protected final ISpecies species;
@@ -134,27 +136,7 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 
 		@Override
 		public Object executeOn(final IScope scope) throws GamaRuntimeException {
-			final IPopulation<T> pop = GamaPopulation.this;
-			final Set<IAgent> targets = new HashSet<IAgent>(Cast.asList(scope, listOfTargetAgents.value(scope)));
-			final List<IAgent> toKill = new ArrayList<>();
-			for (final IAgent agent : pop.iterable(scope)) {
-				final IAgent target = Cast.asAgent(scope, agent.getAttribute(TARGET));
-				if (targets.contains(target)) {
-					targets.remove(target);
-				} else {
-					toKill.add(agent);
-				}
-			}
-			for (final IAgent agent : toKill) {
-				agent.dispose();
-			}
-			final List<Map<String, Object>> attributes = new ArrayList<>();
-			for (final IAgent target : targets) {
-				final Map<String, Object> att = GamaMapFactory.createUnordered();
-				att.put(TARGET, target);
-				attributes.add(att);
-			}
-			return pop.createAgents(scope, targets.size(), attributes, false, true, null);
+			return null;
 		}
 
 	}
@@ -166,8 +148,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		this.species = species;
 		final TypeDescription ecd = species.getDescription();
 		orderedVarNames = ecd.getOrderedAttributeNames(INIT_DEPENDENCIES_FACETS).toArray(new String[0]);
-		updatableVars =
-				Iterables.toArray(transform(ecd.getUpdatableAttributeNames(), s -> species.getVar(s)), IVariable.class);
+		updatableVars = Iterables.toArray(transform(ecd.getUpdatableAttributeNames(), s -> species.getVar(s)),
+				IVariable.class);
 		if (species.isMirror() && host != null) {
 			mirrorManagement = new MirrorPopulationManagement(species.getFacet(MIRRORS));
 		} else {
@@ -180,7 +162,9 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 				final String name = d.getName();
 				if (name.equals(ISpecies.initActionName)) {
 					result[0] = true;
-				} else if (name.equals(ISpecies.stepActionName)) { result[1] = true; }
+				} else if (name.equals(ISpecies.stepActionName)) {
+					result[1] = true;
+				}
 			}
 			return true;
 		});
@@ -195,9 +179,12 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		if (frequencyExp != null) {
 			final int frequency = Cast.asInt(scope, frequencyExp.value(scope));
 			final int step = scope.getClock().getCycle();
-			if (frequency == 0 || step % frequency != 0) return true;
+			if (frequency == 0 || step % frequency != 0)
+				return true;
 		}
-		if (mirrorManagement != null) { mirrorManagement.executeOn(scope); }
+		if (mirrorManagement != null) {
+			mirrorManagement.executeOn(scope);
+		}
 		getSpecies().getArchitecture().preStep(scope, this);
 		return stepAgents(scope);
 
@@ -217,7 +204,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	 */
 	@Override
 	public IList<T> listValue(final IScope scope, final IType contentsType, final boolean copy) {
-		if (copy) return GamaListFactory.create(scope, contentsType, this);
+		if (copy)
+			return GamaListFactory.create(scope, contentsType, this);
 		return this;
 	}
 
@@ -242,7 +230,9 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	@Override
 	public boolean init(final IScope scope) {
 		// See #2933
-		if (mirrorManagement != null) { mirrorManagement.executeOn(scope); }
+		if (mirrorManagement != null) {
+			mirrorManagement.executeOn(scope);
+		}
 		return true;
 		// // Do whatever the population has to do at the first step ?
 	}
@@ -285,7 +275,7 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		return species;
 	}
 
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public Iterable<T> iterable(final IScope scope) {
 		return (Iterable<T>) getAgents(scope);
@@ -303,7 +293,7 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		}
 	}
 
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public T[] toArray() {
 		return (T[]) super.toArray(new IAgent[0]);
@@ -322,7 +312,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	public IList<T> createAgents(final IScope scope, final IContainer<?, ? extends IShape> geometries,
 			final RemoteSequence sequence) {
 		final int number = geometries.length(scope);
-		if (number == 0) return GamaListFactory.EMPTY_LIST;
+		if (number == 0)
+			return GamaListFactory.EMPTY_LIST;
 		final IList<T> list = GamaListFactory.create(getGamlType().getContentType(), number);
 		final IAgentConstructor<T> constr = species.getDescription().getAgentConstructor();
 		for (final IShape geom : geometries.iterable(scope)) {
@@ -339,12 +330,15 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 			a.schedule(scope);
 			// a.scheduleAndExecute(null);
 		}
-		// AD May 2021: adds the execution of the sequence *before* firing listeners (otherwise, improperly initialized
+		// AD May 2021: adds the execution of the sequence *before* firing listeners
+		// (otherwise, improperly initialized
 		// agents were "notified"
 		createVariablesFor(scope, list, EMPTY_LIST);
 		if (sequence != null && !sequence.isEmpty()) {
 			for (final IAgent a : list) {
-				if (!scope.execute(sequence, a, null).passed()) { break; }
+				if (!scope.execute(sequence, a, null).passed()) {
+					break;
+				}
 			}
 		}
 		fireAgentsAdded(scope, list);
@@ -373,11 +367,13 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	public IList<T> createAgents(final IScope scope, final int number,
 			final List<? extends Map<String, Object>> initialValues, final boolean isRestored,
 			final boolean toBeScheduled, final RemoteSequence sequence) throws GamaRuntimeException {
-		if (number == 0) return GamaListFactory.EMPTY_LIST;
+		if (number == 0)
+			return GamaListFactory.EMPTY_LIST;
 		final IList<T> list = GamaListFactory.create(getGamlType().getContentType(), number);
 		final IAgentConstructor<T> constr = species.getDescription().getAgentConstructor();
 		for (int i = 0; i < number; i++) {
-			@SuppressWarnings ("unchecked") final T a = constr.createOneAgent(this, currentAgentIndex++);
+			@SuppressWarnings("unchecked")
+			final T a = constr.createOneAgent(this, currentAgentIndex++);
 			// final int ind = currentAgentIndex++;
 			// a.setIndex(ind);
 			// Try to grab the location earlier
@@ -408,12 +404,15 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 				a.schedule(scope);
 				// a.scheduleAndExecute(sequence);
 			}
-			// AD May 2021: adds the execution of the sequence *before* firing listeners (otherwise, improperly
+			// AD May 2021: adds the execution of the sequence *before* firing listeners
+			// (otherwise, improperly
 			// initialized
 			// agents were "notified"
 			if (sequence != null && !sequence.isEmpty()) {
 				for (final IAgent a : list) {
-					if (!scope.execute(sequence, a, null).passed()) { break; }
+					if (!scope.execute(sequence, a, null).passed()) {
+						break;
+					}
 				}
 			}
 
@@ -427,10 +426,11 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		createAndUpdateVariablesFor(scope, agents, initialValues, false);
 	}
 
-	@SuppressWarnings ("null")
+	@SuppressWarnings("null")
 	public void createAndUpdateVariablesFor(final IScope scope, final List<T> agents,
 			final List<? extends Map<String, Object>> initialValues, final boolean update) throws GamaRuntimeException {
-		if (agents == null || agents.isEmpty()) return;
+		if (agents == null || agents.isEmpty())
+			return;
 		final boolean empty = initialValues == null || initialValues.isEmpty();
 		Map<String, Object> inits;
 		for (int i = 0, n = agents.size(); i < n; i++) {
@@ -443,12 +443,14 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 			for (final String s : orderedVarNames) {
 				final IVariable var = species.getVar(s);
 				final Object initGet = empty || !allowVarInitToBeOverridenByExternalInit(var) ? null : inits.get(s);
-				if (!update || initGet != null) { var.initializeWith(scope, a, initGet); } // else if initGet == null :
-																							// do not do anything, this
-																							// will
-																							// keep the previously
-																							// defined value for the
-																							// variable
+				if (!update || initGet != null) {
+					var.initializeWith(scope, a, initGet);
+				} // else if initGet == null :
+					// do not do anything, this
+					// will
+					// keep the previously
+					// defined value for the
+					// variable
 			}
 		}
 	}
@@ -461,7 +463,9 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	public void initializeFor(final IScope scope) throws GamaRuntimeException {
 		dispose();
 		computeTopology(scope);
-		if (topology != null) { topology.initialize(scope, this); }
+		if (topology != null) {
+			topology.initialize(scope, this);
+		}
 	}
 
 	@Override
@@ -494,11 +498,12 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 		return updatableVars.length > 0;
 	}
 
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getAgent(final IScope scope, final ILocation coord) {
 		final IAgentFilter filter = In.list(scope, this);
-		if (filter == null) return null;
+		if (filter == null)
+			return null;
 
 		return topology == null ? null : (T) topology.getAgentClosestTo(scope, coord, filter);
 	}
@@ -542,62 +547,7 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	}
 
 	protected static ITopology buildGridTopology(final IScope scope, final ISpecies species, final IAgent host) {
-		IExpression exp = species.getFacet(WIDTH);
-		final Envelope3D env = scope.getSimulation().getGeometry().getEnvelope();
-		final int rows = exp == null
-				? species.hasFacet(CELL_WIDTH)
-						? (int) (env.getWidth() / Cast.asFloat(scope, species.getFacet(CELL_WIDTH).value(scope))) : 100
-				: Cast.asInt(scope, exp.value(scope));
-		exp = species.getFacet(IKeyword.HEIGHT);
-		final int columns = exp == null ? species.hasFacet(CELL_HEIGHT)
-				? (int) (env.getHeight() / Cast.asFloat(scope, species.getFacet(CELL_HEIGHT).value(scope))) : 100
-				: Cast.asInt(scope, exp.value(scope));
-
-		final boolean isTorus = host.getTopology().isTorus();
-		exp = species.getFacet("use_individual_shapes");
-		final boolean useIndividualShapes = exp == null || Cast.asBool(scope, exp.value(scope));
-		exp = species.getFacet("use_neighbors_cache");
-		final boolean useNeighborsCache = exp == null || Cast.asBool(scope, exp.value(scope));
-		exp = species.getFacet("horizontal_orientation");
-		final boolean horizontalOrientation = exp == null || Cast.asBool(scope, exp.value(scope));
-
-		exp = species.getFacet("optimizer");
-		final String optimizer = exp == null ? "" : Cast.asString(scope, exp.value(scope));
-
-		exp = species.getFacet(NEIGHBORS);
-		if (exp == null) { exp = species.getFacet(NEIGHBOURS); }
-		final boolean usesVN = exp == null || Cast.asInt(scope, exp.value(scope)) == 4;
-		final boolean isHexagon = exp != null && Cast.asInt(scope, exp.value(scope)) == 6;
-		exp = species.getFacet(FILES);
-		IList<GamaGridFile> files = null;
-		if (exp != null) { files = Cast.asList(scope, exp.value(scope)); }
-		GridTopology result;
-		if (files != null && !files.isEmpty()) {
-			result = new GridTopology(scope, host, files, isTorus, usesVN, useIndividualShapes, useNeighborsCache,
-					optimizer);
-		} else {
-			exp = species.getFacet(FILE);
-			final GamaGridFile file = (GamaGridFile) (exp != null ? exp.value(scope) : null);
-			if (file == null) {
-				result = new GridTopology(scope, host, rows, columns, isTorus, usesVN, isHexagon, horizontalOrientation,
-						useIndividualShapes, useNeighborsCache, optimizer);
-			} else {
-				result = new GridTopology(scope, host, file, isTorus, usesVN, useIndividualShapes, useNeighborsCache,
-						optimizer);
-			}
-
-		}
-		// Reverts the modification of the world envelope (see #1953 and #1939)
-		//
-		// final Envelope3D env =
-		// result.getPlaces().getEnvironmentFrame().getEnvelope();
-		// final Envelope3D world = host.getEnvelope();
-		// final Envelope3D newEnvelope = new Envelope3D(0,
-		// Math.max(env.getWidth(), world.getWidth()), 0,
-		// Math.max(env.getHeight(), world.getHeight()), 0,
-		// Math.max(env.getDepth(), world.getDepth()));
-		// host.setGeometry(new GamaShape(newEnvelope));
-		return result;
+		return null;
 	}
 
 	@Override
@@ -629,7 +579,9 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	public void killMembers() throws GamaRuntimeException {
 		final T[] ag = toArray();
 		for (final IAgent a : ag) {
-			if (a != null) { a.dispose(); }
+			if (a != null) {
+				a.dispose();
+			}
 		}
 		this.clear();
 	}
@@ -661,7 +613,9 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	@Override
 	public void removeValue(final IScope scope, final Object value) {
 		if (value instanceof IAgent && super.remove(value)) {
-			if (topology != null) { topology.removeAgent((IAgent) value); }
+			if (topology != null) {
+				topology.removeAgent((IAgent) value);
+			}
 			fireAgentRemoved(scope, (IAgent) value);
 		}
 	}
@@ -686,7 +640,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 
 	@Override
 	public boolean contains(final IScope scope, final Object o) {
-		if (!(o instanceof IAgent)) return false;
+		if (!(o instanceof IAgent))
+			return false;
 		return ((IAgent) o).getPopulation() == this;
 	}
 
@@ -696,18 +651,24 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 
 	@Override
 	public void addListener(final IPopulation.Listener listener) {
-		if (listeners == null) { listeners = new LinkedList<>(); }
-		if (!listeners.contains(listener)) { listeners.add(listener); }
+		if (listeners == null) {
+			listeners = new LinkedList<>();
+		}
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
 	}
 
 	@Override
 	public void removeListener(final IPopulation.Listener listener) {
-		if (listeners == null) return;
+		if (listeners == null)
+			return;
 		listeners.remove(listener);
 	}
 
 	protected void fireAgentAdded(final IScope scope, final IAgent agent) {
-		if (!hasListeners()) return;
+		if (!hasListeners())
+			return;
 		try {
 			for (final IPopulation.Listener l : listeners) {
 				l.notifyAgentAdded(scope, this, agent);
@@ -718,7 +679,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	}
 
 	protected <T extends IAgent> void fireAgentsAdded(final IScope scope, final IList<T> container) {
-		if (!hasListeners()) return;
+		if (!hasListeners())
+			return;
 		// create list
 		final Collection<T> agents = new LinkedList<>(container);
 		// send event
@@ -732,7 +694,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	}
 
 	protected void fireAgentRemoved(final IScope scope, final IAgent agent) {
-		if (!hasListeners()) return;
+		if (!hasListeners())
+			return;
 		try {
 			for (final IPopulation.Listener l : listeners) {
 				l.notifyAgentRemoved(scope, this, agent);
@@ -743,7 +706,8 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	}
 
 	protected void firePopulationCleared(final IScope scope) {
-		if (!hasListeners()) return;
+		if (!hasListeners())
+			return;
 		// send event
 		try {
 			for (final IPopulation.Listener l : listeners) {
@@ -780,11 +744,15 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 	@Override
 	public boolean accept(final IScope scope, final IShape source, final IShape a) {
 		final IAgent agent = a.getAgent();
-		if (agent == null) return false;
-		if (agent.getPopulation() != this) return false;
-		if (agent.dead()) return false;
+		if (agent == null)
+			return false;
+		if (agent.getPopulation() != this)
+			return false;
+		if (agent.dead())
+			return false;
 		final IAgent as = source.getAgent();
-		if (agent == as) return false;
+		if (agent == as)
+			return false;
 		// }
 		return true;
 	}
@@ -816,18 +784,19 @@ public class GamaPopulation<T extends IAgent> extends GamaList<T> implements IPo
 
 	@Override
 	public T getFromIndicesList(final IScope scope, final IList indices) throws GamaRuntimeException {
-		if (indices == null) return null;
+		if (indices == null)
+			return null;
 		final int size = indices.size();
 		switch (size) {
-			case 0:
-				return null;
-			case 1:
-				return super.getFromIndicesList(scope, indices);
-			case 2:
-				return this.getAgent(scope,
-						new GamaPoint(Cast.asFloat(scope, indices.get(0)), Cast.asFloat(scope, indices.get(1))));
-			default:
-				throw GamaRuntimeException.error("Populations cannot be accessed with 3 or more indexes", scope);
+		case 0:
+			return null;
+		case 1:
+			return super.getFromIndicesList(scope, indices);
+		case 2:
+			return this.getAgent(scope,
+					new GamaPoint(Cast.asFloat(scope, indices.get(0)), Cast.asFloat(scope, indices.get(1))));
+		default:
+			throw GamaRuntimeException.error("Populations cannot be accessed with 3 or more indexes", scope);
 
 		}
 

@@ -48,11 +48,7 @@ public abstract class Gama3DGeometryFile extends GamaGeometryFile {
 
 	@Override
 	protected IShape buildGeometry(final IScope scope) {
-		final List<Geometry> faces = new ArrayList<>();
-		for (final IShape shape : getBuffer().iterable(scope)) {
-			faces.add(shape.getInnerGeometry());
-		}
-		return new GamaShape(GeometryUtils.GEOMETRY_FACTORY.buildGeometry(faces));
+		return null;
 	}
 
 	@Override

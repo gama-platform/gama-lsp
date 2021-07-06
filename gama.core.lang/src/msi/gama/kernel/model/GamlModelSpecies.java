@@ -160,15 +160,7 @@ public class GamlModelSpecies extends GamlSpecies implements IModel {
 			// Otherwise with its title
 			e = titledExperiments.get(s);
 			if (e == null) {
-				// Finally, if the string is an int, we try to get the n-th
-				// experiment
-				if (StringUtils.isNumeric(s)) {
-					final int i = Integer.parseInt(s);
-					final List<String> names = new ArrayList(experiments.keySet());
-					if (names.size() > 0) {
-						e = getExperiment(names.get(i));
-					}
-				}
+				return null;
 			}
 		}
 		return e;

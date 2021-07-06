@@ -95,25 +95,7 @@ public class GridLayerData extends LayerData {
 
 	@Override
 	public void compute(final IScope scope, final IGraphics g) throws GamaRuntimeException {
-		if (grid == null) {
-			final IPopulation<? extends IAgent> gridPop = scope.getAgent().getPopulationFor(name);
-			if (gridPop == null)
-				throw error("No grid species named " + name + " can be found", scope);
-			else if (!gridPop.isGrid()) throw error("Species named " + name + " is not a grid", scope);
-			grid = (IGrid) gridPop.getTopology().getPlaces();
-			// final Envelope env = grid.getEnvironmentFrame().getEnvelope();
-			final Envelope env2 = scope.getSimulation().getEnvelope();
-			final double width = env2.getWidth();
-			final double height = env2.getHeight();
-			// final double width2 = env2.getWidth();
-			// final double height2 = env2.getHeight();
-			final double cols = grid.getCols(scope);
-			final double rows = grid.getRows(scope);
-			cellSize = new GamaPoint(width / cols, height / rows);
-			dim.setLocation(grid.getDimensions());
-		}
-		super.compute(scope, g);
-		if (shouldComputeImage) { computeImage(scope, g); }
+		return;
 	}
 
 	public Boolean isTriangulated() {

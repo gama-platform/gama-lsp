@@ -81,12 +81,7 @@ public class MeshLayerData extends LayerData {
 
 	@Override
 	public void compute(final IScope scope, final IGraphics g) throws GamaRuntimeException {
-		final Envelope env2 = scope.getSimulation().getEnvelope();
-		final double width = env2.getWidth();
-		final double height = env2.getHeight();
-		super.compute(scope, g);
-		shouldComputeValues = super.getRefresh();
-		cellSize = new GamaPoint(width / dim.x, height / dim.y);
+		return;
 	}
 
 	private IField buildValues(final IScope scope, final Object from) {

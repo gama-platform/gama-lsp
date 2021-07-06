@@ -147,11 +147,7 @@ public class GamaObjectMatrix extends GamaMatrix<Object> {
 	 */
 
 	public IMatrix<?> _opAppendVertically(final IScope scope, final IMatrix<?> b) {
-		final Object[] mab = ArrayUtils.addAll(getMatrix(), ((GamaObjectMatrix) b).getMatrix());
-		final IType<?> newContentsType =
-				GamaType.findCommonType(getGamlType().getContentType(), b.getGamlType().getContentType());
-		final IMatrix<?> fl = new GamaObjectMatrix(numCols, numRows + b.getRows(scope), mab, newContentsType);
-		return fl;
+		return null;
 	}
 
 	/**
@@ -402,8 +398,8 @@ public class GamaObjectMatrix extends GamaMatrix<Object> {
 	}
 
 	@Override
-	public StreamEx<Object> stream(final IScope scope) {
-		return StreamEx.of(matrix);
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	@Override

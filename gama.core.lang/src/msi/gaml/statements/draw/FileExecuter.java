@@ -38,28 +38,7 @@ class FileExecuter extends DrawExecuter {
 
 	@Override
 	Rectangle2D executeOn(final IScope scope, final IGraphics g, final DrawingData data) throws GamaRuntimeException {
-		final GamaFile file = constImg == null ? (GamaFile) item.value(scope) : constImg;
-		if (file == null) { return null; }
-		final FileDrawingAttributes attributes =
-				computeAttributes(scope, data, file instanceof GamaImageFile, file instanceof GamaGisFile, g.is2D());
-
-		// XXX EXPERIMENTAL See Issue #1521
-		if (GamaPreferences.Displays.DISPLAY_ONLY_VISIBLE.getValue()
-				&& /* !GAMA.isInHeadLessMode() */ !scope.getExperiment().isHeadless()) {
-			final Scaling3D size = attributes.getSize();
-			if (size != null) {
-				// if a size is provided
-				final Envelope3D expected = Envelope3D.of((ILocation) attributes.getLocation());
-				expected.expandBy(size.getX() / 2, size.getY() / 2);
-				final Envelope visible = g.getVisibleRegion();
-				if (visible != null) {
-					if (!visible.intersects(expected)) { return null; }
-				}
-			}
-			// XXX EXPERIMENTAL
-		}
-
-		return g.drawFile(file, attributes);
+		return null;
 	}
 
 	FileDrawingAttributes computeAttributes(final IScope scope, final DrawingData data, final boolean imageFile,

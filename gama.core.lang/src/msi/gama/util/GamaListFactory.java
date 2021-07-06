@@ -131,9 +131,7 @@ public class GamaListFactory {
 	 * @return
 	 */
 	public static IList<Integer> createWithoutCasting(final IType contentType, final int[] objects) {
-		final IList<Integer> list = create(contentType, objects.length);
-		list.addAll(Arrays.asList(ArrayUtils.toObject(objects)));
-		return list;
+		return null;
 	}
 
 	/**
@@ -145,9 +143,7 @@ public class GamaListFactory {
 	 * @return
 	 */
 	public static IList<Double> createWithoutCasting(final IType contentType, final double[] objects) {
-		final IList<Double> list = create(contentType, objects.length);
-		list.addAll(Arrays.asList(ArrayUtils.toObject(objects)));
-		return list;
+		return null;
 	}
 
 	/**

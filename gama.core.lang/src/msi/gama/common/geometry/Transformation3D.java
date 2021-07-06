@@ -13,9 +13,9 @@ package msi.gama.common.geometry;
 
 import msi.gama.metamodel.shape.GamaPoint;
 
-public interface Transformation3D extends CoordinateFilter {
+public interface Transformation3D {
 
 	default void applyTo(final GamaPoint vertex) {
-		filter(vertex);
+		return;
 	}
 }

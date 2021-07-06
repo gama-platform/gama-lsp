@@ -105,30 +105,11 @@ public class GamaGeoJsonFile extends GamaGisFile {
 
 	@Override
 	public IList<String> getAttributes(final IScope scope) {
-		final Map<String, String> attributes = new LinkedHashMap<>();
-		final SimpleFeatureCollection store = getFeatureCollection(scope);
-		final java.util.List<AttributeDescriptor> att_list = store.getSchema().getAttributeDescriptors();
-		for (final AttributeDescriptor desc : att_list) {
-			String type;
-			if (desc.getType() instanceof GeometryType) {
-				type = "geometry";
-			} else {
-				type = Types.get(desc.getType().getBinding()).toString();
-			}
-			attributes.put(desc.getName().getLocalPart(), type);
-		}
-
-		return GamaListFactory.wrap(Types.STRING, attributes.keySet());
+		return null;
 	}
 
 	@Override
-	protected SimpleFeatureCollection getFeatureCollection(final IScope scope) {
-		try (FileReader fileReader = new FileReader(getFile(scope))) {
-			final FeatureJSON fJSON = new FeatureJSON();
-			return (SimpleFeatureCollection) fJSON.readFeatureCollection(fileReader);
-		} catch (final Exception e) {
-			GAMA.reportError(scope, GamaRuntimeException.create(e, scope), true);
-		}
+	protected Object getFeatureCollection(final IScope scope) {
 		return null;
 	}
 

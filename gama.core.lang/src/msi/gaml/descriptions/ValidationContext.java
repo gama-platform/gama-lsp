@@ -96,7 +96,7 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	}
 
 	public Iterable<GamlCompilationError> getInfos() {
-		return StreamEx.of(items()).filter(IS_INFO).toList();
+		return null;
 	}
 
 	@Override
@@ -113,12 +113,11 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	 */
 	@Override
 	public Iterator<GamlCompilationError> iterator() {
-		return StreamEx.of(items()).append(getImportedErrors()).limit(MAX_SIZE).toList().iterator();
+		return null;
 	}
 
 	public Map<String, URI> getImportedErrorsAsStrings() {
-		return StreamEx.of(importedErrors).toMap(e -> e.toString() + " (" + URI.decode(e.getURI().lastSegment()) + ")",
-				e -> e.getURI(), (t, u) -> t);
+		return null;
 	}
 
 	public void setNoWarning() {
@@ -163,8 +162,7 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	}
 
 	public boolean hasErrorOn(final EObject... objects) {
-		final List<EObject> list = Arrays.asList(objects);
-		return StreamEx.of(items()).filter(IS_ERROR).findAny(p -> list.contains(p.getStatement())).isPresent();
+		return true;
 	}
 
 	public void setNoExperiment() {

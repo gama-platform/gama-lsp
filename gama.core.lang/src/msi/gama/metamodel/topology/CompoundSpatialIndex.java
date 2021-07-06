@@ -28,7 +28,7 @@ import msi.gama.util.Collector;
 import msi.gama.util.GamaMapFactory;
 import msi.gama.util.ICollector;
 
-public class CompoundSpatialIndex extends Object implements ISpatialIndex.Compound {
+public class CompoundSpatialIndex implements ISpatialIndex.Compound {
 
 	boolean disposed = false, unique = true;
 	private Map<IPopulation<? extends IAgent>, ISpatialIndex> spatialIndexes;
@@ -36,12 +36,10 @@ public class CompoundSpatialIndex extends Object implements ISpatialIndex.Compou
 	private GamaQuadTree rootIndex;
 	final protected double[] steps;
 
-	public CompoundSpatialIndex(final Envelope bounds, final boolean parallel) {
-		rootIndex = GamaQuadTree.create(bounds, parallel);
+	public CompoundSpatialIndex(final Object bounds, final boolean parallel) {
+		this.steps = null;
 		uniqueIndexes = Collector.getOrderedSet();
 		uniqueIndexes.add(rootIndex);
-		final double biggest = Math.max(bounds.getWidth(), bounds.getHeight());
-		steps = new double[] { biggest / 20, biggest / 10, biggest / 2, biggest, biggest * Math.sqrt(2) };
 	}
 
 	private ISpatialIndex findSpatialIndex(final IPopulation<? extends IAgent> s) {
@@ -196,7 +194,7 @@ public class CompoundSpatialIndex extends Object implements ISpatialIndex.Compou
 	}
 
 	@Override
-	public Collection<IAgent> allInEnvelope(final IScope scope, final IShape source, final Envelope envelope,
+	public Collection<IAgent> allInEnvelope(final IScope scope, final IShape source, final Object envelope,
 			final IAgentFilter f, final boolean contained) {
 		if (disposed) { return Collections.EMPTY_LIST; }
 		if (unique) { return rootIndex.allInEnvelope(scope, source, envelope, f, contained); }
@@ -245,17 +243,8 @@ public class CompoundSpatialIndex extends Object implements ISpatialIndex.Compou
 	}
 
 	@Override
-	public void updateQuadtree(final Envelope envelope) {
-		GamaQuadTree tree = rootIndex;
-		final Collection<IAgent> agents = tree.allAgents();
-		final boolean parallel = tree.isParallel();
-		tree.dispose();
-		tree = GamaQuadTree.create(envelope, parallel);
-		rootIndex = tree;
-		for (final IAgent a : agents) {
-			tree.insert(a);
-		}
-
+	public void updateQuadtree(final Object envelope) {
+	return;
 	}
 
 	@Override

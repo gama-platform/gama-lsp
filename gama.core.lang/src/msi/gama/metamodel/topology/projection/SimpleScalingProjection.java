@@ -1,65 +1,48 @@
 package msi.gama.metamodel.topology.projection;
 
-
-
-
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.runtime.IScope;
 
-public class SimpleScalingProjection implements IProjection{
+public class SimpleScalingProjection implements IProjection {
 
-	public CoordinateFilter scaling, inverseScaling;
+	public Object scaling, inverseScaling;
 
 	@Override
-	public void createTransformation(MathTransform t) {
-		
+	public void createTransformation(Object t) {
+
 	}
-	
+
 	public SimpleScalingProjection(Double scale) {
 		if (scale != null) {
 			createScalingTransformations(scale);
 		}
-		
+
 	}
 
 	@Override
-	public Geometry transform(Geometry geom) {
+	public Object transform(Object geom) {
 		if (scaling != null) {
-			geom.apply(scaling);
-			geom.geometryChanged();
+			return null;
 		}
 		return geom;
 	}
 
 	@Override
-	public Geometry inverseTransform(Geometry geom) {
-		if (inverseScaling != null) {
-			geom.apply(inverseScaling);
-			geom.geometryChanged();
-		}
-		return geom;
+	public Object inverseTransform(Object geom) {
+		return null;
 	}
-	
+
 	public void createScalingTransformations(final Double scale) {
-		scaling = coord -> {
-			coord.x *= scale;
-			coord.y *= scale;
-			coord.z *= scale;
-		};
-		inverseScaling = coord -> {
-			coord.x /= scale;
-			coord.y /= scale;
-			coord.z /= scale;
-		};
+		return;
 	}
 
 	@Override
-	public CoordinateReferenceSystem getInitialCRS(IScope scope) {
+	public Object getInitialCRS(IScope scope) {
 		return null;
 	}
 
 	@Override
-	public CoordinateReferenceSystem getTargetCRS(IScope scope) {
+	public Object getTargetCRS(IScope scope) {
 		return null;
 	}
 
@@ -69,22 +52,22 @@ public class SimpleScalingProjection implements IProjection{
 	}
 
 	@Override
-	public void translate(Geometry geom) {
-		
+	public void translate(Object geom) {
+
 	}
 
 	@Override
-	public void inverseTranslate(Geometry geom) {
-		
+	public void inverseTranslate(Object geom) {
+
 	}
 
 	@Override
-	public void convertUnit(Geometry geom) {
+	public void convertUnit(Object geom) {
 	}
 
 	@Override
-	public void inverseConvertUnit(Geometry geom) {
-		
+	public void inverseConvertUnit(Object geom) {
+
 	}
 
 }

@@ -85,17 +85,7 @@ public class GamaSVGFile extends GamaGeometryFile {
 
 	@Override
 	protected void fillBuffer(final IScope scope) throws GamaRuntimeException {
-		try (BufferedReader in = new BufferedReader(new FileReader(getFile(scope)))) {
-			final SVGUniverse svg = SVGUniverse.getInstance();
-			final URI uri = svg.loadSVG(in, getPath(scope));
-			final SVGRoot diagram = svg.getRoot(uri);
-			final Shape shape = diagram.getShape();
-			final Geometry geom = ShapeReader.read(shape, 1.0, GeometryUtils.GEOMETRY_FACTORY); // flatness
-			final IShape gs = new GamaShape(null, geom, null, new GamaPoint(0, 0), size, true);
-			setBuffer(GamaListFactory.wrap(Types.GEOMETRY, gs));
-		} catch (final IOException e) {
-			throw GamaRuntimeException.create(e, scope);
-		}
+		return;
 	}
 
 }

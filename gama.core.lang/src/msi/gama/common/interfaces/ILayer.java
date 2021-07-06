@@ -146,10 +146,7 @@ public interface ILayer extends INamed, Comparable<ILayer> {
 	 * @return a rectangle in screen coordinates
 	 */
 	default Rectangle2D focusOn(final IShape geometry, final IDisplaySurface s) {
-		final Envelope3D envelope = geometry.getEnvelope();
-		final Point min = this.getScreenCoordinatesFrom(envelope.getMinX(), envelope.getMinY(), s);
-		final Point max = this.getScreenCoordinatesFrom(envelope.getMaxX(), envelope.getMaxY(), s);
-		return new Rectangle2D.Double(min.x, min.y, (double) max.x - min.x, (double) max.y - min.y);
+		return null;
 	}
 
 	/**

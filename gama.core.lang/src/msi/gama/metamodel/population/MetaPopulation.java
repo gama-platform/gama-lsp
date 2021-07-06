@@ -72,8 +72,8 @@ public class MetaPopulation implements IContainer.Addressable<Integer, IAgent>, 
 	}
 
 	@Override
-	public StreamEx<IAgent> stream(final IScope scope) {
-		return StreamEx.of(populationSets).flatMap(each -> each.stream(scope));
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	/**

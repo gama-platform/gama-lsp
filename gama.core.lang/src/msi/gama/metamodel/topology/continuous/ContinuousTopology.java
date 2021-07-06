@@ -110,16 +110,12 @@ public class ContinuousTopology extends AbstractTopology {
 
 	@Override
 	public Double distanceBetween(final IScope scope, final IShape g1, final IShape g2) {
-		if (g1 == g2) { return 0d; }
-		if (isTorus()) { return returnToroidalGeom(g1).distance(returnToroidalGeom(g2)); }
-		return g1.euclidianDistanceTo(g2);
+		return null;
 	}
 
 	@Override
 	public Double distanceBetween(final IScope scope, final ILocation g1, final ILocation g2) {
-		if (g1 == g2) { return 0d; }
-		if (isTorus()) { return returnToroidalGeom(g1).distance(returnToroidalGeom(g2)); }
-		return g1.euclidianDistanceTo(g2);
+		return null;
 	}
 
 }

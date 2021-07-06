@@ -84,7 +84,7 @@ public class AmorphousTopology implements ITopology {
 	 */
 	@Override
 	public ITopology copy(final IScope scope) throws GamaRuntimeException {
-		return new AmorphousTopology();
+		return null;
 	}
 
 	/**
@@ -109,9 +109,7 @@ public class AmorphousTopology implements ITopology {
 	//
 	@Override
 	public void updateAgent(final Envelope3D previous, final IAgent agent) {
-		final IShape ng =
-				Spatial.Operators.union(agent.getScope(), expandableEnvironment.getGeometry(), agent.getGeometry());
-		expandableEnvironment.setGeometry(new GamaShape(ng.getInnerGeometry().getEnvelope()));
+	return;
 	}
 
 	/**
@@ -254,7 +252,7 @@ public class AmorphousTopology implements ITopology {
 	 */
 	@Override
 	public double getWidth() {
-		return expandableEnvironment.getEnvelope().getWidth();
+		return 0.0;
 	}
 
 	/**
@@ -262,7 +260,7 @@ public class AmorphousTopology implements ITopology {
 	 */
 	@Override
 	public double getHeight() {
-		return expandableEnvironment.getEnvelope().getHeight();
+		return 0.0;
 	}
 
 	/**
@@ -315,7 +313,7 @@ public class AmorphousTopology implements ITopology {
 	}
 
 	@Override
-	public List<Geometry> listToroidalGeometries(final Geometry geom) {
+	public List<Object> listToroidalGeometries(final Object geom) {
 		return Collections.EMPTY_LIST;
 	}
 
@@ -331,51 +329,7 @@ public class AmorphousTopology implements ITopology {
 
 	@Override
 	public ISpatialIndex getSpatialIndex() {
-		return new ISpatialIndex() {
-
-			@Override
-			public void insert(final IAgent agent) {}
-
-			@Override
-			public void remove(final Envelope3D previous, final IAgent agent) {}
-
-			@Override
-			public IAgent firstAtDistance(final IScope scope, final IShape source, final double dist,
-					final IAgentFilter f) {
-				return null;
-			}
-
-			@Override
-			public Collection<IAgent> firstAtDistance(final IScope scope, final IShape source, final double dist,
-					final IAgentFilter f, final int number, final Collection<IAgent> alreadyChosen) {
-				return Collections.EMPTY_LIST;
-			}
-
-			@Override
-			public Collection<IAgent> allInEnvelope(final IScope scope, final IShape source, final Envelope envelope,
-					final IAgentFilter f, final boolean contained) {
-				return Collections.EMPTY_LIST;
-			}
-
-			@Override
-			public Collection<IAgent> allAtDistance(final IScope scope, final IShape source, final double dist,
-					final IAgentFilter f) {
-				return Collections.EMPTY_LIST;
-			}
-
-			@Override
-			public void dispose() {}
-
-			@Override
-			public Collection<IAgent> allAgents() {
-				return Collections.EMPTY_LIST;
-			}
-
-			@Override
-			public boolean isParallel() {
-				return false;
-			}
-		};
+		return null;
 	}
 
 	@Override

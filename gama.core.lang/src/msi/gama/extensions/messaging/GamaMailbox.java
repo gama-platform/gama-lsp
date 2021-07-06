@@ -1,3 +1,5 @@
+package msi.gama.extensions.messaging;
+
 /*******************************************************************************************************
  *
  * is part of the source code of the GAMA modeling and simulation platform (v. 1.8.1)
@@ -10,6 +12,7 @@
 
 import msi.gama.runtime.IScope;
 import msi.gama.util.GamaList;
+import msi.gaml.types.GamaMessage;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
 

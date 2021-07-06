@@ -10,32 +10,39 @@
  ********************************************************************************************************/
 package msi.gama.common.geometry;
 
-
 import msi.gama.metamodel.shape.GamaPoint;
 import msi.gama.metamodel.shape.ILocation;
 
-@SuppressWarnings ("unchecked")
+@SuppressWarnings("unchecked")
 public abstract class Scaling3D implements Transformation3D {
 
 	public final static Scaling3D IDENTITY = new Uniform(1);
 
 	public static Scaling3D of(final double x, final double y, final double z) {
-		if (x == y && y == z) { return of(x); }
+		if (x == y && y == z) {
+			return of(x);
+		}
 		return new Heterogeneous(x, y, z);
 	}
 
 	public static Scaling3D of(final GamaPoint p) {
-		if (p == null) { return null; }
+		if (p == null) {
+			return null;
+		}
 		return of(p.x, p.y, p.z);
 	}
 
 	public static Scaling3D of(final ILocation p) {
-		if (p == null) { return null; }
+		if (p == null) {
+			return null;
+		}
 		return of(p.getX(), p.getY(), p.getZ());
 	}
 
 	public static Scaling3D of(final double factor) {
-		if (factor == 1d) { return IDENTITY; }
+		if (factor == 1d) {
+			return IDENTITY;
+		}
 		return new Uniform(factor);
 	}
 
@@ -46,15 +53,14 @@ public abstract class Scaling3D implements Transformation3D {
 			factor = f;
 		}
 
-		@Override
-		public void filter(final Coordinate coord) {
+		public void filter(final Object coord) {
 			((GamaPoint) coord).multiplyBy(factor);
 
 		}
 
 		@Override
 		public Scaling3D asBoundingBoxIn(final Envelope3D env) {
-			return of(factor / env.getWidth(), factor / env.getHeight(), env.isFlat() ? 1.0 : factor / env.getDepth());
+			return null;
 		}
 
 		@Override
@@ -99,23 +105,13 @@ public abstract class Scaling3D implements Transformation3D {
 			return this;
 		}
 
-		@Override
-		public void filter(final Coordinate coord) {
-			coord.x *= x;
-			coord.y *= y;
-			coord.z *= z;
+		public void filter(final Object coord) {
+			return;
 		}
 
 		@Override
 		public Scaling3D asBoundingBoxIn(final Envelope3D env) {
-			x /= env.getWidth();
-			y /= env.getHeight();
-			if (!env.isFlat()) {
-				z /= env.getDepth();
-			} else {
-				z = 1.0;
-			}
-			return this;
+			return null;
 		}
 
 		@Override

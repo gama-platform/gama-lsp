@@ -18,8 +18,8 @@ import msi.gama.runtime.IScope;
 public class Projection implements IProjection {
 
 	private final ProjectionFactory factory;
-	private GeometryCoordinateSequenceTransformer transformer, inverseTransformer;
-	CoordinateReferenceSystem initialCRS;
+	private Object transformer, inverseTransformer;
+	Object initialCRS;
 	Envelope3D projectedEnv;
 	final IProjection referenceProjection;
 
@@ -28,15 +28,12 @@ public class Projection implements IProjection {
 		factory = fact;
 	}
 
-	Projection(final IScope scope, final IProjection world, final CoordinateReferenceSystem crs, final Envelope3D env,
+	Projection(final IScope scope, final IProjection world, final Object crs, final Envelope3D env,
 			final ProjectionFactory fact) {
 		this.factory = fact;
 		this.referenceProjection = world;
 		initialCRS = crs;
 		if (env != null) {
-			if (initialCRS != null && !initialCRS.equals(getTargetCRS(scope))) {
-				createTransformation(computeProjection(scope));
-			}
 			// We project the envelope and we use it for initializing the translations
 			projectedEnv = transform(env);
 			// createTranslations(projectedEnv.getMinX(), projectedEnv.getHeight(), projectedEnv.getMinY());
@@ -44,79 +41,34 @@ public class Projection implements IProjection {
 	}
 
 	@Override
-	public void createTransformation(final MathTransform t) {
-		if (t != null) {
-			transformer = new GeometryCoordinateSequenceTransformer(new DefaultCoordinateSequenceTransformer(
-					GeometryUtils.GEOMETRY_FACTORY.getCoordinateSequenceFactory()));
-			// TODO see ConcatenatedTransformDirect2D
-			transformer.setMathTransform(t);
-			try {
-				inverseTransformer = new GeometryCoordinateSequenceTransformer(new DefaultCoordinateSequenceTransformer(
-						GeometryUtils.GEOMETRY_FACTORY.getCoordinateSequenceFactory()));
-				inverseTransformer.setMathTransform(t.inverse());
-			} catch (final NoninvertibleTransformException e) {
-				e.printStackTrace();
-			}
-		}
+	public void createTransformation(final Object t) {
+		return;
 	}
 
 	@Override
-	public Geometry transform(final Geometry g) {
-		// Remove uselessly complicated multigeometries
-		if (g instanceof GeometryCollection && g.getNumGeometries() == 1) return transform(g.getGeometryN(0));
-		return transform(g, true);
+	public Object transform(final Object g) {
+		return null;
 	}
 
-	public Geometry transform(final Geometry g, final boolean translate) {
-		Geometry geom = GeometryUtils.GEOMETRY_FACTORY.createGeometry(g);
-		if (transformer != null) {
-			try {
-				geom = transformer.transform(geom);
-			} catch (final TransformException e) {
-				e.printStackTrace();
-			}
-		}
-		if (translate) {
-			translate(geom);
-			convertUnit(geom);
-		}
-		return geom;
+	public Object transform(final Object g, final boolean translate) {
+		return null;
 	}
 
 	Envelope3D transform(final Envelope3D g) {
-		if (transformer == null) return g;
-		return Envelope3D.of(transform(JTS.toGeometry(g)).getEnvelopeInternal());
+		return null;
 	}
 
 	@Override
-	public Geometry inverseTransform(final Geometry g) {
-		Geometry geom = GeometryUtils.GEOMETRY_FACTORY.createGeometry(g);
-		inverseConvertUnit(geom);
-		inverseTranslate(geom);
-		if (inverseTransformer != null) {
-			try {
-				geom = inverseTransformer.transform(geom);
-			} catch (final TransformException e) {
-				e.printStackTrace();
-			}
-		}
-		return geom;
+	public Object inverseTransform(final Object g) {
+		return null;
 	}
 
-	MathTransform computeProjection(final IScope scope) {
-		MathTransform crsTransformation = null;
-		if (initialCRS == null) return null;
-		try {
-			crsTransformation = CRS.findMathTransform(initialCRS, getTargetCRS(scope), true);
-		} catch (final FactoryException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return crsTransformation;
+	Object computeProjection(final IScope scope) {
+		return null;
 	}
 
 	@Override
-	public CoordinateReferenceSystem getInitialCRS(final IScope scope) {
+	public Object getInitialCRS(final IScope scope) {
 		return initialCRS;
 	}
 
@@ -131,7 +83,7 @@ public class Projection implements IProjection {
 	 * @see msi.gama.metamodel.topology.projection.IProjection#getTargetCRS()
 	 */
 	@Override
-	public CoordinateReferenceSystem getTargetCRS(final IScope scope) {
+	public Object getTargetCRS(final IScope scope) {
 		if (referenceProjection != null) return referenceProjection.getTargetCRS(scope);
 		return factory.getTargetCRS(scope);
 	}
@@ -141,7 +93,7 @@ public class Projection implements IProjection {
 	 *
 	 */
 	@Override
-	public void translate(final Geometry geom) {
+	public void translate(final Object geom) {
 		if (referenceProjection != null) { referenceProjection.translate(geom); }
 	}
 
@@ -150,18 +102,18 @@ public class Projection implements IProjection {
 	 *
 	 */
 	@Override
-	public void inverseTranslate(final Geometry geom) {
+	public void inverseTranslate(final Object geom) {
 		if (referenceProjection != null) { referenceProjection.inverseTranslate(geom); }
 	}
 
 	@Override
-	public void convertUnit(final Geometry geom) {
+	public void convertUnit(final Object geom) {
 		if (referenceProjection != null) { referenceProjection.convertUnit(geom); }
 
 	}
 
 	@Override
-	public void inverseConvertUnit(final Geometry geom) {
+	public void inverseConvertUnit(final Object geom) {
 		if (referenceProjection != null) { referenceProjection.inverseConvertUnit(geom); }
 
 	}

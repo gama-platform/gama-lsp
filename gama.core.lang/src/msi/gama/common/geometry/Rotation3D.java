@@ -13,12 +13,11 @@ package msi.gama.common.geometry;
 
 import java.io.Serializable;
 
-
 import msi.gama.metamodel.shape.GamaPoint;
 
 /**
- * This class implements rotations in a three-dimensional space. A reimplementation of class Rotation of the Apache
- * Library
+ * This class implements rotations in a three-dimensional space. A
+ * reimplementation of class Rotation of the Apache Library
  *
  *
  * <p>
@@ -26,12 +25,15 @@ import msi.gama.metamodel.shape.GamaPoint;
  * </p>
  *
  * @see GamaPoint
- * @adapted from Apache maths3 library by A. Drogoul (2017), esp. to allow direct access to the fields and make the
- *          instances mutable in place (reducing the number of garbage during long rotation operations)
+ * @adapted from Apache maths3 library by A. Drogoul (2017), esp. to allow
+ *          direct access to the fields and make the instances mutable in place
+ *          (reducing the number of garbage during long rotation operations)
  */
 
+@SuppressWarnings("serial")
 public class Rotation3D implements Serializable, Transformation3D {
 
+	@SuppressWarnings("serial")
 	public static class CenteredOn extends Rotation3D {
 
 		final GamaPoint center;
@@ -42,10 +44,11 @@ public class Rotation3D implements Serializable, Transformation3D {
 		}
 
 		/**
-		 * Applies this rotation to a Geometry (to be used as a CoordinateFilter for JTS geometries)
+		 * Applies this rotation to a Geometry (to be used as a CoordinateFilter for JTS
+		 * geometries)
 		 */
 		@Override
-		public void filter(final Coordinate c) {
+		public void filter(final Object c) {
 			final GamaPoint p = (GamaPoint) c;
 			p.subtract(center);
 			applyTo(p);
@@ -62,7 +65,8 @@ public class Rotation3D implements Serializable, Transformation3D {
 	// public static final GamaPoint MINUS_K = new GamaPoint(0, 0, -1);
 
 	/** Identity rotation. */
-	// public static final Rotation3D IDENTITY = new Rotation3D(1.0, 0.0, 0.0, 0.0, false);
+	// public static final Rotation3D IDENTITY = new Rotation3D(1.0, 0.0, 0.0, 0.0,
+	// false);
 
 	/** Scalar coordinate of the quaternion. */
 	private double q0;
@@ -105,10 +109,10 @@ public class Rotation3D implements Serializable, Transformation3D {
 	}
 
 	/**
-	 * Sets this rotation to a rotation between the given vector u and the PLUS_I vector
+	 * Sets this rotation to a rotation between the given vector u and the PLUS_I
+	 * vector
 	 *
-	 * @param u
-	 *            an arbitrary 3D vector
+	 * @param u an arbitrary 3D vector
 	 */
 	public void alignToHorizontal(final GamaPoint u) {
 		final double normProduct = u.norm();
@@ -134,10 +138,8 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * Build a rotation from an axis and an angle.
 	 *
-	 * @param axis
-	 *            axis around which to rotate
-	 * @param angle
-	 *            rotation angle in radians
+	 * @param axis  axis around which to rotate
+	 * @param angle rotation angle in radians
 	 */
 	public Rotation3D(final GamaPoint rotationAxis, final double angle) {
 		GamaPoint axis = rotationAxis;
@@ -167,8 +169,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * By default around the Z axis (PLUS_K)
 	 *
-	 * @param angle
-	 *            rotation angle in radians
+	 * @param angle rotation angle in radians
 	 */
 	// public Rotation3D(final double angle) {
 	// final double halfAngle = -0.5 * angle;
@@ -182,26 +183,26 @@ public class Rotation3D implements Serializable, Transformation3D {
 	 * Build the rotation that transforms a pair of vectors into another pair.
 	 *
 	 * <p>
-	 * Except for possible scale factors, if the instance were applied to the pair (u<sub>1</sub>, u<sub>2</sub>) it
-	 * will produce the pair (v<sub>1</sub>, v<sub>2</sub>).
+	 * Except for possible scale factors, if the instance were applied to the pair
+	 * (u<sub>1</sub>, u<sub>2</sub>) it will produce the pair (v<sub>1</sub>,
+	 * v<sub>2</sub>).
 	 * </p>
 	 *
 	 * <p>
-	 * If the angular separation between u<sub>1</sub> and u<sub>2</sub> is not the same as the angular separation
-	 * between v<sub>1</sub> and v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than v<sub>2</sub>,
-	 * the corrected vector will be in the (&pm;v<sub>1</sub>, +v<sub>2</sub>) half-plane.
+	 * If the angular separation between u<sub>1</sub> and u<sub>2</sub> is not the
+	 * same as the angular separation between v<sub>1</sub> and v<sub>2</sub>, then
+	 * a corrected v'<sub>2</sub> will be used rather than v<sub>2</sub>, the
+	 * corrected vector will be in the (&pm;v<sub>1</sub>, +v<sub>2</sub>)
+	 * half-plane.
 	 * </p>
 	 *
-	 * @param u1
-	 *            first vector of the origin pair
-	 * @param u2
-	 *            second vector of the origin pair
-	 * @param v1
-	 *            desired image of u1 by the rotation
-	 * @param v2
-	 *            desired image of u2 by the rotation
+	 * @param u1 first vector of the origin pair
+	 * @param u2 second vector of the origin pair
+	 * @param v1 desired image of u1 by the rotation
+	 * @param v2 desired image of u2 by the rotation
 	 */
-	// public Rotation3D(final GamaPoint originVector1, final GamaPoint originVector2, final GamaPoint desiredVector1,
+	// public Rotation3D(final GamaPoint originVector1, final GamaPoint
+	// originVector2, final GamaPoint desiredVector1,
 	// final GamaPoint desiredVector2) {
 	// GamaPoint u1 = originVector1;
 	// GamaPoint u2 = originVector2;
@@ -209,13 +210,15 @@ public class Rotation3D implements Serializable, Transformation3D {
 	// GamaPoint v2 = desiredVector2;
 	//
 	// // build orthonormalized base from u1, u2
-	// // this fails when vectors are null or collinear, which is forbidden to define a rotation
+	// // this fails when vectors are null or collinear, which is forbidden to
+	// define a rotation
 	// final GamaPoint u3 = u1.crossProduct(u2).normalized();
 	// u2 = u3.crossProduct(u1).normalized();
 	// u1 = u1.normalized();
 	//
 	// // build an orthonormalized base from v1, v2
-	// // this fails when vectors are null or collinear, which is forbidden to define a rotation
+	// // this fails when vectors are null or collinear, which is forbidden to
+	// define a rotation
 	// final GamaPoint v3 = v1.crossProduct(v2).normalized();
 	// v2 = v3.crossProduct(v1).normalized();
 	// v1 = v1.normalized();
@@ -240,21 +243,22 @@ public class Rotation3D implements Serializable, Transformation3D {
 	//
 	// }
 
-	// public Rotation3D(final GamaPoint u1, final GamaPoint u2, final boolean clockwise) {
+	// public Rotation3D(final GamaPoint u1, final GamaPoint u2, final boolean
+	// clockwise) {
 	// rotateToHorizontal(u1, u2, clockwise);
 	// }
 
 	/**
-	 * Sets this rotation to a rotation between the reference frame u1,u2 and the horizontal reference frame, specifying
-	 * whether the rotation should be treated in a clockwise way (PLUS_I, MINUS_J) or counter-clockwise way (MINUS_I,
-	 * MINUS_J). This shorthand version eliminates a lot of intermediate computations and reduces the garbage produced
-	 * to the minimum. If the first vector is already a normal to the horizontal plane, it defers to alignToHorizontal()
-	 * directly
+	 * Sets this rotation to a rotation between the reference frame u1,u2 and the
+	 * horizontal reference frame, specifying whether the rotation should be treated
+	 * in a clockwise way (PLUS_I, MINUS_J) or counter-clockwise way (MINUS_I,
+	 * MINUS_J). This shorthand version eliminates a lot of intermediate
+	 * computations and reduces the garbage produced to the minimum. If the first
+	 * vector is already a normal to the horizontal plane, it defers to
+	 * alignToHorizontal() directly
 	 *
-	 * @param u1
-	 *            a non-null vector
-	 * @param u2
-	 *            a second non-null vector
+	 * @param u1        a non-null vector
+	 * @param u2        a second non-null vector
 	 * @param clockwise
 	 */
 	public Rotation3D rotateToHorizontal(final GamaPoint u1, final GamaPoint u2, final boolean clockwise) {
@@ -322,16 +326,15 @@ public class Rotation3D implements Serializable, Transformation3D {
 	 * Build one of the rotations that transform one vector into another one.
 	 *
 	 * <p>
-	 * Except for a possible scale factor, if the instance were applied to the vector u it will produce the vector v.
-	 * There is an infinite number of such rotations, this constructor choose the one with the smallest associated angle
-	 * (i.e. the one whose axis is orthogonal to the (u, v) plane). If u and v are collinear, an arbitrary rotation axis
-	 * is chosen.
+	 * Except for a possible scale factor, if the instance were applied to the
+	 * vector u it will produce the vector v. There is an infinite number of such
+	 * rotations, this constructor choose the one with the smallest associated angle
+	 * (i.e. the one whose axis is orthogonal to the (u, v) plane). If u and v are
+	 * collinear, an arbitrary rotation axis is chosen.
 	 * </p>
 	 *
-	 * @param u
-	 *            origin vector
-	 * @param v
-	 *            desired image of u by the rotation
+	 * @param u origin vector
+	 * @param v desired image of u by the rotation
 	 */
 	// public Rotation3D(final GamaPoint u, final GamaPoint v) {
 	// setToRotationBetween(u, v);
@@ -340,8 +343,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * Convert an orthogonal rotation matrix to a quaternion.
 	 *
-	 * @param ort
-	 *            orthogonal rotation matrix
+	 * @param ort orthogonal rotation matrix
 	 * @return quaternion corresponding to the matrix
 	 */
 	// private static double[] mat2quat(final double[][] ort) {
@@ -389,8 +391,8 @@ public class Rotation3D implements Serializable, Transformation3D {
 	// }
 
 	/**
-	 * Revert a rotation. Sets this rotation to the reverse of its effect. This means that if r(u) = v, then r.revert(v)
-	 * = u. The instance is modified
+	 * Revert a rotation. Sets this rotation to the reverse of its effect. This
+	 * means that if r(u) = v, then r.revert(v) = u. The instance is modified
 	 *
 	 * @return this, which reverses the effect of the instance
 	 */
@@ -429,15 +431,17 @@ public class Rotation3D implements Serializable, Transformation3D {
 	public double getAngle() {
 		if (q0 < -0.1 || q0 > 0.1) {
 			return 2 * Math.asin(Math.sqrt(q1 * q1 + q2 * q2 + q3 * q3));
-		} else if (q0 < 0) { return 2 * Math.acos(-q0); }
+		} else if (q0 < 0) {
+			return 2 * Math.acos(-q0);
+		}
 		return 2 * Math.acos(q0);
 	}
 
 	/**
 	 * Apply the rotation to a vector.
 	 *
-	 * @param u
-	 *            vector to apply the rotation to. The vector will be directly modified
+	 * @param u vector to apply the rotation to. The vector will be directly
+	 *          modified
 	 */
 	@Override
 	public void applyTo(final GamaPoint u) {
@@ -454,25 +458,14 @@ public class Rotation3D implements Serializable, Transformation3D {
 
 	}
 
-	public void applyTo(final Coordinate u) {
-
-		final double x = u.x;
-		final double y = u.y;
-		final double z = u.z;
-
-		final double s = q1 * x + q2 * y + q3 * z;
-
-		u.x = 2 * (q0 * (x * q0 - (q2 * z - q3 * y)) + s * q1) - x;
-		u.y = 2 * (q0 * (y * q0 - (q3 * x - q1 * z)) + s * q2) - y;
-		u.z = 2 * (q0 * (z * q0 - (q1 * y - q2 * x)) + s * q3) - z;
-
+	public void applyTo(final Object u) {
+		return;
 	}
 
 	/**
 	 * Apply the rotation to a vector stored in an array.
 	 *
-	 * @param in
-	 *            an array with three items which stores the vector to rotate
+	 * @param in an array with three items which stores the vector to rotate
 	 */
 	// public void applyTo(final double[] in) {
 	//
@@ -491,8 +484,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * Apply the inverse of the rotation to a vector.
 	 *
-	 * @param u
-	 *            vector to apply the inverse of the rotation to
+	 * @param u vector to apply the inverse of the rotation to
 	 */
 	// public void applyInverseTo(final GamaPoint u) {
 	//
@@ -512,10 +504,9 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * Apply the inverse of the rotation to a vector stored in an array.
 	 *
-	 * @param in
-	 *            an array with three items which stores vector to rotate
-	 * @param out
-	 *            an array with three items to put result to (it can be the same array as in)
+	 * @param in  an array with three items which stores vector to rotate
+	 * @param out an array with three items to put result to (it can be the same
+	 *            array as in)
 	 */
 	// public void applyInverseTo(final double[] in, final double[] out) {
 	//
@@ -537,8 +528,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	 * <p>
 	 * </p>
 	 *
-	 * @param r
-	 *            rotation to apply the rotation to
+	 * @param r rotation to apply the rotation to
 	 * @return a new rotation which is the composition of r by the instance
 	 */
 	public Rotation3D applyTo(final Rotation3D r) {
@@ -553,13 +543,14 @@ public class Rotation3D implements Serializable, Transformation3D {
 	 *
 	 * </p>
 	 *
-	 * @param r
-	 *            rotation to apply the rotation to
-	 * @return a new rotation which is the composition of r by the inverse of the instance
+	 * @param r rotation to apply the rotation to
+	 * @return a new rotation which is the composition of r by the inverse of the
+	 *         instance
 	 */
 	// public Rotation3D applyInverseTo(final Rotation3D r) {
 	// return new Rotation3D(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
-	// -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2), -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
+	// -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2), -r.q2 * q0 + r.q0 * q2 +
+	// (r.q3 * q1 - r.q1 * q3),
 	// -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1), false);
 	// }
 
@@ -570,8 +561,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	/**
 	 * Applies r to this, transforming the rotation in place
 	 *
-	 * @param r
-	 *            another Rotation3D
+	 * @param r another Rotation3D
 	 */
 
 	// public void apply(final Rotation3D r) {
@@ -582,11 +572,7 @@ public class Rotation3D implements Serializable, Transformation3D {
 	// q3 = -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1);
 	// }
 
-	/**
-	 * Applies this rotation to a Geometry (to be used as a CoordinateFilter for JTS geometries)
-	 */
-	@Override
-	public void filter(final Coordinate c) {
+	public void filter(final Object c) {
 		applyTo(c);
 	}
 

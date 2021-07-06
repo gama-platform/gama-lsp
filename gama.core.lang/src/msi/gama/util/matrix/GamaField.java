@@ -225,8 +225,8 @@ public class GamaField extends GamaFloatMatrix implements IField {
 	 *
 	 */
 	@Override
-	public StreamEx<Double> stream(final IScope scope) {
-		return DoubleStreamEx.of(getMatrix()).filter(d -> d != noDataValue).boxed();
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	/**
@@ -251,37 +251,12 @@ public class GamaField extends GamaFloatMatrix implements IField {
 
 	@Override
 	public IList<Double> getValuesIntersecting(final IScope scope, final IShape shape) {
-		Envelope3D env = Envelope3D.of(shape);
-		IList<Double> inEnv = GamaListFactory.create(Types.FLOAT);
-		GamaPoint p = new GamaPoint();
-		for (double i = env.getMinX(); i < env.getMaxX(); i += cellDimensions.x) {
-			for (double j = env.getMinY(); j < env.getMaxY(); j += cellDimensions.y) {
-				p.setLocation(i, j, 0);
-				if (GamaShape.pl.intersects(p, shape.getInnerGeometry())) {
-					Double d = get(scope, p);
-					if (d != null) { inEnv.add(d); }
-				}
-			}
-		}
-		return inEnv;
+		return null;
 	}
 
 	@Override
 	public IList<IShape> getCellsIntersecting(final IScope scope, final IShape shape) {
-		Envelope3D env = Envelope3D.of(shape);
-		IList<IShape> inEnv = GamaListFactory.create(Types.GEOMETRY);
-		GamaPoint p = new GamaPoint();
-		for (double i = env.getMinX(); i < env.getMaxX(); i += cellDimensions.x) {
-			for (double j = env.getMinY(); j < env.getMaxY(); j += cellDimensions.y) {
-				p.setLocation(i, j, 0);
-				if (GamaShape.pl.intersects(p, shape.getInnerGeometry())) {
-					IShape s = getCellShapeAt(scope, p);
-					if (s != null) { inEnv.add(s); }
-				}
-			}
-		}
-		return inEnv;
-
+		return null;
 	}
 
 }

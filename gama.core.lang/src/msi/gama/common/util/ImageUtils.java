@@ -108,38 +108,7 @@ public class ImageUtils {
 	}
 
 	private BufferedImage privateReadFromFile(final File file, final boolean forOpenGL) throws IOException {
-		// DEBUG.OUT("READING " + file.getName());
-		BufferedImage result = getNoImage();
-		if (file == null) { return result; }
-		final String name = file.getName();
-		String ext = null;
-		if (name.contains(".")) {
-			ext = name.substring(file.getName().lastIndexOf('.'));
-		}
-		if (tiffExt.contains(ext)) {
-			try (FileSeekableStream stream = new FileSeekableStream(file.getAbsolutePath())) {
-				/**
-				 * AD TODO : decodeParam is not used ...
-				 */
-				// final TIFFDecodeParam decodeParam = new TIFFDecodeParam();
-				// decodeParam.setDecodePaletteAsShorts(true);
-				final ParameterBlock params = new ParameterBlock();
-				params.add(stream);
-				final RenderedOp image1 = JAI.create("tiff", params);
-				return image1.getAsBufferedImage();
-			}
-		} else if (gifExt.contains(ext)) {
-			final GifDecoder d = new GifDecoder();
-			d.read(new FileInputStream(file.getAbsolutePath()));
-			return d.getImage();
-		}
-
-		try {
-			result = forOpenGL ? ImageIO.read(file) : toCompatibleImage(ImageIO.read(file));
-		} catch (final Exception e) {
-			return getNoImage();
-		}
-		return result;
+		return null;
 	}
 
 	private GifDecoder privateReadGifFromFile(final File file) throws IOException {

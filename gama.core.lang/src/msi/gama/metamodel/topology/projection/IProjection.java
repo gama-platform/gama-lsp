@@ -24,28 +24,28 @@ import msi.gama.runtime.IScope;
  */
 public interface IProjection {
 
-	public abstract void createTransformation(final MathTransform t);
+	public abstract void createTransformation(final Object t);
 
-	public abstract Geometry transform(final Geometry g);
+	public abstract Object transform(final Object g);
 
-	public abstract Geometry inverseTransform(final Geometry g);
+	public abstract Object inverseTransform(final Object g);
 
-	public abstract CoordinateReferenceSystem getInitialCRS(IScope scope);
+	public abstract Object getInitialCRS(IScope scope);
 
-	public abstract CoordinateReferenceSystem getTargetCRS(IScope scope);
+	public abstract Object getTargetCRS(IScope scope);
 
 	public abstract Envelope3D getProjectedEnvelope();
 
 	/**
 	 * @param geom
 	 */
-	public abstract void translate(Geometry geom);
+	public abstract void translate(Object geom);
 
-	public abstract void inverseTranslate(Geometry geom);
+	public abstract void inverseTranslate(Object geom);
 	
 
-	public abstract void convertUnit(Geometry geom);
+	public abstract void convertUnit(Object geom);
 
-	public abstract void inverseConvertUnit(Geometry geom);
+	public abstract void inverseConvertUnit(Object geom);
 
 }

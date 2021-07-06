@@ -10,16 +10,12 @@
  ********************************************************************************************************/
 package msi.gama.util.file;
 
-import static org.apache.commons.lang.StringUtils.join;
-import static org.apache.commons.lang.StringUtils.splitByWholeSeparatorPreserveAllTokens;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 
 import msi.gama.common.geometry.GamaGeometryFactory;
 import msi.gama.common.geometry.GeometryUtils;
@@ -47,15 +43,11 @@ import ummisco.gama.dev.utils.DEBUG;
  * @todo Description
  *
  */
-@file (
-		name = "shape",
-		extensions = { "shp" },
-		buffer_type = IType.LIST,
-		buffer_content = IType.GEOMETRY,
-		buffer_index = IType.INT,
-		concept = { IConcept.SHAPEFILE, IConcept.FILE },
-		doc = @doc ("Represents a shape file as defined by the ESRI standard. See https://en.wikipedia.org/wiki/Shapefile for more information."))
-@SuppressWarnings ({ "unchecked", "rawtypes" })
+@file(name = "shape", extensions = {
+		"shp" }, buffer_type = IType.LIST, buffer_content = IType.GEOMETRY, buffer_index = IType.INT, concept = {
+				IConcept.SHAPEFILE,
+				IConcept.FILE }, doc = @doc("Represents a shape file as defined by the ESRI standard. See https://en.wikipedia.org/wiki/Shapefile for more information."))
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class GamaShapeFile extends GamaGisFile {
 
 	static {
@@ -67,98 +59,21 @@ public class GamaShapeFile extends GamaGisFile {
 	public static class ShapeInfo extends GamaFileMetaData {
 
 		final int itemNumber;
-		final CoordinateReferenceSystem crs;
+		final Object crs;
 		final double width;
 		final double height;
 		final Map<String, String> attributes = new LinkedHashMap();
 
 		public ShapeInfo(final IScope scope, final URL url, final long modificationStamp) {
 			super(modificationStamp);
-			FileDataStore store = null;
-			ReferencedEnvelope env = new ReferencedEnvelope();
-			CoordinateReferenceSystem crs1 = null;
-			int number = 0;
-			try {
-				store = getDataStore(url);
-				final SimpleFeatureSource source = store.getFeatureSource();
-				final SimpleFeatureCollection features = source.getFeatures();
-				try {
-					crs1 = source.getInfo().getCRS();
-
-				} catch (final Exception e) {
-					DEBUG.ERR("Ignored exception in ShapeInfo getCRS:" + e.getMessage());
-				}
-				env = source.getBounds();
-				if (crs1 == null) {
-					crs1 = GISUtils.manageGoogleCRS(url);
-					if (crs1 != null) { env = new ReferencedEnvelope(env, crs1); }
-				}
-
-				if (crs1 != null) {
-					try {
-						env = env.transform(new ProjectionFactory().getTargetCRS(scope), true);
-					} catch (final Exception e) {
-						throw e;
-					}
-				}
-				try {
-					number = features.size();
-				} catch (final Exception e) {
-					DEBUG.ERR("Error in loading shapefile: " + e.getMessage());
-				}
-				final java.util.List<AttributeDescriptor> att_list = store.getSchema().getAttributeDescriptors();
-				for (final AttributeDescriptor desc : att_list) {
-					String type;
-					if (desc.getType() instanceof GeometryType) {
-						type = "geometry";
-					} else {
-						type = Types.get(desc.getType().getBinding()).toString();
-					}
-					attributes.put(desc.getName().getLocalPart(), type);
-				}
-			} catch (final Exception e) {
-				DEBUG.ERR("Error in reading metadata of " + url);
-				e.printStackTrace();
-
-			} finally {
-				width = env.getWidth();
-				height = env.getHeight();
-				itemNumber = number;
-				this.crs = crs1;
-				if (store != null) { store.dispose(); }
-			}
-
+			this.crs = new Object();
+			this.width = 0;
+			this.height = 0;
+			this.itemNumber = 0;
 		}
 
-		public CoordinateReferenceSystem getCRS() {
-			return crs;
-		}
-
-		public ShapeInfo(final String propertiesString) {
-			super(propertiesString);
-			final String[] segments = split(propertiesString);
-			itemNumber = Integer.parseInt(segments[1]);
-			final String crsString = segments[2];
-			CoordinateReferenceSystem theCRS;
-			if ("null".equals(crsString) || crsString.startsWith("Unknown")) {
-				theCRS = null;
-			} else {
-				try {
-					theCRS = CRS.parseWKT(crsString);
-				} catch (final Exception e) {
-					theCRS = null;
-				}
-			}
-			crs = theCRS;
-			width = Double.parseDouble(segments[3]);
-			height = Double.parseDouble(segments[4]);
-			if (segments.length > 5) {
-				final String[] names = splitByWholeSeparatorPreserveAllTokens(segments[5], SUB_DELIMITER);
-				final String[] types = splitByWholeSeparatorPreserveAllTokens(segments[6], SUB_DELIMITER);
-				for (int i = 0; i < names.length; i++) {
-					attributes.put(names[i], types[i]);
-				}
-			}
+		public Object getCRS() {
+			return null;
 		}
 
 		/**
@@ -175,28 +90,12 @@ public class GamaShapeFile extends GamaGisFile {
 
 		@Override
 		public void appendSuffix(final StringBuilder sb) {
-			sb.append(itemNumber).append(" object");
-			if (itemNumber > 1) { sb.append("s"); }
-			sb.append(SUFFIX_DEL);
-			sb.append(crs == null ? "Unknown CRS" : crs.getName().getCode());
-			sb.append(SUFFIX_DEL);
-			sb.append(Math.round(width)).append("m x ");
-			sb.append(Math.round(height)).append("m");
+			return;
 		}
 
 		@Override
 		public String getDocumentation() {
-			final StringBuilder sb = new StringBuilder();
-			sb.append("Shapefile").append(Strings.LN);
-			sb.append(itemNumber).append(" objects").append(Strings.LN);
-			sb.append("Dimensions: ").append(Math.round(width) + "m x " + Math.round(height) + "m").append(Strings.LN);
-			sb.append("Coordinate Reference System: ").append(crs == null ? "Unknown CRS" : crs.getName().getCode())
-					.append(Strings.LN);
-			if (!attributes.isEmpty()) {
-				sb.append("Attributes: ").append(Strings.LN);
-				attributes.forEach((k, v) -> sb.append("<li>").append(k).append(" (" + v + ")").append("</li>"));
-			}
-			return sb.toString();
+			return null;
 		}
 
 		public Map<String, String> getAttributes() {
@@ -205,23 +104,7 @@ public class GamaShapeFile extends GamaGisFile {
 
 		@Override
 		public String toPropertyString() {
-			// See Issue #1603: .toWKT() && pa can sometimes cause problem with
-			// certain projections.
-			String system = crs == null ? "Unknown projection" : crs.toWKT();
-			try {
-				CRS.parseWKT(system);
-			} catch (final Exception e) {
-				// The toWKT()/parseWKT() pair has a problem
-				String srs = CRS.toSRS(crs);
-				if (srs == null && crs != null) { srs = crs.getName().getCode(); }
-				system = "Unknown projection " + srs;
-
-			}
-			final String attributeNames = join(attributes.keySet(), SUB_DELIMITER);
-			final String types = join(attributes.values(), SUB_DELIMITER);
-			final Object[] toSave =
-					new Object[] { super.toPropertyString(), itemNumber, system, width, height, attributeNames, types };
-			return join(toSave, DELIMITER);
+			return null;
 		}
 	}
 
@@ -230,57 +113,39 @@ public class GamaShapeFile extends GamaGisFile {
 	 * @param scope
 	 * @param pathName
 	 */
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\");",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\");", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName) throws GamaRuntimeException {
 		super(scope, pathName, (Integer) null);
 	}
 
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code, as an int (epsg code)",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\", \"32648\");",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code, as an int (epsg code)", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\", \"32648\");", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName, final Integer code) throws GamaRuntimeException {
 		super(scope, pathName, code);
 	}
 
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code (epg,...,), as a string",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\", \"EPSG:32648\");",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code (epg,...,), as a string", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\", \"EPSG:32648\");", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName, final String code) throws GamaRuntimeException {
 		super(scope, pathName, code);
 	}
 
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file and take a potential z value (not taken in account by default)",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\", true);",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file and take a potential z value (not taken in account by default)", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\", true);", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName, final boolean with3D) throws GamaRuntimeException {
 		super(scope, pathName, (Integer) null, with3D);
 	}
 
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code, as an int (epsg code) and take a potential z value (not taken in account by default)",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\", \"32648\", true);",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code, as an int (epsg code) and take a potential z value (not taken in account by default)", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\", \"32648\", true);", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName, final Integer code, final boolean with3D)
 			throws GamaRuntimeException {
 		super(scope, pathName, code, with3D);
 	}
 
-	@doc (
-			value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code (epg,...,), as a string and take a potential z value (not taken in account by default)",
-			examples = { @example (
-					value = "file f <- shape_file(\"file.shp\", \"EPSG:32648\",true);",
-					isExecutable = false) })
+	@doc(value = "This file constructor allows to read a shapefile (.shp) file and specifying the coordinates system code (epg,...,), as a string and take a potential z value (not taken in account by default)", examples = {
+			@example(value = "file f <- shape_file(\"file.shp\", \"EPSG:32648\",true);", isExecutable = false) })
 	public GamaShapeFile(final IScope scope, final String pathName, final String code, final boolean with3D)
 			throws GamaRuntimeException {
 		super(scope, pathName, code, with3D);
@@ -302,83 +167,23 @@ public class GamaShapeFile extends GamaGisFile {
 		return GamaListFactory.wrap(Types.STRING, s.attributes.keySet());
 	}
 
-	static FileDataStore getDataStore(final URL url) {
-		FileDataStore fds;
-		try {
-			fds = FileDataStoreFinder.getDataStore(url);
-		} catch (IOException e) {
-			return null;
-		}
-		if (fds instanceof ShapefileDataStore) {
-			ShapefileDataStore store = (ShapefileDataStore) fds;
-			store.setGeometryFactory(GeometryUtils.GEOMETRY_FACTORY);
-			store.setMemoryMapped(true);
-			store.setCharset(Charset.forName("UTF8"));
-		}
-		return fds;
-
+	static Object getDataStore(final URL url) {
+		return null;
 	}
 
 	@Override
 	protected final void readShapes(final IScope scope) {
-		ProgressCounter counter = new ProgressCounter(scope, "Reading " + getName(scope));
-		SimpleFeatureCollection collection = getFeatureCollection(scope);
-		computeEnvelope(scope);
-		try {
-			collection.accepts(feature -> {
-				Geometry g = (Geometry) feature.getDefaultGeometryProperty().getValue();
-				if (g != null && !g.isEmpty() /* Fix for Issue 725 && 677 */ ) {
-					if (!with3D && !g.isValid()) { g = GeometryUtils.cleanGeometry(g); }
-					g = gis.transform(g);
-					if (!with3D) {
-						g.apply(ZERO_Z);
-						g.geometryChanged();
-					}
-					g = multiPolygonManagement(g);
-					GamaShape gt = new GamaGisGeometry(g, feature);
-					if (gt.getInnerGeometry() != null) { getBuffer().add(gt); }
-				} else if (g == null) {
-					// See Issue 725
-					GAMA.reportError(scope,
-							GamaRuntimeException.warning(
-									"geometry could not be added as it is " + "nil: " + feature.getIdentifier(), scope),
-							false);
-				}
-			}, counter);
-		} catch (final IOException e) {
-			throw GamaRuntimeException.create(e, scope);
-		}
-		// finally {
-		// if (store != null) { store.dispose(); }
-		// }
-		// if (size > list.size()) {
-		// reportError(scope, warning("Problem with file " + getFile(scope) + ": only " + list.size() + " of the "
-		// + size + " geometries could be added", scope), false);
-		// }
+		return;
 	}
 
 	@Override
-	protected SimpleFeatureCollection getFeatureCollection(final IScope scope) {
-		try {
-
-			// if (store == null) { store = getDataStoreOld(getFile(scope).toURI().toURL()); }
-			final SimpleFeatureSource source = getDataStore(getFile(scope).toURI().toURL()).getFeatureSource();
-			// AD See Issue #3094. This constitutes a workaround
-			Query query = new Query();
-			// if (!with3D) { query.setHints(new Hints(Hints.FEATURE_2D, true)); }
-			query.getHints().put(Hints.JTS_COORDINATE_SEQUENCE_FACTORY, GamaGeometryFactory.COORDINATES_FACTORY);
-			query.getHints().put(Hints.JTS_GEOMETRY_FACTORY, GeometryUtils.GEOMETRY_FACTORY);
-			// AD
-			return source.getFeatures(query);
-		} catch (IOException e) {
-			throw GamaRuntimeException.create(e, scope);
-		}
+	protected Object getFeatureCollection(final IScope scope) {
+		return null;
 	}
 
 	@Override
 	public int length(final IScope scope) {
-		if (getBuffer() == null) return getFeatureCollection(scope).size();
-		return super.length(scope);
+		return 0;
 	}
 
 	@Override

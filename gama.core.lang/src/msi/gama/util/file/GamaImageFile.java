@@ -417,28 +417,7 @@ public class GamaImageFile extends GamaFile<IMatrix<Integer>, Integer> implement
 				throw GamaRuntimeException.create(e, scope);
 			}
 		} else if (extension.equals("tiff") || extension.equals("tif")) {
-			final GamaGridFile file = new GamaGridFile(null, this.getPath(scope));
-
-			final Envelope e = file.computeEnvelope(scope);
-			if (e != null) {
-				GamaPoint minCorner = new GamaPoint(e.getMinX(), e.getMinY());
-				GamaPoint maxCorner = new GamaPoint(e.getMaxX(), e.getMaxY());
-				if (geodataFile != null) {
-					IProjection pr;
-					try {
-						pr = scope.getSimulation().getProjectionFactory().forSavingWith(scope,
-								file.gis.getTargetCRS(scope));
-						minCorner = new GamaShape(pr.transform(minCorner.getInnerGeometry())).getLocation();
-						maxCorner = new GamaShape(pr.transform(maxCorner.getInnerGeometry())).getLocation();
-					} catch (final FactoryException e1) {
-						e1.printStackTrace();
-					}
-
-				}
-				isGeoreferenced = true;
-				return Envelope3D.of(minCorner.x, maxCorner.x, minCorner.y, maxCorner.y, 0, 0);
-			}
-
+			return null;
 		}
 		final int nbCols = getCols(scope);
 		final int nbRows = getRows(scope);

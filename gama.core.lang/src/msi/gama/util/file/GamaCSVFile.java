@@ -10,8 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.util.file;
 
-import static org.apache.commons.lang.StringUtils.splitByWholeSeparatorPreserveAllTokens;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -87,7 +85,7 @@ public class GamaCSVFile extends GamaFile<IMatrix<Object>, Object> implements IF
 			delimiter = segments[4].charAt(0);
 			type = Types.get(segments[5]);
 			if (header) {
-				headers = splitByWholeSeparatorPreserveAllTokens(segments[6], SUB_DELIMITER);
+				
 			} else {
 
 				headers = new String[cols];
@@ -131,8 +129,7 @@ public class GamaCSVFile extends GamaFile<IMatrix<Object>, Object> implements IF
 		@Override
 		public String toPropertyString() {
 			return super.toPropertyString() + DELIMITER + cols + DELIMITER + rows + DELIMITER + header + DELIMITER
-					+ delimiter + DELIMITER + type
-					+ (header ? DELIMITER + StringUtils.join(headers, SUB_DELIMITER) : "");
+					+ delimiter + DELIMITER + type;
 		}
 
 		/**

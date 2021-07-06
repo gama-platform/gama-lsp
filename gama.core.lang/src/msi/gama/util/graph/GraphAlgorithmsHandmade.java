@@ -63,31 +63,7 @@ public class GraphAlgorithmsHandmade {
 	 * @return
 	 */
 	public static IGraph rewireGraphProbability(final IScope scope, final IGraph graph, final Double probability) {
-
-		final IList edges = graph.getEdges();
-		for (int i = 0; i < edges.size(); i++) {
-
-			final Object currentEdge = edges.get(i);
-			if (scope.getRandom().between(0, 1.0) <= probability) {
-
-				// rewire this edge
-				final Object from = graph.getEdgeSource(currentEdge);
-
-				//System.err.println("removing " + from);
-
-				final Object toNode = getAnotherRandomNode(scope, graph, from);
-				//System.err.println("rewiring " + graph.getEdgeTarget(currentEdge) + " to " + toNode);
-
-				graph.removeEdge(currentEdge);
-
-				graph.addEdge(from, toNode, currentEdge);
-
-			}
-
-		}
-
-		return graph;
-
+		return null;
 	}
 
 	/**
@@ -99,31 +75,7 @@ public class GraphAlgorithmsHandmade {
 	 * @return
 	 */
 	public static IGraph rewireGraphCount(final IScope scope, final IGraph graph, final Integer count) {
-
-		final IList edges = graph.getEdges();
-		for (int i = 0; i < count; i++) {
-
-			final Object currentEdge = edges.get(scope.getRandom().between(0, graph.getEdges().length(null) - 1 // VERIFY
-			// NULL
-			// SCOPE
-			));
-
-			// rewire this edge
-			final Object from = graph.getEdgeSource(currentEdge);
-
-			//System.err.println("removing " + from);
-
-			final Object toNode = getAnotherRandomNode(scope, graph, from);
-			//System.err.println("rewiring " + graph.getEdgeTarget(currentEdge) + " to " + toNode);
-
-			graph.removeEdge(currentEdge);
-
-			graph.addEdge(from, toNode, currentEdge);
-
-		}
-
-		return graph;
-
+		return null;
 	}
 
 }

@@ -81,59 +81,7 @@ class ShapeExecuter extends DrawExecuter {
 
 	@Override
 	Rectangle2D executeOn(final IScope scope, final IGraphics gr, final DrawingData data) throws GamaRuntimeException {
-		final IShape shape = constantShape == null ? asGeometry(scope, item.value(scope), false) : constantShape;
-		if (shape == null) { return null; }
-		final DrawingAttributes attributes = computeAttributes(scope, data, shape);
-		Geometry gg = shape.getInnerGeometry();
-		if (gg == null) { return null; }
-		final ICoordinates ic = getContourCoordinates(gg);
-		ic.ensureClockwiseness();
-
-		// If the graphics is 2D, we pre-translate and pre-rotate the geometry
-		if (gr.is2D()) {
-			ic.getCenter(center);
-			rotate(gg, center, attributes.getRotation());
-			final GamaPoint location = attributes.getLocation();
-			if (location != null) {
-				if (gg.getNumPoints() == 1) {
-					gg = GEOMETRY_FACTORY.createPoint(location);
-				} else {
-					translate(gg, center, location);
-				}
-			}
-			gg.geometryChanged();
-		}
-		if (hasArrows) {
-			final Geometry withArrows = addArrows(scope, gg, !attributes.isEmpty());
-			if (withArrows != gg) {
-				gg = withArrows;
-				attributes.setType(IShape.Type.NULL);
-			}
-		}
-		final Geometry withTorus = addToroidalParts(scope, gg);
-		if (withTorus != gg) {
-			gg = withTorus;
-			attributes.setType(IShape.Type.NULL);
-		}
-
-		// XXX EXPERIMENTAL See Issue #1521
-		if (GamaPreferences.Displays.DISPLAY_ONLY_VISIBLE.getValue() && !scope.getExperiment().isHeadless()) {
-			final Envelope3D e = shape.getEnvelope();
-			try {
-				final Envelope visible = gr.getVisibleRegion();
-				if (visible != null) {
-					if (!visible.intersects(e)) { return null; }
-					// XXX EXPERIMENTAL
-				}
-			} finally {
-				e.dispose();
-			}
-		}
-
-		// The textures are computed as well in advance
-		addTextures(scope, attributes);
-		// And we ask the IGraphics object to draw the shape
-		return gr.drawShape(gg, attributes);
+		return null;
 	}
 
 	DrawingAttributes computeAttributes(final IScope scope, final DrawingData data, final IShape shape) {
@@ -175,42 +123,13 @@ class ShapeExecuter extends DrawExecuter {
 	 * @param shape
 	 * @return
 	 */
-	private Geometry addToroidalParts(final IScope scope, final Geometry shape) {
-		Geometry result = shape;
-		final ITopology t = scope.getTopology();
-		if (t != null && t.isTorus()) {
-			final List<Geometry> geoms = t.listToroidalGeometries(shape);
-			final Geometry all = GEOMETRY_FACTORY.buildGeometry(geoms);
-			final Geometry world = scope.getSimulation().getInnerGeometry();
-			result = all.intersection(world);
-			// WARNING Does not correctly handle rotations or translations
-		}
-		return result;
+	private Object addToroidalParts(final IScope scope, final Object shape) {
+		return null;
 	}
 
-	private final List<Geometry> tempArrowList = new ArrayList<>();
+	private final List<Object> tempArrowList = new ArrayList<>();
 
-	private Geometry addArrows(final IScope scope, final Geometry g1, final Boolean fill) {
-		final GamaPoint[] points = getPointsOf(g1);
-		final int size = points.length;
-		if (size < 2) { return g1; }
-		tempArrowList.clear();
-		tempArrowList.add(g1);
-		Geometry end = null, begin = null;
-		if (endArrow != null || constantEnd != null) {
-			final double width = constantEnd == null ? asFloat(scope, endArrow.value(scope)) : constantEnd;
-			if (width > 0) {
-				end = buildArrow(points[size - 2], points[size - 1], width, width + width / 3, fill).getInnerGeometry();
-				tempArrowList.add(end);
-			}
-		}
-		if (beginArrow != null || constantBegin != null) {
-			final double width = constantBegin == null ? asFloat(scope, beginArrow.value(scope)) : constantBegin;
-			if (width > 0) {
-				begin = buildArrow(points[1], points[0], width, width + width / 3, fill).getInnerGeometry();
-				tempArrowList.add(begin);
-			}
-		}
-		return GEOMETRY_FACTORY.createGeometryCollection(tempArrowList.toArray(new Geometry[tempArrowList.size()]));
+	private Object addArrows(final IScope scope, final Object g1, final Boolean fill) {
+		return null;
 	}
 }

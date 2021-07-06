@@ -13,42 +13,34 @@ package msi.gama.common.geometry;
 
 import msi.gama.metamodel.shape.GamaPoint;
 
-public class GamaCoordinateSequenceFactory implements CoordinateSequenceFactory {
+public class GamaCoordinateSequenceFactory {
 
 	/**
 	 * Method create()
 	 *
 	 */
-	@Override
-	public ICoordinates create(final Coordinate[] coordinates) {
-		if (coordinates.length == 1) return new UniqueCoordinateSequence(3, coordinates[0]);
-		return new GamaCoordinateSequence(3, coordinates);
+	public ICoordinates create(final Object[] coordinates) {
+		return null;
 	}
 
 	public ICoordinates create(final GamaPoint[] coordinates, final boolean copy) {
-		if (coordinates.length == 1) return new UniqueCoordinateSequence(3, coordinates[0]);
-		return new GamaCoordinateSequence(3, copy, coordinates);
+		return null;
 	}
 
 	/**
 	 * Method create()
 	 *
 	 */
-	@Override
-	public ICoordinates create(final CoordinateSequence cs) {
-		if (cs.size() == 1) return new UniqueCoordinateSequence(cs.getDimension(), cs.getCoordinate(0));
-		if (cs instanceof GamaCoordinateSequence) return ((GamaCoordinateSequence) cs).clone();
-		return new GamaCoordinateSequence(cs.getDimension(), cs.toCoordinateArray());
+	public ICoordinates create(final Object cs) {
+		return null;
 	}
 
 	/**
 	 * Method create()
 	 *
 	 */
-	@Override
 	public ICoordinates create(final int size, final int dimension) {
-		if (size == 1) return new UniqueCoordinateSequence(dimension, new GamaPoint());
-		return new GamaCoordinateSequence(dimension, size);
+		return null;
 	}
 
 }

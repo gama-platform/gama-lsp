@@ -416,7 +416,7 @@ public class ChartLayerStatement extends AbstractLayerStatement {
 		dataDeclaration.setChildren(commands);
 	}
 
-	public JFreeChart getChart() {
+	public Object getChart() {
 		// should be changed, used in LayerSideControls to open an editor...
 		return getDataSet().getOutput().getJFChart();
 	}

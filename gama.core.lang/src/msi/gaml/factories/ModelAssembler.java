@@ -230,20 +230,7 @@ public class ModelAssembler {
 	}
 
 	private Iterable<SpeciesDescription> getSpeciesInHierarchicalOrder(final ModelDescription model) {
-		final DefaultDirectedGraph<SpeciesDescription, Object> hierarchy = new DefaultDirectedGraph<>(Object.class);
-		final DescriptionVisitor visitor = desc -> {
-			if (desc instanceof ModelDescription) return true;
-			final SpeciesDescription sd = ((SpeciesDescription) desc).getParent();
-			if (sd == null || sd == desc) return false;
-			hierarchy.addVertex((SpeciesDescription) desc);
-			if (!sd.isBuiltIn()) {
-				hierarchy.addVertex(sd);
-				hierarchy.addEdge(sd, (SpeciesDescription) desc);
-			}
-			return true;
-		};
-		model.visitAllSpecies(visitor);
-		return () -> new TopologicalOrderIterator<>(hierarchy);
+		return null;
 	}
 
 	private void createSchedulerSpecies(final ModelDescription model) {
