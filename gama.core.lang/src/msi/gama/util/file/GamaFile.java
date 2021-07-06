@@ -48,6 +48,10 @@ public abstract class GamaFile<Container extends IAddressableContainer & IModifi
 	protected final URL url;
 	protected boolean writable = false;
 	private Container buffer;
+	
+	public GamaFile(final IScope scope, final String pn, final IMap somethingIDK) {
+		this(scope, pn, true);
+	}
 
 	public GamaFile(final IScope scope, final String pn) throws GamaRuntimeException {
 		this(scope, pn, true);

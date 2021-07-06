@@ -40,10 +40,10 @@ import msi.gaml.types.Types;
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 public abstract class GamaMatrix<T> implements IMatrix<T> {
 
-	private final IContainerType<IMatrix> type;
+	private final IContainerType<IMatrix<T>> type;
 
 	@Override
-	public IContainerType<?> getGamlType() {
+	public IContainerType<IMatrix<T>> getGamlType() {
 		return type;
 	}
 

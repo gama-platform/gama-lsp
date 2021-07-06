@@ -37,7 +37,7 @@ import msi.gaml.expressions.IExpression;
 		concept = { IConcept.TYPE, IConcept.CONTAINER, IConcept.LIST },
 		doc = @doc ("Ordered collection of values or agents"))
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaListType extends GamaContainerType<IList> {
+public class GamaListType<E> extends GamaContainerType<IList<E>> {
 
 	@Override
 	public IList cast(final IScope scope, final Object obj, final Object param, final IType keyType,

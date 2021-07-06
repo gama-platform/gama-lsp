@@ -26,9 +26,11 @@ import msi.gama.runtime.IScope;
 import msi.gama.runtime.exceptions.GamaRuntimeException;
 import msi.gama.util.GamaListFactory;
 import msi.gama.util.GamaMapFactory;
+import msi.gama.util.IAddressableContainer;
 import msi.gama.util.IContainer;
 import msi.gama.util.IList;
 import msi.gama.util.IMap;
+import msi.gama.util.IModifiableContainer;
 import msi.gaml.operators.Cast;
 import msi.gaml.operators.Strings;
 import msi.gaml.types.IContainerType;
@@ -41,7 +43,7 @@ import ummisco.gama.dev.utils.DEBUG;
 				IConcept.FILE,
 				IConcept.R }, doc = @doc("Represents an R file. The internal representation is a map of lists (the result of the evaluation)"))
 @SuppressWarnings({ "rawtypes" })
-public class RFile extends GamaFile<IMap, Object> {
+public class RFile<C extends IAddressableContainer & IModifiableContainer, C1> extends GamaFile<IMap, Object> {
 
 	// GamaMap<String, IList>, IList, String, IList
 	private final IContainer parameters;
@@ -57,7 +59,7 @@ public class RFile extends GamaFile<IMap, Object> {
 			@example(value = "file f <-R_file(\"file.r\",map([\"param1\"::1.0,\"param2\"::10.0 ]));", isExecutable = false) })
 
 	public RFile(final IScope scope, final String pathName, final IMap p) {
-		super(scope, pathName, p);
+		super(scope, pathName);
 		parameters = p;
 	}
 
@@ -117,7 +119,7 @@ public class RFile extends GamaFile<IMap, Object> {
 	 */
 	@Override
 	public IContainerType<IGamaFile> getGamlType() {
-		return Types.FILE.of(Types.INT, Types.STRING);
+		return null;
 	}
 
 }

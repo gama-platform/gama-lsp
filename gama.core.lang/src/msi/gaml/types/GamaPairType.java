@@ -38,7 +38,7 @@ import msi.gama.util.IMap;
 		concept = { IConcept.TYPE, IConcept.CONTAINER },
 		doc = @doc ("Represents a pair of 2 arbitrary elements"))
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaPairType extends GamaContainerType<GamaPair> {
+public class GamaPairType<K, V> extends GamaContainerType<GamaPair<K, V>> {
 
 	@Override
 	public GamaPair cast(final IScope scope, final Object obj, final Object param, final IType keyType,

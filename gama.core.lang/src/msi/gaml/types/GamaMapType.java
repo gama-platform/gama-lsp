@@ -32,7 +32,7 @@ import msi.gaml.expressions.IExpression;
 		concept = { IConcept.TYPE, IConcept.CONTAINER, IConcept.MAP },
 		doc = @doc ("Represents lists of pairs key::value, where each key is unique in the map. Maps are ordered by the insertion order of elements"))
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaMapType extends GamaContainerType<IMap> {
+public class GamaMapType<K, V> extends GamaContainerType<IMap<K, V>> {
 
 	@Override
 	public IMap cast(final IScope scope, final Object obj, final Object param, final IType keyType,

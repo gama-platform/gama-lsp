@@ -43,7 +43,7 @@ import msi.gaml.operators.Cast;
 		concept = { IConcept.TYPE, IConcept.CONTAINER, IConcept.MATRIX },
 		doc = @doc ("Matrices are 2-dimensional containers that can contain any type of date (not only floats or integers). They can be accessed with a point index or by rows / columns"))
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaMatrixType extends GamaContainerType<IMatrix> {
+public class GamaMatrixType<T> extends GamaContainerType<IMatrix<T>> {
 
 	public static IMatrix staticCast(final IScope scope, final Object obj, final Object param, final IType contentType,
 			final boolean copy) {

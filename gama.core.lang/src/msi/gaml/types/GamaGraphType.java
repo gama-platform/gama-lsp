@@ -37,7 +37,7 @@ import msi.gaml.operators.Cast;
 		concept = { IConcept.TYPE, IConcept.GRAPH },
 		doc = @doc ("Special type of container composed of edges and vertices"))
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class GamaGraphType extends GamaContainerType<IGraph> {
+public class GamaGraphType<Node, Edge> extends GamaContainerType<IGraph<Node, Edge>> {
 
 	@Override
 	public IGraph cast(final IScope scope, final Object obj, final Object param, final IType keyType,
