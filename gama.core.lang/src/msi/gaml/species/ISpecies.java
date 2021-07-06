@@ -38,7 +38,6 @@ import msi.gaml.statements.UserCommandStatement;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
 import msi.gaml.variables.IVariable;
-import one.util.streamex.StreamEx;
 
 /**
  * Written by drogoul Modified on 25 avr. 2010
@@ -119,8 +118,7 @@ public interface ISpecies
 	@getter (SUBSPECIES)
 	@doc ("Returns all the direct subspecies names of this species")
 	default IList<String> getSubSpeciesNames(final IScope scope) {
-		return StreamEx.of(getSubSpecies(scope)).map((each) -> each.getName())
-				.toCollection(Containers.listOf(Types.STRING));
+		return null;
 	}
 
 	@Override
@@ -187,8 +185,7 @@ public interface ISpecies
 	@getter (ACTIONS)
 	@doc ("retuns the list of actions defined in this species (incl. the ones inherited from its parent)")
 	default IList<String> getActionNames(final IScope scope) {
-		return GamaListFactory.create(scope, Types.STRING,
-				StreamEx.of(getActions()).map((each) -> each.getName()).toList());
+		return null;
 	}
 
 	Collection<ActionStatement> getActions();

@@ -12,7 +12,6 @@ package msi.gama.metamodel.topology;
 
 import java.util.Collection;
 
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.metamodel.agent.IAgent;
@@ -38,7 +37,7 @@ public interface ISpatialIndex {
 	Collection<IAgent> firstAtDistance(IScope scope, final IShape source, final double dist, final IAgentFilter f,
 			int number, Collection<IAgent> alreadyChosen);
 
-	Collection<IAgent> allInEnvelope(IScope scope, final IShape source, final Envelope envelope, final IAgentFilter f,
+	Collection<IAgent> allInEnvelope(IScope scope, final IShape source, final Object envelope, final IAgentFilter f,
 			boolean contained);
 
 	Collection<IAgent> allAtDistance(IScope scope, IShape source, double dist, IAgentFilter f);
@@ -51,7 +50,7 @@ public interface ISpatialIndex {
 
 		void remove(final IPopulation<? extends IAgent> species);
 
-		void updateQuadtree(Envelope envelope);
+		void updateQuadtree(Object envelope);
 
 		void mergeWith(Compound spatialIndex);
 

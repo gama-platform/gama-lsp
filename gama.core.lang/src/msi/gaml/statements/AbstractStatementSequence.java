@@ -18,7 +18,6 @@ import msi.gama.runtime.IScope;
 import msi.gama.runtime.exceptions.GamaRuntimeException;
 import msi.gaml.compilation.ISymbol;
 import msi.gaml.descriptions.IDescription;
-import one.util.streamex.StreamEx;
 
 public class AbstractStatementSequence extends AbstractStatement {
 

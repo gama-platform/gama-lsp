@@ -30,7 +30,6 @@ import msi.gama.util.matrix.IMatrix;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.StreamEx;
 
 /**
  * Written by drogoul Modified on 3 juin 2010
@@ -62,13 +61,12 @@ public interface IContainer<KeyType, ValueType> extends IValue {
 	 * @return
 	 */
 	@SuppressWarnings ("unchecked")
-	default StreamEx<ValueType> stream(final IScope scope) {
-		if (this instanceof Collection) { return StreamEx.of(((Collection<ValueType>) this).stream()); }
-		return StreamEx.of(listValue(scope, Types.NO_TYPE, false));
+	default Object stream(final IScope scope) {
+		return null;
 	}
 
-	default StreamEx<ValueType> parallelStream(final IScope scope) {
-		return stream(scope).parallel(GamaExecutorService.AGENT_PARALLEL_EXECUTOR);
+	default Object parallelStream(final IScope scope) {
+		return null;
 	}
 
 	public interface Addressable<KeyType, ValueType> {

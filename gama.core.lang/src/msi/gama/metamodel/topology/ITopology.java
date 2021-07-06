@@ -13,8 +13,6 @@ package msi.gama.metamodel.topology;
 import java.util.Collection;
 import java.util.List;
 
-import org.locationtech.jts.geom.Geometry;
-
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.interfaces.IValue;
@@ -66,7 +64,7 @@ public interface ITopology extends IValue {
 
 	void removeAgent(final IAgent agent);
 
-	List<Geometry> listToroidalGeometries(final Geometry geom);
+	List<Object> listToroidalGeometries(final Object geom);
 
 	Collection<IAgent> getAgentClosestTo(IScope scope, final IShape source, IAgentFilter filter, int number);
 

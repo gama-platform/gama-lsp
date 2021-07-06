@@ -15,9 +15,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-
 import msi.gama.metamodel.shape.ILocation;
 import msi.gama.outputs.layers.OverlayLayer;
 import msi.gama.outputs.layers.charts.ChartOutput;
@@ -69,7 +66,7 @@ public interface IGraphics {
 
 	Rectangle2D drawString(final String string, final TextDrawingAttributes attributes);
 
-	Rectangle2D drawShape(final Geometry shape, final DrawingAttributes attributes);
+	Rectangle2D drawShape(final Object shape, final DrawingAttributes attributes);
 
 	void setOpacity(double i);
 
@@ -90,7 +87,7 @@ public interface IGraphics {
 	/*
 	 * Returns the region of the current layer (in model units) that is visible on screen
 	 */
-	Envelope getVisibleRegion();
+	Object getVisibleRegion();
 
 	void endDrawingLayer(ILayer layer);
 

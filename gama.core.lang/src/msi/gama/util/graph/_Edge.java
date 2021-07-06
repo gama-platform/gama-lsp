@@ -11,8 +11,6 @@
 package msi.gama.util.graph;
 
 
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-
 import msi.gama.runtime.IScope;
 import msi.gama.runtime.exceptions.GamaRuntimeException;
 
@@ -27,7 +25,7 @@ public class _Edge<V, E> extends GraphObject<GamaGraph<V, E>, V, E> {
 
 	public _Edge(final GamaGraph<V, E> gamaGraph, final Object edge, final Object source, final Object target)
 			throws GamaRuntimeException {
-		this(gamaGraph, edge, source, target, DefaultDirectedWeightedGraph.DEFAULT_EDGE_WEIGHT);
+		this(gamaGraph, edge, source, target, 0.0);
 	}
 
 	public _Edge(final GamaGraph<V, E> gamaGraph, final Object edge, final Object source, final Object target,

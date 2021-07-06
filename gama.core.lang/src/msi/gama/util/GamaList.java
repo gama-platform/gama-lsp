@@ -21,7 +21,6 @@ import msi.gaml.types.GamaType;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types; 
-import one.util.streamex.StreamEx;
  
 /**
  * Written by drogoul Modified on 21 nov. 2008
@@ -39,8 +38,8 @@ public class GamaList<E> extends ArrayList<E> implements IList<E> {
 	}
 
 	@Override
-	public StreamEx<E> stream(final IScope scope) {
-		return StreamEx.<E> of(this);
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	@Override

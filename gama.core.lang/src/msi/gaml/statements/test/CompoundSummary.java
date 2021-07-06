@@ -21,7 +21,6 @@ import org.eclipse.emf.common.util.URI;
 import com.google.common.base.Objects;
 
 import msi.gama.util.GamaMapFactory;
-import one.util.streamex.StreamEx;
 
 /**
  * A summary composed of other summaries (for instance, a TestStatement summary is composed of AsserStatement summaries)
@@ -70,7 +69,7 @@ public class CompoundSummary<T extends AbstractSummary<?>, S extends WithTestSum
 
 	@Override
 	public long getTimeStamp() {
-		return StreamEx.ofValues(summaries).mapToLong(s -> s.getTimeStamp()).max().getAsLong();
+		return 0;
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class CompoundSummary<T extends AbstractSummary<?>, S extends WithTestSum
 
 	@Override
 	public int countTestsWith(final TestState state) {
-		return StreamEx.ofValues(summaries).mapToInt(s -> s.countTestsWith(state)).sum();
+		return 0;
 	}
 
 	public void getSubSummariesBelongingTo(final URI fileURI, final List<AbstractSummary<?>> collector) {

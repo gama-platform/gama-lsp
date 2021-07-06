@@ -15,11 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.GraphWalk;
-
 import msi.gama.runtime.GAMA;
 import msi.gama.util.GamaMapFactory;
 import msi.gama.util.IMap;
@@ -28,6 +23,10 @@ import msi.gama.util.matrix.GamaIntMatrix;
 
 // Copy of the jgrapht algorithm: just make it usable with GAMA undirected graph
 public class FloydWarshallShortestPathsGAMA<V, E> {
+	class Graph<K, K1> {}
+	class Pair<K, K1> {}
+	class GraphPath<K, K1> {}
+	class GraphWalk<K, K1> {}
 
 	// TODO Look at the new implementantion of the algorithm in JGraphT 1.0.1 and try to derive from it.
 
@@ -63,7 +62,7 @@ public class FloydWarshallShortestPathsGAMA<V, E> {
 	/**
 	 * @return the graph on which this algorithm operates
 	 */
-	public Graph<V, E> getGraph() {
+	public GamaGraph<V, E> getGraph() {
 		return graph;
 	}
 
@@ -202,50 +201,7 @@ public class FloydWarshallShortestPathsGAMA<V, E> {
 	}
 
 	private GraphPath<V, E> getShortestPathImpl(final V a, final V b) {
-		int v_a = vertices.indexOf(a);
-		final int v_b = vertices.indexOf(b);
-		int prev = v_a;
-		final List<E> edges = new ArrayList<>();
-		if (matrix != null) {
-			v_a = matrix.get(GAMA.getRuntimeScope(), v_b, v_a);
-			if (v_a != -1) {
-				while (prev != v_b) {
-					final Set<E> eds = graph.getAllEdges(vertices.get(prev), vertices.get(v_a));
-					if (!eds.isEmpty()) {
-						double minW = Double.MAX_VALUE;
-						E ed = null;
-						for (final E e : eds) {
-							final double w = graph.getEdgeWeight(e);
-							if (w < minW) {
-								minW = w;
-								ed = e;
-							}
-						}
-						edges.add(ed);
-					} else {
-						return null;
-					}
-					if (prev != v_b) {
-						prev = v_a;
-						v_a = matrix.get(GAMA.getRuntimeScope(), v_b, v_a);
-					}
-				}
-			}
-		} else {
-			shortestPathRecur(edges, v_a, v_b);
-		}
-
-		// no path, return null
-		if (edges.size() < 1) { return null; }
-		final GraphWalk<V, E> path = new GraphWalk<>(graph, a, b, edges, edges.size());
-		if (graph.isSaveComputedShortestPaths()) {
-			final V v_i = vertices.get(v_a);
-			final V v_j = vertices.get(v_b);
-
-			paths.put(new Pair<>(v_i, v_j), path);
-			nShortestPaths++;
-		}
-		return path;
+		return null;
 	}
 
 	/**

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.jts.geom.Geometry;
 
 import com.google.common.primitives.Ints;
 
@@ -100,7 +99,7 @@ public abstract class AbstractAgent implements IAgent {
 	 * @see msi.gama.interfaces.IShape#getInnerGeometry()
 	 */
 	@Override
-	public Geometry getInnerGeometry() {
+	public Object getInnerGeometry() {
 		return getGeometry().getInnerGeometry();
 	}
 
@@ -153,7 +152,7 @@ public abstract class AbstractAgent implements IAgent {
 	 * @see msi.gama.common.interfaces.IGeometry#setInnerGeometry(org.locationtech.jts.geom.Geometry)
 	 */
 	@Override
-	public void setInnerGeometry(final Geometry geom) {
+	public void setInnerGeometry(final Object geom) {
 		getGeometry().setInnerGeometry(geom);
 	}
 

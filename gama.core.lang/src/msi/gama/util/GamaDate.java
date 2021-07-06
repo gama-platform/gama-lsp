@@ -37,8 +37,6 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalUnit;
 import java.time.temporal.WeekFields;
 
-import org.apache.commons.lang.StringUtils;
-
 import msi.gama.common.interfaces.IValue;
 import msi.gama.kernel.simulation.SimulationAgent;
 import msi.gama.precompiler.GamlAnnotations.doc;
@@ -62,66 +60,29 @@ import msi.gaml.types.Types;
  * @author Taillandier
  * @author Alexis Drogoul
  */
-@vars ({ @variable (
-		name = "day_of_week",
-		type = IType.INT,
-		doc = { @doc ("Returns the index of the day of the week (with Monday being 1)") }),
-		@variable (
-				name = "date",
-				type = IType.DATE,
-				doc = { @doc ("Returns a new date object with only the year-month-day components of this date") }),
-		@variable (
-				name = "leap",
-				type = IType.BOOL,
-				doc = { @doc ("Returns true if the year is a leap year") }),
-		@variable (
-				name = "days_in_month",
-				type = IType.INT,
-				doc = { @doc ("Returns the number of days of the month (28-31) of this date") }),
-		@variable (
-				name = "day_of_year",
-				type = IType.INT,
-				doc = { @doc ("Returns the current day number of the year of this date") }),
-		@variable (
-				name = "days_in_year",
-				type = IType.INT,
-				doc = { @doc ("Returns the number of days of the year (365-366) of this date") }),
-		@variable (
-				name = "week_of_year",
-				type = IType.INT,
-				doc = { @doc ("Returns the week (1-52) of the year") }),
-		@variable (
-				name = "second",
-				type = IType.INT,
-				doc = { @doc ("Returns the second of minute (0-59) of this date") }),
-		@variable (
-				name = "second_of_day",
-				type = IType.INT,
-				doc = { @doc ("Returns the second of day (0-86399) of this date") }),
-		@variable (
-				name = "minute",
-				type = IType.INT,
-				doc = { @doc ("Returns the minute of hour (0-59) of this date") }),
-		@variable (
-				name = "minute_of_day",
-				type = IType.INT,
-				doc = { @doc ("Returns the minute of day (0-1439) of this date") }),
-		@variable (
-				name = "hour",
-				type = IType.INT,
-				doc = { @doc ("Returns the hour of the day (0-23) of this date") }),
-		@variable (
-				name = "day",
-				type = IType.INT,
-				doc = { @doc ("Returns the day of month (1-31) of this date") }),
-		@variable (
-				name = "month",
-				type = IType.INT,
-				doc = { @doc ("Returns the month of year (1-12) of this date") }),
-		@variable (
-				name = "year",
-				type = IType.INT,
-				doc = { @doc ("Returns the year") }) })
+@vars({ @variable(name = "day_of_week", type = IType.INT, doc = {
+		@doc("Returns the index of the day of the week (with Monday being 1)") }),
+		@variable(name = "date", type = IType.DATE, doc = {
+				@doc("Returns a new date object with only the year-month-day components of this date") }),
+		@variable(name = "leap", type = IType.BOOL, doc = { @doc("Returns true if the year is a leap year") }),
+		@variable(name = "days_in_month", type = IType.INT, doc = {
+				@doc("Returns the number of days of the month (28-31) of this date") }),
+		@variable(name = "day_of_year", type = IType.INT, doc = {
+				@doc("Returns the current day number of the year of this date") }),
+		@variable(name = "days_in_year", type = IType.INT, doc = {
+				@doc("Returns the number of days of the year (365-366) of this date") }),
+		@variable(name = "week_of_year", type = IType.INT, doc = { @doc("Returns the week (1-52) of the year") }),
+		@variable(name = "second", type = IType.INT, doc = {
+				@doc("Returns the second of minute (0-59) of this date") }),
+		@variable(name = "second_of_day", type = IType.INT, doc = {
+				@doc("Returns the second of day (0-86399) of this date") }),
+		@variable(name = "minute", type = IType.INT, doc = { @doc("Returns the minute of hour (0-59) of this date") }),
+		@variable(name = "minute_of_day", type = IType.INT, doc = {
+				@doc("Returns the minute of day (0-1439) of this date") }),
+		@variable(name = "hour", type = IType.INT, doc = { @doc("Returns the hour of the day (0-23) of this date") }),
+		@variable(name = "day", type = IType.INT, doc = { @doc("Returns the day of month (1-31) of this date") }),
+		@variable(name = "month", type = IType.INT, doc = { @doc("Returns the month of year (1-12) of this date") }),
+		@variable(name = "year", type = IType.INT, doc = { @doc("Returns the year") }) })
 public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 
 	final Temporal internal;
@@ -188,10 +149,14 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 		if (df != null) {
 			try {
 				final TemporalAccessor ta = df.parse(original);
-				if (ta instanceof Temporal) { return (Temporal) ta; }
+				if (ta instanceof Temporal) {
+					return (Temporal) ta;
+				}
 				if (!ta.isSupported(ChronoField.YEAR) && !ta.isSupported(ChronoField.MONTH_OF_YEAR)
 						&& !ta.isSupported(ChronoField.DAY_OF_MONTH)) {
-					if (ta.isSupported(ChronoField.HOUR_OF_DAY)) { return LocalTime.from(ta); }
+					if (ta.isSupported(ChronoField.HOUR_OF_DAY)) {
+						return LocalTime.from(ta);
+					}
 				}
 				if (!ta.isSupported(ChronoField.HOUR_OF_DAY) && !ta.isSupported(ChronoField.MINUTE_OF_HOUR)
 						&& !ta.isSupported(ChronoField.SECOND_OF_MINUTE)) {
@@ -214,7 +179,7 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 			// the string is correctly formatted
 			String string = original;
 			if (!original.contains("T") && original.contains(" ")) {
-				string = StringUtils.replaceOnce(original, " ", "T");
+				string = "";
 			}
 			final String[] base = string.split("T");
 			final String[] date = base[0].split("-");
@@ -275,15 +240,17 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 	}
 
 	/**
-	 * returns the complete number of seconds since the starting_date of the model (equivalent to a duration)
+	 * returns the complete number of seconds since the starting_date of the model
+	 * (equivalent to a duration)
 	 *
-	 * @param scope
-	 *            the current scope from which the simulation can be obtained
+	 * @param scope the current scope from which the simulation can be obtained
 	 * @return the duration in seconds since this starting date
 	 */
 	public double floatValue(final IScope scope) {
 		final SimulationAgent sim = scope.getSimulation();
-		if (sim == null) { return Dates.DATES_STARTING_DATE.getValue().until(this, ChronoUnit.SECONDS); }
+		if (sim == null) {
+			return Dates.DATES_STARTING_DATE.getValue().until(this, ChronoUnit.SECONDS);
+		}
 		return sim.getStartingDate().until(this, ChronoUnit.SECONDS);
 	}
 
@@ -346,77 +313,77 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 		return new GamaDate(scope, internal);
 	}
 
-	@getter ("year")
+	@getter("year")
 	public int getYear() {
 		return internal.get(YEAR);
 	}
 
-	@getter ("date")
+	@getter("date")
 	public GamaDate getDate() {
 		return GamaDate.of(LocalDate.of(getYear(), getMonth(), getDay()));
 	}
 
-	@getter ("day_of_year")
+	@getter("day_of_year")
 	public int getDayOfYear() {
 		return internal.get(DAY_OF_YEAR);
 	}
 
-	@getter ("second_of_day")
+	@getter("second_of_day")
 	public int getSecondOfDay() {
 		return internal.get(ChronoField.SECOND_OF_DAY);
 	}
 
-	@getter ("month")
+	@getter("month")
 	public int getMonth() {
 		return internal.get(MONTH_OF_YEAR);
 	}
 
-	@getter ("day")
+	@getter("day")
 	public int getDay() {
 		return internal.get(DAY_OF_MONTH);
 	}
 
-	@getter ("hour")
+	@getter("hour")
 	public int getHour() {
 		return internal.get(ChronoField.HOUR_OF_DAY);
 	}
 
-	@getter ("minute")
+	@getter("minute")
 	public int getMinute() {
 		return internal.get(MINUTE_OF_HOUR);
 	}
 
-	@getter ("minute_of_day")
+	@getter("minute_of_day")
 	public int getMinuteOfDay() {
 		return internal.get(ChronoField.MINUTE_OF_DAY);
 	}
 
-	@getter ("second")
+	@getter("second")
 	public int getSecond() {
 		return internal.get(SECOND_OF_MINUTE);
 	}
 
-	@getter ("day_of_week")
+	@getter("day_of_week")
 	public int getDayWeek() {
 		return internal.get(DAY_OF_WEEK);
 	}
 
-	@getter ("leap")
+	@getter("leap")
 	public boolean getIsLeap() {
 		return LocalDate.from(internal).isLeapYear();
 	}
 
-	@getter ("week_of_year")
+	@getter("week_of_year")
 	public int getWeekYear() {
 		return internal.get(WeekFields.ISO.weekOfYear());
 	}
 
-	@getter ("days_in_month")
+	@getter("days_in_month")
 	public int getDaysMonth() {
 		return LocalDate.from(internal).lengthOfMonth();
 	}
 
-	@getter ("days_in_year")
+	@getter("days_in_year")
 	public int getDaysInYear() {
 		return LocalDate.from(internal).lengthOfYear();
 	}
@@ -445,9 +412,12 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 
 	@Override
 	public long getLong(final TemporalField field) {
-		if (internal.isSupported(field)) { return internal.getLong(field); }
+		if (internal.isSupported(field)) {
+			return internal.getLong(field);
+		}
 		if (field.equals(ChronoField.OFFSET_SECONDS)) {
-			// If no offset or time zone is supplied, we assume it is the zone of the modeler
+			// If no offset or time zone is supplied, we assume it is the zone of the
+			// modeler
 			return GamaDateType.DEFAULT_OFFSET_IN_SECONDS.getTotalSeconds();
 		}
 		if (field.equals(ChronoField.INSTANT_SECONDS)) {
@@ -540,14 +510,22 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 		// We get the current date from the model
 		final GamaDate current = scope.getClock().getCurrentDate();
 		// Exact date ?
-		if (this.equals(current)) { return true; }
+		if (this.equals(current)) {
+			return true;
+		}
 		// Not yet reached ?
-		if (isGreaterThan(current, true)) { return false; }
+		if (isGreaterThan(current, true)) {
+			return false;
+		}
 		GamaDate nextByPeriod = plus(scope, period);
 		// Null period ?
-		if (nextByPeriod.equals(this)) { return false; }
+		if (nextByPeriod.equals(this)) {
+			return false;
+		}
 		// Exactly reached ?
-		if (nextByPeriod.equals(current)) { return true; }
+		if (nextByPeriod.equals(current)) {
+			return true;
+		}
 		while (nextByPeriod.isSmallerThan(current, true)) {
 			nextByPeriod = nextByPeriod.plus(scope, period);
 		}
@@ -578,7 +556,9 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 		// period.evaluateAsTemporalExpression(scope, a);
 		// return this.plus(a.d).plus(a.p);
 		final long p = (long) (Cast.asFloat(scope, period.value(scope)) * 1000);
-		if (p == 0) { return this; }
+		if (p == 0) {
+			return this;
+		}
 		return plus(p, ChronoUnit.MILLIS);
 	}
 
@@ -603,12 +583,14 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 	// if (period.canBeComputed()) {
 	// return isIntervalReached(scope, current, period);
 	// }
-	// private boolean isIntervalReached(final IScope scope, final GamaDate current, final IExpression period) {
+	// private boolean isIntervalReached(final IScope scope, final GamaDate current,
+	// final IExpression period) {
 	// // We compute the frequency (should not include the fancy stuff
 	// // related to #week, #month and #year). The frequency should be
 	// // expressed in seconds, so we convert it immediately to
 	// // milliseconds
-	// final long frequencyInMillis = (long) (Cast.asFloat(scope, period.value(scope)) * 1000);
+	// final long frequencyInMillis = (long) (Cast.asFloat(scope,
+	// period.value(scope)) * 1000);
 	// // Fail fast 3: if the frequency is null, we return false
 	// if (frequencyInMillis == 0) { return false; }
 	//
@@ -620,14 +602,16 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 	// // Fail fast 5: if we have exactly reached an interval, we return
 	// // true
 	// if (remainder == 0) {
-	// DEBUG.LOG("We return true for " + current + " because the remainder is 0 between the elapsed_time "
+	// DEBUG.LOG("We return true for " + current + " because the remainder is 0
+	// between the elapsed_time "
 	// + elapsedTime + " and the frequency " + frequencyInMillis);
 	// return true;
 	// }
 	// // Finally, we return if the step is greater than the remainder
 	// final boolean result = stepInMillis > remainder;
 	// if (result) {
-	// DEBUG.LOG("We return true for " + current + " because the step " + stepInMillis
+	// DEBUG.LOG("We return true for " + current + " because the step " +
+	// stepInMillis
 	// + " is greater than the remainder " + remainder);
 	// }
 	// return result;
@@ -639,7 +623,8 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 		final boolean month = name.startsWith("m");
 		final GamaDate next = this.plus(number, month ? ChronoUnit.MONTHS : ChronoUnit.YEARS);
 		final double result = this.until(next, ChronoUnit.MILLIS) / 1000d;
-		// DEBUG.LOG("Computation of " + number + " " + exp.getName() + " = " + result + "s or "
+		// DEBUG.LOG("Computation of " + number + " " + exp.getName() + " = " + result +
+		// "s or "
 		// + this.until(next, ChronoUnit.DAYS) + " days");
 
 		return result;
@@ -665,8 +650,11 @@ public class GamaDate implements IValue, Temporal, Comparable<GamaDate> {
 	public static GamaDate fromISOString(final String s) {
 		try {
 			final TemporalAccessor t = Dates.getFormatter(Dates.ISO_OFFSET_KEY, null).parse(s);
-			if (t instanceof Temporal) { return of((Temporal) t); }
-		} catch (final DateTimeParseException e) {}
+			if (t instanceof Temporal) {
+				return of((Temporal) t);
+			}
+		} catch (final DateTimeParseException e) {
+		}
 		return new GamaDate(null, s);
 	}
 

@@ -13,7 +13,6 @@ package msi.gama.util.matrix;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
 
 import com.google.common.primitives.Ints;
 
@@ -32,8 +31,6 @@ import msi.gaml.types.GamaMatrixType;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.IntStreamEx;
-import one.util.streamex.StreamEx;
 
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 public class GamaIntMatrix extends GamaMatrix<Integer> {
@@ -178,8 +175,7 @@ public class GamaIntMatrix extends GamaMatrix<Integer> {
 	 * @return the matrix concatenated
 	 */
 	public GamaIntMatrix _opAppendVertically(final IScope scope, final GamaIntMatrix b) {
-		final int[] mab = ArrayUtils.addAll(getMatrix(), b.getMatrix());
-		return new GamaIntMatrix(numCols, numRows + b.getRows(scope), mab);
+		return null;
 	}
 
 	/**
@@ -520,8 +516,8 @@ public class GamaIntMatrix extends GamaMatrix<Integer> {
 	}
 
 	@Override
-	public StreamEx<Integer> stream(final IScope scope) {
-		return IntStreamEx.of(matrix).boxed();
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	@Override

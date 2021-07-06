@@ -13,15 +13,14 @@ package msi.gama.util.graph;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgrapht.util.ArrayUnenforcedSet;
 
 import msi.gama.util.Collector;
 
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 public class _Vertex<E, V> extends GraphObject<GamaGraph<E, V>, E, V> {
 
-	Set inEdges = new ArrayUnenforcedSet(1);
-	Set outEdges = new ArrayUnenforcedSet(1);
+	Set inEdges = null;
+	Set outEdges = null;
 	// Double weight = WeightedGraph.DEFAULT_EDGE_WEIGHT;
 	int edgesCount = 0;
 	int index = -1;

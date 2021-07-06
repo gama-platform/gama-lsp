@@ -25,7 +25,6 @@ import msi.gama.common.interfaces.IGamlDescription;
 import msi.gama.common.preferences.GamaPreferences;
 import msi.gama.util.Collector;
 import msi.gaml.compilation.GamlCompilationError;
-import one.util.streamex.StreamEx;
 
 public class ValidationContext extends Collector.AsList<GamlCompilationError> implements IDocManager {
 
@@ -77,7 +76,7 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	}
 
 	public boolean hasInternalErrors() {
-		return !isEmpty() && StreamEx.of(items()).filter(IS_ERROR).count() > 0;
+		return false;
 	}
 
 	public boolean hasImportedErrors() {
@@ -85,7 +84,7 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	}
 
 	public List<GamlCompilationError> getInternalErrors() {
-		return StreamEx.of(items()).filter(IS_ERROR).toList();
+		return null;
 	}
 
 	public Collection<GamlCompilationError> getImportedErrors() {
@@ -93,7 +92,7 @@ public class ValidationContext extends Collector.AsList<GamlCompilationError> im
 	}
 
 	public Iterable<GamlCompilationError> getWarnings() {
-		return StreamEx.of(items()).filter(IS_WARNING).toList();
+		return null;
 	}
 
 	public Iterable<GamlCompilationError> getInfos() {

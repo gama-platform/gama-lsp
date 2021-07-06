@@ -50,7 +50,6 @@ import msi.gaml.species.ISpecies;
 import msi.gaml.statements.IExecutable;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.StreamEx;
 
 @species (
 		name = IKeyword.PLATFORM,
@@ -267,8 +266,7 @@ public class PlatformAgent extends GamlAgent implements ITopLevelAgent, IExpress
 			value = "plugins",
 			initializer = true)
 	public IList<String> getPluginsList() {
-		final BundleContext bc = FrameworkUtil.getBundle(getClass()).getBundleContext();
-		return StreamEx.of(bc.getBundles()).map(b -> b.getSymbolicName()).toCollection(Containers.listOf(Types.STRING));
+		return null;
 	}
 
 	@getter (

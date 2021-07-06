@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.jts.geom.Geometry;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.interfaces.IKeyword;
@@ -373,38 +372,7 @@ public class SimulationAgent extends GamlAgent implements ITopLevelAgent {
 	}
 
 	@Override
-	public void setGeometry(final IShape g) {
-		// FIXME : AD 5/15 Revert the commit by PT:
-		// getProjectionFactory().setWorldProjectionEnv(geom.getEnvelope());
-		// We systematically translate the geometry to {0,0}
-		IShape geom = g;
-		if (geom == null) {
-			geom = GamaGeometryType.buildBox(100, 100, 100, new GamaPoint(50, 50, 50));
-		} else {
-			// See Issue #2787, #2795
-			final Geometry gg = geom.getInnerGeometry();
-			Object savedData = null;
-			if (gg != null) { savedData = gg.getUserData(); }
-			geom.setInnerGeometry(geom.getEnvelope().toGeometry());
-			geom.getInnerGeometry().setUserData(savedData);
-		}
-
-		final Envelope3D env = geom.getEnvelope();
-		if (getProjectionFactory().getWorld() == null) {
-			projectionFactory.setWorldProjectionEnv(GAMA.getRuntimeScope(), env);
-		}
-
-		((WorldProjection) getProjectionFactory().getWorld()).updateTranslations(env);
-		((WorldProjection) getProjectionFactory().getWorld()).updateUnit(getProjectionFactory().getUnitConverter());
-		final GamaPoint p = new GamaPoint(-env.getMinX(), -env.getMinY(), -env.getMinZ());
-		geometry.setGeometry(Transformations.translated_by(getScope(), geom, p));
-		if (getProjectionFactory().getUnitConverter() != null) {
-			((WorldProjection) getProjectionFactory().getWorld()).convertUnit(geometry.getInnerGeometry());
-
-		}
-		setTopology(getScope(), geometry);
-
-	}
+	public void setGeometry(final IShape g) {}
 
 	@Override
 	public SimulationPopulation getPopulation() {

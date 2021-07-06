@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.util.graph;
 
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 
 /**
  * Class GraphObject.
@@ -22,7 +21,7 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 public abstract class GraphObject<T extends IGraph<V, E>, V, E> {
 
 	protected final T graph;
-	protected double weight = DefaultDirectedWeightedGraph.DEFAULT_EDGE_WEIGHT;
+	protected double weight = 0.0;
 
 	GraphObject(final T g, final double w) {
 		graph = g;

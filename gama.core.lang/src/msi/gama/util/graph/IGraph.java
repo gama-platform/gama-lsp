@@ -31,8 +31,6 @@ import msi.gama.util.path.IPath;
 import msi.gaml.operators.Graphs;
 import msi.gaml.species.ISpecies;
 import msi.gaml.types.IType;
-
-import org.jgrapht.Graph;
 /**
  * Written by drogoul Modified on 24 nov. 2011
  *

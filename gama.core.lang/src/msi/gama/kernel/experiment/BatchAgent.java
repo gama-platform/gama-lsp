@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.jfree.data.statistics.Statistics;
-
 import msi.gama.common.interfaces.IGui;
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.kernel.batch.IExploration;
@@ -278,9 +276,7 @@ public class BatchAgent extends ExperimentAgent {
 		// different simulation.
 		final short fitnessCombination = getSpecies().getExplorationAlgorithm().getCombination();
 		lastSolution = currentSolution;
-		lastFitness = fitnessCombination == IExploration.C_MAX ? Collections.max(fitnessValues)
-				: fitnessCombination == IExploration.C_MIN ? Collections.min(fitnessValues)
-						: Statistics.calculateMean(fitnessValues);
+		lastFitness = (double) 0;
 
 		// we update the best solution found so far
 		getSpecies().getExplorationAlgorithm().updateBestFitness(lastSolution, lastFitness);

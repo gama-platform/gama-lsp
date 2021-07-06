@@ -13,7 +13,6 @@ package msi.gama.metamodel.agent;
 import java.util.Objects;
 import java.util.Set;
 
-import org.locationtech.jts.geom.Geometry;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.interfaces.IKeyword;
@@ -56,7 +55,7 @@ public class MinimalAgent extends AbstractAgent {
 	 *            the population used to prototype the agent.
 	 */
 	public MinimalAgent(final IPopulation<? extends IAgent> s, final int index) {
-		this(s, index, new GamaShape((Geometry) null));
+		this(s, index, null);
 	}
 
 	protected MinimalAgent(final IPopulation<? extends IAgent> population, final int index, final IShape geometry) {
@@ -83,47 +82,7 @@ public class MinimalAgent extends AbstractAgent {
 	}
 
 	@Override
-	public/* synchronized */void setGeometry(final IShape newGeometry) {
-		// Addition to address Issue 817: if the new geometry is exactly the one
-		// possessed by the agent, no need to change anything.
-		if (newGeometry == geometry || newGeometry == null || newGeometry.getInnerGeometry() == null || dead()
-				|| this.getSpecies().isGrid() && ((GamlSpecies) this.getSpecies()).belongsToAMicroModel())
-			return;
-
-		final ITopology topology = getTopology();
-		final ILocation newGeomLocation = newGeometry.getLocation().copy(getScope());
-
-		// if the old geometry is "shared" with another agent, we create a new
-		// one. otherwise, we copy it directly.
-		final IAgent other = newGeometry.getAgent();
-		IShape newLocalGeom;
-		if (other == null) {
-			newLocalGeom = newGeometry;
-		} else {
-			// If the agent is different, we do not copy the attributes present in the shape passed as argument (see
-			// Issue #2053).
-			newLocalGeom = new GamaShape((Geometry) newGeometry.getInnerGeometry().clone());
-			newLocalGeom.copyShapeAttributesFrom(newGeometry);
-		}
-		topology.normalizeLocation(newGeomLocation, false);
-
-		if (!newGeomLocation.equals(newLocalGeom.getLocation())) { newLocalGeom.setLocation(newGeomLocation); }
-
-		newLocalGeom.setAgent(this);
-		final Envelope3D previous = Envelope3D.of(geometry);
-		geometry.setGeometry(newLocalGeom);
-
-		topology.updateAgent(previous, this);
-
-		// update micro-agents' locations accordingly
-
-		// TODO DOES NOT WORK FOR THE MOMENT
-		// for ( final IPopulation pop : getMicroPopulations() ) {
-		// pop.hostChangesShape();
-		// }
-
-		notifyVarValueChange(IKeyword.SHAPE, newLocalGeom);
-	}
+	public/* synchronized */void setGeometry(final IShape newGeometry) {}
 
 	@Override
 	public String getName() {

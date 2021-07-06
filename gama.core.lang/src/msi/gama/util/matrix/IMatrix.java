@@ -31,7 +31,6 @@ import msi.gama.util.IList;
 import msi.gama.util.IModifiableContainer;
 import msi.gama.util.file.IFieldMatrixProvider;
 import msi.gaml.types.IType;
-import one.util.streamex.StreamEx;
 
 /**
  * Written by drogoul Modified on 15 d�c. 2010
@@ -275,7 +274,7 @@ public interface IMatrix<T> extends IModifiableContainer<ILocation, T, ILocation
 	void set(IScope scope, final int col, final int row, final Object obj) throws GamaRuntimeException;
 
 	@Override
-	StreamEx<T> stream(final IScope scope);
+	Object stream(final IScope scope);
 
 	@Override
 	default boolean containsKey(final IScope scope, final Object o) {

@@ -31,7 +31,6 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
 
-import org.geotools.referencing.CRS;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.preferences.IPreferenceChangeListener.IPreferenceBeforeChangeListener;
@@ -51,7 +50,6 @@ import msi.gaml.operators.Cast;
 import msi.gaml.operators.Strings;
 import msi.gaml.types.GamaFontType;
 import msi.gaml.types.IType;
-import one.util.streamex.StreamEx;
 
 /**
  * Class GamaPreferencesView.
@@ -528,30 +526,9 @@ public class GamaPreferences {
 		public static final Pref<Boolean> LIB_USE_DEFAULT =
 				create("pref_gis_save_crs", "When no CRS is provided, save the GIS data with the current CRS", true,
 						IType.BOOL, true).deactivates("pref_gis_output_crs").in(NAME, GEOTOOLS);
-		public static final Pref<Integer> LIB_TARGET_CRS = create("pref_gis_default_crs",
-				"...or use the following EPSG code (the one that will also be used if no projection information is found)",
-				32648, IType.INT, true).in(NAME, GEOTOOLS)
-						.addChangeListener((IPreferenceBeforeChangeListener<Integer>) newValue -> {
-							final var codes = CRS.getSupportedCodes(newValue.toString());
-							if (codes.isEmpty()) return false;
-							return true;
-						});
-
-		public static final Pref<Integer> LIB_INITIAL_CRS =
-				create("pref_gis_initial_crs", "...or use the following CRS (EPSG code)", 4326, IType.INT, true)
-						.in(NAME, GEOTOOLS).addChangeListener((IPreferenceBeforeChangeListener<Integer>) newValue -> {
-							final var codes = CRS.getSupportedCodes(newValue.toString());
-							if (codes.isEmpty()) return false;
-							return true;
-						});
-
-		public static final Pref<Integer> LIB_OUTPUT_CRS =
-				create("pref_gis_output_crs", "... or use this following CRS (EPSG code)", 4326, IType.INT, true)
-						.in(NAME, GEOTOOLS).addChangeListener((IPreferenceBeforeChangeListener<Integer>) newValue -> {
-							final var codes = CRS.getSupportedCodes(newValue.toString());
-							if (codes.isEmpty()) return false;
-							return true;
-						});
+		public static final Pref<Integer> LIB_TARGET_CRS = null;
+		public static final Pref<Integer> LIB_INITIAL_CRS = null;
+		public static final Pref<Integer> LIB_OUTPUT_CRS = null;
 
 		// RScript adress:
 		// "/Library/Frameworks/R.framework/Versions/3.4/Resources/bin/exec/x86_64/RScript"
@@ -817,37 +794,7 @@ public class GamaPreferences {
 	}
 
 	public static void savePreferencesTo(final String path) {
-		try (var os = new FileWriter(path)) {
-			final var entries = StreamEx.ofValues(prefs).sortedBy(Pref::getName).toList();
-
-			final var read = new StringBuilder(1000);
-			final var write = new StringBuilder(1000);
-			for (final Pref e : entries) {
-				if (e.isHidden() || !e.inGaml()) { continue; }
-				read.append(Strings.TAB).append("//").append(e.getTitle()).append(Strings.LN);
-				read.append(Strings.TAB).append("write sample(gama.").append(e.getName()).append(");")
-						.append(Strings.LN).append(Strings.LN);
-				write.append(Strings.TAB).append("//").append(e.getTitle()).append(Strings.LN);
-				write.append(Strings.TAB).append("gama.").append(e.getName()).append(" <- ")
-						.append(Cast.toGaml(e.getValue())).append(";").append(Strings.LN).append(Strings.LN);
-			}
-			os.append("// ").append(GAMA.VERSION).append(" Preferences saved on ")
-					.append(LocalDateTime.now().toString()).append(Strings.LN).append(Strings.LN);
-			os.append("model preferences").append(Strings.LN).append(Strings.LN);
-			os.append("experiment 'Display Preferences' type: gui {").append(Strings.LN);
-			os.append("init {").append(Strings.LN);
-			os.append(read);
-			os.append("}").append(Strings.LN);
-			os.append("}").append(Strings.LN).append(Strings.LN).append(Strings.LN);
-			os.append("experiment 'Set Preferences' type: gui {").append(Strings.LN);
-			os.append("init {").append(Strings.LN);
-			os.append(write);
-			os.append("}").append(Strings.LN);
-			os.append("}").append(Strings.LN);
-			os.flush();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+		return;
 	}
 
 	// To force preferences to load

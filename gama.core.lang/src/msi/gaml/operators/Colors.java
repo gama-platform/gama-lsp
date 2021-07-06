@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.eclipse.emf.ecore.EObject;
-import org.geotools.brewer.color.BrewerPalette;
-import org.geotools.brewer.color.ColorBrewer;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -458,51 +456,12 @@ public class Colors {
 
 		@Override
 		public boolean validate(final IDescription context, final EObject emfContext, final IExpression... arguments) {
-			if (arguments[0].isConst()) {
-				final Object palette = arguments[0].getConstValue();
-				if (palette instanceof String) {
-					final String p = (String) palette;
-					final ColorBrewer brewer = ColorBrewer.instance();
-					if (!brewer.hasPalette(p)) {
-						context.error(
-								"Palette " + p + " does not exist. Available palette names are: "
-										+ Arrays.toString(brewer.getPaletteNames()),
-								UNKNOWN_ARGUMENT, getArg(emfContext, 1));
-						return false;
-					} else if (arguments.length > 1) {
-						final IExpression exp = arguments[1];
-						if (exp.isConst()) {
-							final Object number = exp.getConstValue();
-							if (number instanceof Integer) {
-								final BrewerPalette pal = brewer.getPalette(p);
-								if (pal.getCount() < (Integer) number) {
-									context.warning("Palette " + p + " has only " + pal.getCount() + " colors.",
-											IGamlIssue.WRONG_VALUE, getArg(emfContext, 1),
-											String.valueOf(pal.getCount()));
-								}
-							}
-						}
-					}
-				}
-			}
 			return true;
 		}
 	}
 
-	static final ColorBrewer BREWER = ColorBrewer.instance();
-	static final LoadingCache<String, GamaPalette> BREWER_CACHE =
-			CacheBuilder.newBuilder().build(new CacheLoader<String, GamaPalette>() {
-
-				@Override
-				public GamaPalette load(final String name) throws Exception {
-					IList<GamaColor> colors = GamaListFactory.create(Types.COLOR);
-					BrewerPalette p = BREWER.getPalette(name);
-					for (final Color col : p.getColors()) {
-						if (col != null) { colors.add(new GamaColor(col)); }
-					}
-					return new GamaPalette(colors);
-				}
-			});
+	static final Object BREWER = null;
+	static final LoadingCache<String, GamaPalette> BREWER_CACHE = null;
 
 	@validator (BrewerValidator.class)
 	@operator (
@@ -522,12 +481,7 @@ public class Colors {
 			see = { "brewer_palettes" })
 	@no_test
 	public static GamaPalette brewerPaletteColors(final IScope scope, final String type) {
-		if (!BREWER.hasPalette(type)) throw GamaRuntimeException.error(type + " does not exist", scope);
-		try {
-			return BREWER_CACHE.get(type);
-		} catch (ExecutionException e) {
-			throw GamaRuntimeException.error(type + " cannot be retrieved", scope);
-		}
+		return null;
 	}
 
 	@validator (BrewerValidator.class)
@@ -571,11 +525,7 @@ public class Colors {
 			see = { "brewer_colors" })
 	@no_test
 	public static IList<String> brewerPaletteNames(final int min, final int max) {
-		final IList<String> palettes = GamaListFactory.create(Types.STRING);
-		for (final BrewerPalette p : BREWER.getPalettes()) {
-			if (p.getCount() >= min && p.getCount() <= max) { palettes.add(p.getName()); }
-		}
-		return palettes;
+		return null;
 	}
 
 	@operator (
@@ -593,11 +543,7 @@ public class Colors {
 			see = { "brewer_colors" })
 	@no_test
 	public static IList<String> brewerPaletteNames(final int min) {
-		final IList<String> palettes = GamaListFactory.create(Types.STRING);
-		for (final BrewerPalette p : BREWER.getPalettes()) {
-			if (p.getCount() >= min) { palettes.add(p.getName()); }
-		}
-		return palettes;
+		return null;
 	}
 
 	@SuppressWarnings ("unchecked")

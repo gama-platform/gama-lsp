@@ -10,8 +10,6 @@
  ********************************************************************************************************/
 package msi.gama.metamodel.shape;
 
-import org.locationtech.jts.geom.Coordinate;
-
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.precompiler.GamlAnnotations.doc;
 import msi.gama.precompiler.GamlAnnotations.getter;
@@ -40,7 +38,7 @@ import msi.gaml.types.IType;
 				name = IKeyword.Z,
 				type = IType.FLOAT,
 				doc = { @doc ("Returns the z ordinate of this point") }) })
-public interface ILocation extends IShape, Comparable<Coordinate> {
+public interface ILocation extends IShape, Comparable<Object> {
 
 	@getter (IKeyword.X)
 	double getX();
@@ -52,7 +50,7 @@ public interface ILocation extends IShape, Comparable<Coordinate> {
 
 	void setY(double y);
 
-	// public abstract boolean equals(final Coordinate o);
+	// public abstract boolean equals(final Object o);
 	@getter (IKeyword.Z)
 	double getZ();
 
@@ -70,12 +68,12 @@ public interface ILocation extends IShape, Comparable<Coordinate> {
 
 	ILocation yNegated();
 
-	boolean equalsWithTolerance(Coordinate c, double tolerance);
+	boolean equalsWithTolerance(Object c, double tolerance);
 
 	ILocation withPrecision(int i);
 
 	default int compareTo(ILocation location) {
-		return compareTo((Coordinate)toGamaPoint());
+		return compareTo((Object)toGamaPoint());
 	}
 
 }

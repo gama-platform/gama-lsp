@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.Graphs;
-
-import org.locationtech.jts.geom.Coordinate;
-
 import msi.gama.common.geometry.GeometryUtils;
 import msi.gama.common.util.StringUtils;
 import msi.gama.metamodel.agent.IAgent;
@@ -109,12 +105,7 @@ public class GamaSpatialGraph extends GamaGraph<IShape, IShape> implements ISpat
 
 	@Override
 	public GamaSpatialGraph copy(final IScope scope) {
-		final GamaSpatialGraph g = new GamaSpatialGraph(GamaListFactory.EMPTY_LIST, true, directed, vertexRelation,
-				edgeSpecies, scope, type.getKeyType(), type.getContentType());
-
-		Graphs.addAllVertices(g, this.getVertices());
-		Graphs.addAllEdges(g, this, this.edgeSet());
-		return g;
+		return null;
 	}
 
 	@Override
@@ -166,7 +157,6 @@ public class GamaSpatialGraph extends GamaGraph<IShape, IShape> implements ISpat
 		return new _SpatialVertex(this, v);
 	}
 
-	@Override
 	public boolean addVertex(final IShape v) {
 		final boolean added = super.addVertex(v);
 		if (added && vertexRelation != null) {
@@ -264,15 +254,7 @@ public class GamaSpatialGraph extends GamaGraph<IShape, IShape> implements ISpat
 		verticesBuilt.put(vertex.getLocation().hashCode(), vertex);
 	}
 
-	public IShape getBuiltVertex(final Coordinate vertex) {
-		if (tolerance == 0) { return verticesBuilt.get(vertex.hashCode()); }
-		final IShape sh = verticesBuilt.get(vertex.hashCode());
-		if (sh != null) { return sh; }
-		for (final Object v : verticesBuilt.values()) {
-			if (vertex.distance3D(GeometryUtils.toCoordinate(((IShape) v).getLocation())) <= tolerance) {
-				return (IShape) v;
-			}
-		}
+	public IShape getBuiltVertex(final Object vertex) {
 		return null;
 	}
 
@@ -302,37 +284,6 @@ public class GamaSpatialGraph extends GamaGraph<IShape, IShape> implements ISpat
 	}
 
 	public boolean addEdgeWithNodes(final IScope scope, final IShape e, final IMap<ILocation, IShape> nodes) {
-		if (containsEdge(e)) { return false; }
-		final Coordinate[] coord = e.getInnerGeometry().getCoordinates();
-		final IShape ptS = new GamaPoint(coord[0]);
-		final IShape ptT = new GamaPoint(coord[coord.length - 1]);
-		final IShape v1 = nodes.get(ptS);
-		if (v1 == null) { return false; }
-		final IShape v2 = nodes.get(ptT);
-		if (v2 == null) { return false; }
-		
-		if (e instanceof IAgent && (((IAgent) e).getSpecies().implementsSkill("skill_road"))) {
-			final IShape ag = e.getAgent();
-			final List v1ro = (List) v1.getAttribute("roads_out");
-			v1ro.add(ag);
-			final List v2ri = (List) v2.getAttribute("roads_in");
-			v2ri.add(ag);
-			ag.setAttribute("source_node", v1);
-			ag.setAttribute("target_node", v2);
-		}
-		
-		addVertex(v1);
-		addVertex(v2);
-		_Edge<IShape, IShape> edge;
-		try {
-			edge = newEdge(e, v1, v2);
-		} catch (final GamaRuntimeException e1) {
-			e1.addContext("Impossible to create edge from " + StringUtils.toGaml(e, false) + " in graph " + this);
-			throw e1;
-		}
-		// if ( edge == null ) { return false; }
-		edgeMap.put(e, edge);
-		dispatchEvent(scope, new GraphEvent(scope, this, this, e, null, GraphEventType.EDGE_ADDED));
 		return true;
 	}
 

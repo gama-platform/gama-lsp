@@ -16,8 +16,6 @@ import java.net.URL;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.util.FileUtils;
-import msi.gama.ext.webb.Webb;
-import msi.gama.ext.webb.WebbException;
 import msi.gama.metamodel.shape.ILocation;
 import msi.gama.runtime.GAMA;
 import msi.gama.runtime.IScope;
@@ -33,7 +31,6 @@ import msi.gaml.expressions.IExpression;
 import msi.gaml.operators.Cast;
 import msi.gaml.statements.Facets;
 import msi.gaml.types.IType;
-import one.util.streamex.StreamEx;
 
 /**
  * Written by drogoul Modified on 7 août 2010
@@ -120,18 +117,7 @@ public abstract class GamaFile<Container extends IAddressableContainer & IModifi
 	}
 
 	protected void sendToURL(final IScope scope) throws GamaRuntimeException {
-		final String urlPath = url.toExternalForm();
-		final String status = "Uploading file to " + urlPath;
-		scope.getGui().getStatus(scope).beginSubStatus(status);
-		final Webb web = Webb.create();
-		try {
-			web.post(urlPath).ensureSuccess().connectTimeout(20000).retry(1, false)
-					.header(Webb.HDR_CONTENT_TYPE, getHttpContentType()).body(getFile(scope)).asVoid();
-		} catch (final WebbException e) {
-			throw GamaRuntimeException.create(e, scope);
-		} finally {
-			scope.getGui().getStatus(scope).endSubStatus(status);
-		}
+		return;
 	}
 
 	/**
@@ -394,7 +380,7 @@ public abstract class GamaFile<Container extends IAddressableContainer & IModifi
 	}
 
 	@Override
-	public StreamEx<Contents> stream(final IScope scope) {
+	public Object stream(final IScope scope) {
 		getContents(scope);
 		return getBuffer().stream(scope);
 	}

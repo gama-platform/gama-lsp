@@ -13,7 +13,6 @@ package msi.gaml.compilation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.URI;
 
 import com.google.common.collect.Multimap;
@@ -67,8 +66,7 @@ public class GAML {
 	private static String[] REPLACEMENTS = { Strings.LN, Strings.LN, "", "", "", "", "", "", Strings.LN + "- ", "" };
 
 	public static String toText(final String s) {
-		if (s == null) { return ""; }
-		return breakStringToLines(StringUtils.replaceEach(s, HTML_TAGS, REPLACEMENTS), 120, Strings.LN);
+		return "";
 	}
 
 	// private static String multiLine(final String longString, final String splitter, final int maxLength) {
@@ -175,23 +173,24 @@ public class GAML {
 	}
 
 	public static String getDocumentationOn(final String query) {
-		final String keyword = StringUtils.removeEnd(StringUtils.removeStart(query.trim(), "#"), ":");
-		final Multimap<GamlIdiomsProvider<?>, IGamlDescription> results = GamlIdiomsProvider.forName(keyword);
-		if (results.isEmpty()) { return "No result found"; }
-		final StringBuilder sb = new StringBuilder();
-		final int max = results.keySet().stream().mapToInt(each -> each.name.length()).max().getAsInt();
-		final String separator = StringUtils.repeat("—", max + 6).concat(Strings.LN);
-		results.asMap().forEach((provider, list) -> {
-			sb.append("").append(separator).append("|| ");
-			sb.append(StringUtils.rightPad(provider.name, max));
-			sb.append(" ||").append(Strings.LN).append(separator);
-			for (final IGamlDescription d : list) {
-				sb.append("== ").append(toText(d.getTitle())).append(Strings.LN).append(toText(provider.document(d)))
-						.append(Strings.LN);
-			}
-		});
-
-		return sb.toString();
+		return query;
+//		final String keyword = StringUtils.removeEnd(StringUtils.removeStart(query.trim(), "#"), ":");
+//		final Multimap<GamlIdiomsProvider<?>, IGamlDescription> results = GamlIdiomsProvider.forName(keyword);
+//		if (results.isEmpty()) { return "No result found"; }
+//		final StringBuilder sb = new StringBuilder();
+//		final int max = results.keySet().stream().mapToInt(each -> each.name.length()).max().getAsInt();
+//		final String separator = StringUtils.repeat("—", max + 6).concat(Strings.LN);
+//		results.asMap().forEach((provider, list) -> {
+//			sb.append("").append(separator).append("|| ");
+//			sb.append(StringUtils.rightPad(provider.name, max));
+//			sb.append(" ||").append(Strings.LN).append(separator);
+//			for (final IGamlDescription d : list) {
+//				sb.append("== ").append(toText(d.getTitle())).append(Strings.LN).append(toText(provider.document(d)))
+//						.append(Strings.LN);
+//			}
+//		});
+//
+//		return sb.toString();
 
 		//
 	}

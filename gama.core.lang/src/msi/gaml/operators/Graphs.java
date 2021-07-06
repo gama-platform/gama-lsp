@@ -10,8 +10,6 @@
  ********************************************************************************************************/
 package msi.gaml.operators;
 
-import static one.util.streamex.StreamEx.of;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,32 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.jgrapht.alg.clique.BronKerboschCliqueFinder;
-import org.jgrapht.alg.clustering.GirvanNewmanClustering;
-import org.jgrapht.alg.clustering.KSpanningTreeClustering;
-import org.jgrapht.alg.clustering.LabelPropagationClustering;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
-import org.jgrapht.alg.drawing.IndexedFRLayoutAlgorithm2D;
-import org.jgrapht.alg.drawing.model.Box2D;
-import org.jgrapht.alg.drawing.model.LayoutModel2D;
-import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
-import org.jgrapht.alg.drawing.model.Point2D;
-import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
-import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.MaximumFlow;
-import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
-import org.jgrapht.generate.ComplementGraphGenerator;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.WattsStrogatzGraphGenerator;
-import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.graph.Multigraph;
-import org.jgrapht.util.SupplierUtil;
-import org.locationtech.jts.geom.Coordinate;
 
 import msi.gama.common.geometry.Envelope3D;
 import msi.gama.common.geometry.GeometryUtils;
@@ -171,29 +143,7 @@ public class Graphs {
 
 		@Override
 		public boolean related(final IScope scope, final IShape p1, final IShape p2) {
-			if (optimizedForTriangulation) {
-				int nb = 0;
-				final Coordinate[] coord1 = p1.getInnerGeometry().getCoordinates();
-				final Coordinate[] coord2 = p2.getInnerGeometry().getCoordinates();
-
-				for (int i = 0; i < 3; i++) {
-					if (ArrayUtils.contains(coord2, coord1[i])) {
-						nb++;
-					}
-				}
-
-				return nb == 2;
-			}
-			try (ICollector<ILocation> cp = Collector.getSet()) {
-				final GamaPoint[] lp1 = GeometryUtils.getPointsOf(p1);
-				for (final GamaPoint pt : GeometryUtils.getPointsOf(p2)) {
-					if (ArrayUtils.contains(lp1, pt)) {
-						cp.add(pt);
-					}
-				}
-
-				return cp.size() == 2;
-			}
+			return true;
 		}
 
 		@Override
@@ -398,11 +348,7 @@ public class Graphs {
 							equals = "true") },
 			see = { "contains_edge" })
 	public static Boolean containsVertex(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) {
-			throw GamaRuntimeException.error("In the contains_vertex operator, the graph should not be null!", scope);
-		}
-		if (vertex instanceof Graphs.NodeToAdd) { return graph.containsVertex(((Graphs.NodeToAdd) vertex).object); }
-		return graph.containsVertex(vertex);
+		return null;
 	}
 
 	@operator (
@@ -420,17 +366,7 @@ public class Graphs {
 							equals = "true") },
 			see = { "contains_vertex" })
 	public static Boolean containsEdge(final IScope scope, final IGraph graph, final Object edge) {
-		if (graph == null) { throw GamaRuntimeException.error("graph is nil", scope); }
-		if (edge instanceof Graphs.EdgeToAdd) {
-			final Graphs.EdgeToAdd edge2 = (Graphs.EdgeToAdd) edge;
-			if (edge2.object != null) {
-				return graph.containsEdge(edge2.object);
-			} else if (edge2.source != null && edge2.target != null) {
-				return graph.containsEdge(edge2.source, edge2.target);
-			}
-
-		}
-		return graph.containsEdge(edge);
+		return null;
 	}
 
 	@operator (
@@ -449,8 +385,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "(g contains_edge ({10,5}::{20,3})) = true")
 	public static Boolean containsEdge(final IScope scope, final IGraph graph, final GamaPair edge) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		return graph.containsEdge(edge.first(), edge.last());
+		return null;
 	}
 
 	@operator (
@@ -476,8 +411,6 @@ public class Graphs {
 							equals = "{1,5}") },
 			see = { "target_of" })
 	public static Object sourceOf(final IScope scope, final IGraph graph, final Object edge) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsEdge(edge)) { return graph.getEdgeSource(edge); }
 		return null;
 	}
 
@@ -501,8 +434,6 @@ public class Graphs {
 							equals = "{12,45}") },
 			see = "source_of")
 	public static Object targetOf(final IScope scope, final IGraph graph, final Object edge) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsEdge(edge)) { return graph.getEdgeTarget(edge); }
 		return null;
 	}
 
@@ -521,24 +452,7 @@ public class Graphs {
 							value = "graphFromMap weight_of(link({1,5},{12,45}))",
 							equals = "1.0") })
 	public static Double weightOf(final IScope scope, final IGraph graph, final Object edge) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (edge instanceof Graphs.GraphObjectToAdd) {
-			if (edge instanceof Graphs.EdgeToAdd) {
-				final Graphs.EdgeToAdd edge2 = (Graphs.EdgeToAdd) edge;
-				if (edge2.object != null) {
-					return graph.getEdgeWeight(edge2.object);
-				} else if (edge2.source != null && edge2.target != null) {
-					final Object edge3 = graph.getEdge(edge2.source, edge2.target);
-					return graph.getEdgeWeight(edge3);
-				}
-			} else if (edge instanceof Graphs.NodeToAdd) {
-				return graph.getVertexWeight(((Graphs.NodeToAdd) edge).object);
-			}
-		}
-		if (graph.containsEdge(edge)) {
-			return graph.getEdgeWeight(edge);
-		} else if (graph.containsVertex(edge)) { return graph.getVertexWeight(edge); }
-		return 1d;
+		return null;
 	}
 
 	@operator (
@@ -560,11 +474,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g2 <- directed(as_edge_graph([ edge({10,5}, {30,30}), edge({30,30}, {80,35}), node ({30,30})]));\r\n"
 			+ "first(link({10,5},{30,30})) = first(g2 in_edges_of {30,30})")
 	public static IList inEdgesOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) {
-			return GamaListFactory.create(scope, graph.getGamlType().getContentType(), graph.incomingEdgesOf(vertex));
-		}
-		return GamaListFactory.create(graph.getGamlType().getContentType());
+		return null;
 	}
 
 	@operator (
@@ -582,10 +492,6 @@ public class Graphs {
 			+ "edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "(g edge_between ({10,5}::{20,3})) = g.edges[0]")
 	public static Object EdgeBetween(final IScope scope, final IGraph graph, final GamaPair verticePair) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(verticePair.key) && graph.containsVertex(verticePair.value)) {
-			return graph.getEdge(verticePair.key, verticePair.value);
-		}
 		return null;
 	}
 
@@ -607,8 +513,6 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "(g in_degree_of ({20,3})) = 1")
 	public static int inDregreeOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) { return graph.inDegreeOf(vertex); }
 		return 0;
 	}
 
@@ -632,11 +536,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " list li <- g out_edges_of {10,5};  length(li) = 2")
 	public static IList outEdgesOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) {
-			return GamaListFactory.create(scope, graph.getGamlType().getContentType(), graph.outgoingEdgesOf(vertex));
-		}
-		return GamaListFactory.create(graph.getGamlType().getContentType());
+		return null;
 	}
 
 	@operator (
@@ -659,8 +559,6 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g2 <- directed(as_edge_graph([ edge({30,30}, {10,5}), edge({30,30}, {80,35}), node ({30,30})]));\r\n"
 			+ "g2 out_degree_of {30,30} = 2")
 	public static int outDregreeOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) { return graph.outDegreeOf(vertex); }
 		return 0;
 	}
 
@@ -682,8 +580,6 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " (g degree_of ({10,5})) = 3")
 	public static int degreeOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) { return graph.degreeOf(vertex); }
 		return 0;
 	}
 
@@ -705,16 +601,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " list comp <- connected_components_of(g); " + " length(comp) = 2")
 	public static IList<IList> connectedComponentOf(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-
-		ConnectivityInspector ci;
-		ci = new ConnectivityInspector(graph);
-		final IList<IList> results = GamaListFactory.create(Types.LIST);
-		for (final Object obj : ci.connectedSets()) {
-			results.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) obj));
-		}
-			
-		return results;
+		return null;
 	}
 
 	@operator (
@@ -735,25 +622,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " list comp <- connected_components_of(g, true); " + " length(comp) = 2")
 	public static IList<IList> connectedComponentOf(final IScope scope, final IGraph graph, final boolean edge) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-
-		ConnectivityInspector ci;
-		ci = new ConnectivityInspector(graph);
-		final IList<IList> results = GamaListFactory.create(Types.LIST);
-		for (final Object obj : ci.connectedSets()) {
-			if (edge) {
-				final IList edges = GamaListFactory.create(scope, graph.getGamlType().getContentType());
-				for (final Object v : (Set) obj) {
-					edges.addAll(graph.edgesOf(v));
-				}
-
-				results.add(Containers.remove_duplicates(scope, edges));
-
-			} else {
-				results.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) obj));
-			}
-		}
-		return results;
+		return null;
 	}
 
 	@operator (
@@ -772,27 +641,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " length(main_connected_component(g)) = 5")
 	public static IGraph ReduceToMainconnectedComponentOf(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-
-		final IList<IList> cc = connectedComponentOf(scope, graph);
-		final IGraph newGraph = (IGraph) graph.copy(scope);
-		IList mainCC = null;
-		int size = 0;
-		for (final IList c : cc) {
-			if (c.size() > size) {
-				size = c.size();
-				mainCC = c;
-			}
-		}
-		if (mainCC != null) {
-			final Set vs = graph.vertexSet();
-			vs.removeAll(mainCC);
-			for (final Object v : vs) {
-				newGraph.removeVertex(v);
-			}
-		}
-
-		return newGraph;
+		return null;
 	}
 
 	@operator (
@@ -813,14 +662,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " maximal_cliques_of(g) = [[{10.0,5.0,0.0},{20.0,3.0,0.0}],[{30.0,30.0,0.0},{10.0,5.0,0.0}],[{20.0,3.0,0.0}],[{30.0,30.0,0.0},{80.0,35.0,0.0}],[{40.0,60.0,0.0},{80.0,35.0,0.0}],[{40.0,60.0,0.0}],[{50.0,50.0,0.0}]]  ")
 	public static IList<IList> getMaximalCliques(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		final BronKerboschCliqueFinder cls = new BronKerboschCliqueFinder(graph);
-		final IList<IList> results = GamaListFactory.create(Types.LIST);
-		Iterator it = cls.iterator();
-		while (it.hasNext()) {
-			results.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) it.next()));
-		}
-		return results;
+		return null;
 	}
 
 	@operator (
@@ -841,15 +683,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " biggest_cliques_of(g) = [[{10.0,5.0,0.0},{20.0,3.0,0.0}],[{30.0,30.0,0.0},{10.0,5.0,0.0}],[{30.0,30.0,0.0},{80.0,35.0,0.0}],[{40.0,60.0,0.0},{80.0,35.0,0.0}]]  ")
 	public static IList<IList> getBiggestCliques(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		final BronKerboschCliqueFinder cls = new BronKerboschCliqueFinder(graph);
-
-		final IList<IList> results = GamaListFactory.create(Types.LIST);
-		Iterator it = cls.maximumIterator();
-		while (it.hasNext()) {
-			results.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) it.next()));
-		}
-		return results;
+		return null;
 	}
 
 	@operator (
@@ -869,11 +703,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " nb_cycles(g) = 1 ")
 	public static int nbCycles(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		final int S = graph.vertexSet().size();
-		final int C = connectedComponentOf(scope, graph).size();
-		final int L = graph.edgeSet().size();
-		return L - S + C;
+		return 0;
 	}
 
 	@operator (
@@ -893,9 +723,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " alpha_index(g) = 0.14285714285714285 ")
 	public static double alphaIndex(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		final int S = graph.vertexSet().size();
-		return nbCycles(scope, graph) / (2.0 * S - 5);
+		return 0.0;
 	}
 
 	@operator (
@@ -914,8 +742,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " beta_index(g) = 0.8333333333333334 ")
 	public static double betaIndex(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		return (graph.edgeSet().size() + 0.0) / graph.vertexSet().size();
+		return 0.0;
 	}
 
 	@operator (
@@ -934,8 +761,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " gamma_index(g) = 0.7142857142857143 ")
 	public static double gammaIndex(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		return graph.edgeSet().size() / (2.0 * graph.vertexSet().size() - 5);
+		return 0.0;
 	}
 
 	@operator (
@@ -954,10 +780,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " connectivity_index(g) = 0.8 ")
 	public static double connectivityIndex(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		final int S = graph.vertexSet().size();
-		final int C = connectedComponentOf(scope, graph).size();
-		return (S - C) / (S - 1.0);
+		return 0.0;
 	}
 
 	@operator (
@@ -978,40 +801,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ " betweenness_centrality(g) = [{10.0,5.0,0.0}::5,{20.0,3.0,0.0}::0,{30.0,30.0,0.0}::2,{80.0,35.0,0.0}::4,{40.0,60.0,0.0}::0,{50.0,50.0,0.0}::0] ")
 	public static IMap betweennessCentrality(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-
-		final IMap mapResult = GamaMapFactory.create(graph.getGamlType().getKeyType(), Types.INT);
-		final IList vertices = Cast.asList(scope, graph.vertexSet());
-		for (final Object v : vertices) {
-			mapResult.put(v, 0);
-		}
-		final boolean directed = graph.isDirected();
-		for (int i = 0; i < vertices.size(); i++) {
-			for (int j = directed ? 0 : i + 1; j < vertices.size(); j++) {
-				final Object v1 = vertices.get(i);
-				final Object v2 = vertices.get(j);
-				if (v1 == v2) {
-					continue;
-				}
-				final List edges = graph.computeBestRouteBetween(scope, v1, v2);
-				if (edges == null) {
-					continue;
-				}
-				Object vc = v1;
-				for (final Object edge : edges) {
-					Object node = graph.getEdgeTarget(edge);
-					
-					if (node == vc) {
-						node = graph.getEdgeSource(edge);
-					}
-					if (node != v2 && node != v1) {
-						mapResult.put(node, (Integer) mapResult.get(node) + 1);
-					}
-					vc = node;
-				}
-			}
-		}
-		return mapResult;
+		return 0.0;
 	}
 
 	@operator (
@@ -1031,32 +821,7 @@ public class Graphs {
 			see = {})
 	@no_test
 	public static IMap edgeBetweenness(final IScope scope, final IGraph graph) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		// DEBUG.OUT("result.getRaw() : " + result.getRaw());
-
-		final IMap mapResult = GamaMapFactory.create(graph.getGamlType().getContentType(), Types.INT);
-		for (final Object v : graph.edgeSet()) {
-			mapResult.put(v, 0);
-		}
-		final IList vertices = Cast.asList(scope, graph.vertexSet());
-		final boolean directed = graph.isDirected();
-		for (int i = 0; i < vertices.size(); i++) {
-			for (int j = directed ? 0 : i + 1; j < vertices.size(); j++) {
-				final Object v1 = vertices.get(i);
-				final Object v2 = vertices.get(j);
-				if (v1 == v2) {
-					continue;
-				}
-				final List edges = graph.computeBestRouteBetween(scope, v1, v2);
-				if (edges == null) {
-					continue;
-				}
-				for (final Object edge : edges) {
-					mapResult.put(edge, (Integer) mapResult.get(edge) + 1);
-				}
-			}
-		}
-		return mapResult;
+		return null;
 	}
 
 	@operator (
@@ -1079,12 +844,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "(g neighbors_of ({10,5}) sort_by point(each)) = [{20.0,3.0,0.0},{30.0,30.0,0.0},{80.0,35.0,0.0}]")
 	public static IList neighborsOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph == null) { throw GamaRuntimeException.error("The graph is nil", scope); }
-		if (graph.containsVertex(vertex)) {
-			return GamaListFactory.create(scope, graph.getGamlType().getKeyType(),
-					org.jgrapht.Graphs.neighborListOf(graph, vertex));
-		}
-		return GamaListFactory.create(graph.getGamlType().getKeyType());
+		return null;
 	}
 
 	@operator (
@@ -1110,11 +870,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "g predecessors_of ({10,5}) = [{80.0,35.0,0.0}]")
 	public static IList predecessorsOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph.containsVertex(vertex)) {
-			return GamaListFactory.create(scope, graph.getGamlType().getKeyType(),
-					org.jgrapht.Graphs.predecessorListOf(graph, vertex));
-		}
-		return GamaListFactory.create(graph.getGamlType().getKeyType());
+		return null;
 	}
 
 	@operator (
@@ -1137,11 +893,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "g successors_of ({10,5}) = [{20.0,3.0,0.0},{30.0,30.0,0.0}]")
 	public static IList successorsOf(final IScope scope, final IGraph graph, final Object vertex) {
-		if (graph.containsVertex(vertex)) {
-			return GamaListFactory.create(scope, graph.getGamlType().getKeyType(),
-					org.jgrapht.Graphs.successorListOf(graph, vertex));
-		}
-		return GamaListFactory.create(graph.getGamlType().getKeyType());
+		return null;
 	}
 
 	@operator (
@@ -1289,34 +1041,11 @@ public class Graphs {
 	}
 
 	public static IGraph spatialLineIntersectionTriangle(final IScope scope, final IContainer vertices) {
-		final IGraph g = new GamaSpatialGraph(scope, vertices.getGamlType().getContentType(), Types.GEOMETRY);
-		for (final Object o : vertices.iterable(scope)) {
-			g.addVertex(o);
-		}
-		for (final Object o1 : vertices.iterable(scope)) {
-			final Coordinate[] coord1 = ((IShape) o1).getInnerGeometry().getCoordinates();
-			for (final Object o2 : vertices.iterable(scope)) {
-				final Coordinate[] coord2 = ((IShape) o2).getInnerGeometry().getCoordinates();
-				if (o1 != o2 && lineInter(coord1, coord2)) {
-					g.addEdge(o1, o2);
-				}
-			}
-		}
-		return g;
+		return null;
 	}
 
-	static boolean lineInter(final Coordinate[] coord1, final Coordinate[] coord2) {
-		int nb = 0;
-		for (int i = 0; i < 3; i++) {
-			final Coordinate c1 = coord1[i];
-			for (int j = 0; j < 3; j++) {
-				final Coordinate c2 = coord2[j];
-				if (c1.x == c2.x && c1.y == c2.y) {
-					nb++;
-				}
-			}
-		}
-		return nb == 2;
+	static boolean lineInter(final Object[] coord1, final Object[] coord2) {
+		return true;
 	}
 
 	@operator (
@@ -1359,12 +1088,7 @@ public class Graphs {
 			see = {})
 	@no_test
 	public static IGraph gridCellsToGraph(final IScope scope, final IContainer vertices) {
-		final IGraph graph = new GamaSpatialGraph(vertices, false, false, new GridNeighborsRelation(), null, scope,
-				vertices.getGamlType().getContentType(), Types.GEOMETRY);
-		for (final Object e : graph.edgeSet()) {
-			graph.setEdgeWeight(e, ((IShape) e).getPerimeter());
-		}
-		return graph;
+		return null;
 	}
 	
 
@@ -1379,15 +1103,7 @@ public class Graphs {
 			see = { "as_intersection_graph", "as_edge_graph" })
 	@no_test
 	public static IGraph gridCellsToGraph(final IScope scope, final IContainer vertices,final ISpecies edgeSpecies) {
-		final IType edgeType = scope.getType(edgeSpecies.getName());
-		final IGraph createdGraph = new GamaSpatialGraph(vertices, false, false, new GridNeighborsRelation(),
-				edgeSpecies, scope, vertices.getGamlType().getContentType(), edgeType);
-
-		for (final Object e : createdGraph.edgeSet()) {
-			createdGraph.setEdgeWeight(e, ((IShape) e).getPerimeter());
-		}
-
-		return createdGraph;
+		return null;
 	}
 
 
@@ -1529,20 +1245,7 @@ public class Graphs {
 					+ "Note that the ordering of edges may change overtime, which can create some problems..."))
 	@no_test
 	public static IGraph withWeights(final IScope scope, final IGraph graph, final IList weights) {
-		// Simply a list of double... and, by default, for edges.However, the
-		// ordering of edges may
-		// change overtime, which can create a problem somewhere...
-		final IList edges = graph.getEdges();
-		final int n = edges.size();
-		if (n != weights.size()) { return graph; }
-		for (int i = 0; i < n; i++) {
-			graph.setEdgeWeight(edges.get(i), Cast.asFloat(scope, weights.get(i)));
-		}
-		graph.incVersion();
-		if (graph instanceof GamaSpatialGraph) {
-			((GamaSpatialGraph) graph).reInitPathFinder();
-		}
-		return graph;
+		return null;
 	}
 	
 	@operator (
@@ -1636,8 +1339,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "g <- g add_node {10,40} ;" + " length(g.vertices) = 7")
 	public static IGraph addNode(final IGraph g, final IShape node) {
-		g.addVertex(node);
-		return g;
+		return null;
 	}
 
 	@operator (
@@ -1656,9 +1358,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "g <- geometry({10,5}) remove_node_from g; " + " length(g.vertices) = 5 and length(g.edges) = 2")
 	public static IGraph removeNodeFrom(final IShape node, final IGraph g) {
-		g.removeVertex(node);
-
-		return g;
+		return null;
 	}
 
 	@operator (
@@ -1700,9 +1400,7 @@ public class Graphs {
 	@test ("graph<geometry, geometry> g <- directed(as_edge_graph([edge({10,5}, {20,3}), edge({10,5}, {30,30}),edge({30,30}, {80,35}),edge({80,35}, {40,60}),edge({80,35}, {10,5}), node ({50,50})]));\r\n"
 			+ "g <- g add_edge ({40,60}::{50,50}); " + " length(g.edges) = 6")
 	public static IGraph addEdge(final IGraph g, final GamaPair nodes) {
-		g.addEdge(nodes.first(), nodes.last());
-		g.incVersion();
-		return g;
+		return null;
 	}
 
 	@operator (
@@ -1770,11 +1468,7 @@ public class Graphs {
 	@no_test
 	public static IMap<Object, Double> maxFlowBetween(final IScope scope, final GamaGraph graph, final Object source,
 			final Object sink) throws GamaRuntimeException {
-		final EdmondsKarpMFImpl ek = new EdmondsKarpMFImpl(graph);
-		final MaximumFlow<IShape> mf = ek.getMaximumFlow(source, sink);
-		final IMap<Object, Double> result = GamaMapFactory.create();
-		result.putAll(mf.getFlowMap());
-		return result;
+		return null;
 	}
 
 	@operator (
@@ -1864,10 +1558,7 @@ public class Graphs {
 	@no_test
 	public static IGraph layoutForce(final IScope scope, final GamaGraph graph, final IShape bounds,
 			final double coeffForce, final double coolingRate, final int maxIteration, final double criterion) {
-		final LayoutForceDirected sim =
-				new LayoutForceDirected(graph, bounds, coeffForce, coolingRate, maxIteration, true, criterion);
-		sim.startSimulation(scope);
-		return graph;
+		return null;
 	}
 
 
@@ -1887,10 +1578,7 @@ public class Graphs {
 	@no_test
 	public static IGraph layoutForceFR(final IScope scope, final GamaGraph graph, final IShape bounds,
 			final double normalization_factor,  final int maxIteration) {
-		final FRLayoutAlgorithm2D sim = new FRLayoutAlgorithm2D(maxIteration,normalization_factor,scope.getSimulation().getRandomGenerator().getGenerator());
-		LayoutModel2D model = toModel(graph,bounds);
-		sim.layout(graph, model);
-		return update_loc(graph,model);
+		return null;
 	}
 	
 	@operator (
@@ -1909,33 +1597,17 @@ public class Graphs {
 	@no_test
 	public static IGraph indexedFRLayout(final IScope scope, final GamaGraph graph, final IShape bounds,
 			final double theta, final double normalizationFactor,  final int maxIteration) {
-		final IndexedFRLayoutAlgorithm2D sim = new IndexedFRLayoutAlgorithm2D(maxIteration,theta, normalizationFactor,scope.getSimulation().getRandomGenerator().getGenerator());
-		LayoutModel2D model = toModel(graph,bounds);
-		sim.layout(graph, model);
-		return update_loc(graph,model);
+		return null;
 	}
 	
 	
 
-	static IGraph update_loc(IGraph graph, LayoutModel2D model) {
-		for (Object s : graph.vertexSet()) {
-			if (s instanceof IShape) {
-				Point2D pt = model.get(s);
-				((IShape) s).setLocation(new GamaPoint(pt.getX(), pt.getY()));
-			}
-		}
-		return graph;
+	static IGraph update_loc(IGraph graph, Object model) {
+		return null;
 	}
 	
-	static LayoutModel2D toModel(final GamaGraph graph, final IShape bounds) {
-		Envelope3D env = bounds.getEnvelope();
-		LayoutModel2D model = new MapLayoutModel2D<>(new Box2D(env.getMinY(), env.getMinY(), env.getWidth(), env.getHeight()));
-		for (Object s : graph.vertexSet()) {
-			if (s instanceof IShape) {
-				model.put(s, new Point2D(((IShape)s).getLocation().getX(), ((IShape)s).getLocation().getY()));
-			}
-		}
-		return model;
+	static Object toModel(final GamaGraph graph, final IShape bounds) {
+		return null;
 	}
 	
 	@operator (
@@ -1954,10 +1626,7 @@ public class Graphs {
 	@no_test
 	public static IGraph layoutForce(final IScope scope, final GamaGraph graph, final IShape bounds,
 			final double coeffForce, final double coolingRate, final int maxIteration) {
-		final LayoutForceDirected sim =
-				new LayoutForceDirected(graph, bounds, coeffForce, coolingRate, maxIteration, false, 0);
-		sim.startSimulation(scope);
-		return graph;
+		return null;
 	}
 
 	@operator (
@@ -2021,44 +1690,7 @@ public class Graphs {
 			value = "retur for each edge, its strahler number")
 	@no_test
 	public static IMap strahlerNumber(final IScope scope, final GamaGraph graph) {
-		final IMap<Object, Integer> results = GamaMapFactory.create(Types.NO_TYPE, Types.INT);
-		if (graph == null || graph.isEmpty(scope)) { return results; }
-		
-		IGraph g = graph.getConnected() ? asDirectedGraph(graph):  asDirectedGraph(ReduceToMainconnectedComponentOf(scope, graph));
-		if ( g.hasCycle()) {
-			throw GamaRuntimeException
-					.error("Strahler number can only be computed for Tree (connected graph with no cycle)!", scope);
-		}
-
-		List currentEdges = of(g.getEdges()).filter(a -> g.outDegreeOf(g.getEdgeTarget(a)) == 0).toList();
-		while (!currentEdges.isEmpty()) {
-			final List newList = new ArrayList<>();
-			for (final Object e : currentEdges) {
-				final List previousEdges = inEdgesOf(scope, g, g.getEdgeSource(e));
-				final List nextEdges = outEdgesOf(scope, g, g.getEdgeTarget(e));
-				if (nextEdges.isEmpty()) {
-					results.put(e, 1);
-					newList.addAll(previousEdges);
-				} else {
-					final boolean notCompleted = nextEdges.stream().anyMatch(a -> !results.containsKey(a));
-					if (notCompleted) {
-						newList.add(e);
-					} else {
-						final List<Integer> vals = of(nextEdges).map(a -> results.get(a)).toList();
-						final Integer maxVal = Collections.max(vals);
-						final int nbIt = Collections.frequency(vals, maxVal);
-						if (nbIt > 1) {
-							results.put(e, maxVal + 1);
-						} else {
-							results.put(e, maxVal);
-						}
-						newList.addAll(previousEdges);
-					}
-				}
-			}
-			currentEdges = newList;
-		}
-		return results;
+		return null;
 	}
 
 	@operator (
@@ -2426,19 +2058,7 @@ public class Graphs {
 	@no_test
 	public static IGraph generateGraphBarabasiAlbert(final IScope scope, final Integer initNbNodes ,final Integer nbEdgesAdded, final Integer nbNodes,  final Boolean directed, final ISpecies node_species,
 			final ISpecies edges_species) {
-
-		BarabasiAlbertGraphGenerator gen = new BarabasiAlbertGraphGenerator(initNbNodes, nbEdgesAdded, nbNodes, scope.getSimulation().getRandomGenerator().getGenerator());
-		AbstractBaseGraph<String, DefaultEdge> graph = 
-				directed ?
-					new DirectedMultigraph(
-				            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true) :
-				new Multigraph(
-	            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true);
-		
-		gen.generateGraph(graph);
-		return new GamaGraph<>(scope, graph, node_species, edges_species);
-		
-
+		return null;
 	}
 	
 	@operator (
@@ -2569,17 +2189,7 @@ public class Graphs {
 	public static IGraph generateGraphWattsStrogatz(final IScope scope,final Integer nbNodes, final Double p, final Integer k,
 			 final Boolean directed, final ISpecies node_species,
 			final ISpecies edges_species) {
-		
-		WattsStrogatzGraphGenerator wsg = new WattsStrogatzGraphGenerator(nbNodes, k, p, false, scope.getSimulation().getRandomGenerator().getGenerator());
-		AbstractBaseGraph<String, DefaultEdge> graph = 
-				directed ?
-					new DirectedMultigraph(
-				            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true) :
-				new Multigraph(
-	            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true);
-		wsg.generateGraph(graph);
-		return new GamaGraph<>(scope, graph, node_species, edges_species);
-		
+		return null;
 	}
 	
 	@operator (
@@ -2695,17 +2305,7 @@ public class Graphs {
 			see = { "generate_barabasi_albert", "generate_watts_strogatz" })
 	@no_test 
 	public static IGraph generateGraphRandom(final IScope scope, final int nbNodes, final int nbEdges, final Boolean directed, final ISpecies node_species, final ISpecies edges_species) {
-		AbstractBaseGraph<String, DefaultEdge> graph = 
-				directed ?
-					new DirectedMultigraph(
-				            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true) :
-				new Multigraph(
-	            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true);
-		GnmRandomGraphGenerator gen = new GnmRandomGraphGenerator(nbNodes,nbEdges,scope.getSimulation().getSeed().longValue());
-		gen.generateGraph(graph, null);
-		
-		return new GamaGraph<>(scope, graph, node_species, edges_species);
-		
+		return null;
 	}
 	
 	@operator (
@@ -2789,20 +2389,7 @@ public class Graphs {
 			see = { "generate_barabasi_albert", "generate_watts_strogatz" })
 	@no_test 
 	public static IGraph generateGraphComplete(final IScope scope, final Boolean directed, final IList nodes, final ISpecies edges_species) {
-		AbstractBaseGraph<String, DefaultEdge> graph = 
-				directed ?
-					new DirectedMultigraph(
-				            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true) :
-				new Multigraph(
-	            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true);
-		for (int i = 0; i < nodes.size(); i++) {
-			graph.addVertex(i + "");
-		}
-		ComplementGraphGenerator gen = new ComplementGraphGenerator(graph);
-		gen.generateGraph(graph, null);
-		
-		return new GamaGraph<>(scope, graph, nodes,edges_species);
-		
+		return null;
 	}
 	
 	@operator (
@@ -2852,20 +2439,7 @@ public class Graphs {
 			see = { "generate_barabasi_albert", "generate_watts_strogatz" })
 	@no_test 
 	public static IGraph generateGraphComplete(final IScope scope, final int nbNodes,  final Boolean directed, final ISpecies node_species, final ISpecies edges_species) {
-		AbstractBaseGraph<String, DefaultEdge> graph = 
-				directed ?
-					new DirectedMultigraph(
-				            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true) :
-				new Multigraph(
-	            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, true);
-		for (int i = 0; i < nbNodes;i++) {
-			graph.addVertex(""+i);
-		}
-		ComplementGraphGenerator gen = new ComplementGraphGenerator(graph);
-		gen.generateGraph(graph, null);
-		
-		return new GamaGraph<>(scope, graph, node_species, edges_species);
-		
+		return null;
 	}
 	
 	@operator (
@@ -2923,23 +2497,11 @@ public class Graphs {
 			type = ITypeProvider.CONTENT_TYPE_AT_INDEX + 1,
 			category = { IOperatorCategory.GRAPH })
 	@doc (
-			value = "The Girvan–Newman algorithm is a hierarchical method used to detect communities. It detects communities by progressively removing edges from the original network."
+			value = "The Girvanï¿½Newman algorithm is a hierarchical method used to detect communities. It detects communities by progressively removing edges from the original network."
 					+ "It returns a list of list of vertices and takes as operand the graph and the number of clusters")
 	@no_test
 	public static IList GirvanNewmanClustering(final IScope scope, final IGraph graph, final int numCLusters) {
-		if (graph.getVertices().isEmpty() || graph.getEdges().isEmpty()) {
-			IList<IGraph> emptyL = GamaListFactory.create(Types.GRAPH);
-			emptyL.add((IGraph) graph.copy(scope));
-			return emptyL;
-		}
-		
-		GirvanNewmanClustering clustering = new GirvanNewmanClustering(graph, numCLusters);
-		Clustering clusters = clustering.getClustering();
-		IList clustersV = GamaListFactory.create(Types.LIST);
-		for (Object s : clusters.getClusters()) {
-			clustersV.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) s));
-		}
-		return clustersV;
+		return null;
 	}
 	
 	
@@ -2954,19 +2516,7 @@ public class Graphs {
 					+ "It returns a list of list of vertices and takes as operand the graph and the number of clusters")
 	@no_test
 	public static IList KSpanningTreeClusteringAfl(final IScope scope, final IGraph graph, final int numCLusters) {
-		if (graph.getVertices().isEmpty() || graph.getEdges().isEmpty()) {
-			IList<IGraph> emptyL = GamaListFactory.create(Types.GRAPH);
-			emptyL.add((IGraph) graph.copy(scope));
-			return emptyL;
-		}
-		
-		KSpanningTreeClustering clustering = new KSpanningTreeClustering(graph, numCLusters);
-		Clustering clusters = clustering.getClustering();
-		IList clustersV = GamaListFactory.create(Types.LIST);
-		for (Object s : clusters.getClusters()) {
-			clustersV.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) s));
-		}
-		return clustersV;
+		return null;
 	}
 	
 	@operator (
@@ -2980,19 +2530,7 @@ public class Graphs {
 					+ "It returns a list of list of vertices and takes as operand the graph and maximal number of iteration")
 	@no_test
 	public static IList LabelPropagationClusteringAgl(final IScope scope, final IGraph graph, final int maxIteration) {
-		if (graph.getVertices().isEmpty() || graph.getEdges().isEmpty()) {
-			IList<IGraph> emptyL = GamaListFactory.create(Types.GRAPH);
-			emptyL.add((IGraph) graph.copy(scope));
-			return emptyL;
-		}
-		
-		LabelPropagationClustering  clustering= new LabelPropagationClustering(graph, maxIteration, scope.getSimulation().getRandomGenerator().getGenerator());
-		Clustering clusters = clustering.getClustering();
-		IList clustersV = GamaListFactory.create(Types.LIST);
-		for (Object s : clusters.getClusters()) {
-			clustersV.add(GamaListFactory.create(scope, graph.getGamlType().getKeyType(), (Set) s));
-		}
-		return clustersV;
+		return null;
 	}
 	
 	

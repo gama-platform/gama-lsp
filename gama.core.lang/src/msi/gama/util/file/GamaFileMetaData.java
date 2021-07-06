@@ -13,8 +13,6 @@ package msi.gama.util.file;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.lang.StringUtils;
-
 import ummisco.gama.dev.utils.DEBUG;
 
 /**
@@ -55,7 +53,7 @@ public abstract class GamaFileMetaData implements IGamaFileMetaData {
 	}
 
 	public GamaFileMetaData(final String propertyString) {
-		final String s = StringUtils.substringBefore(propertyString, DELIMITER);
+		final String s = "";
 		if (FAILED.equals(s)) {
 			hasFailed = true;
 		} else if (s == null || s.isEmpty()) {
@@ -71,7 +69,7 @@ public abstract class GamaFileMetaData implements IGamaFileMetaData {
 	}
 
 	protected String[] split(final String s) {
-		return StringUtils.splitByWholeSeparatorPreserveAllTokens(s, DELIMITER);
+		return null;
 	}
 
 	/**

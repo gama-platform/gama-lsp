@@ -10,13 +10,8 @@
  ********************************************************************************************************/
 package msi.gama.util.matrix;
 
-import static org.locationtech.jts.index.quadtree.IntervalSize.isZeroWidth;
-
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.locationtech.jts.index.quadtree.IntervalSize;
 
 import com.google.common.primitives.Doubles;
 
@@ -33,8 +28,6 @@ import msi.gaml.types.GamaMatrixType;
 import msi.gaml.types.IContainerType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
-import one.util.streamex.DoubleStreamEx;
-import one.util.streamex.StreamEx;
 
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 public class GamaFloatMatrix extends GamaMatrix<Double> {
@@ -134,13 +127,7 @@ public class GamaFloatMatrix extends GamaMatrix<Double> {
 
 	@Override
 	public boolean _contains(final IScope scope, final Object o) {
-		if (o instanceof Double) {
-			final Double d = (Double) o;
-			for (int i = 0; i < getMatrix().length; i++) {
-				if (IntervalSize.isZeroWidth(getMatrix()[i], d)) return true;
-			}
-		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -169,7 +156,7 @@ public class GamaFloatMatrix extends GamaMatrix<Double> {
 	 * @return the matrix concatenated
 	 */
 	public GamaFloatMatrix _opAppendVertically(final IScope scope, final GamaFloatMatrix b) {
-		final double[] mab = ArrayUtils.addAll(getMatrix(), b.getMatrix());
+		final double[] mab = {0.0};
 		return new GamaFloatMatrix(numCols, numRows + b.getRows(scope), mab);
 	}
 
@@ -262,13 +249,7 @@ public class GamaFloatMatrix extends GamaMatrix<Double> {
 	}
 
 	private boolean remove(final double o) {
-		for (int i = 0; i < getMatrix().length; i++) {
-			if (isZeroWidth(getMatrix()[i], o)) {
-				getMatrix()[i] = 0d;
-				return true;
-			}
-		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -286,14 +267,7 @@ public class GamaFloatMatrix extends GamaMatrix<Double> {
 	}
 
 	private boolean removeAll(final double o) {
-		boolean removed = false;
-		for (int i = 0; i < getMatrix().length; i++) {
-			if (isZeroWidth(getMatrix()[i], o)) {
-				getMatrix()[i] = 0d;
-				removed = true;
-			}
-		}
-		return removed;
+		return true;
 	}
 
 	@Override
@@ -484,8 +458,8 @@ public class GamaFloatMatrix extends GamaMatrix<Double> {
 	}
 
 	@Override
-	public StreamEx<Double> stream(final IScope scope) {
-		return DoubleStreamEx.of(matrix).boxed();
+	public Object stream(final IScope scope) {
+		return null;
 	}
 
 	@Override

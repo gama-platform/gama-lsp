@@ -13,12 +13,8 @@ package msi.gama.metamodel.shape;
 import static java.lang.Math.sqrt;
 import static msi.gaml.operators.Maths.round;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.util.NumberUtil;
-
 import msi.gama.common.geometry.Envelope3D;
-import msi.gama.common.geometry.GeometryUtils;
+//import msi.gama.common.geometry.ObjectUtils;
 import msi.gama.common.interfaces.BiConsumerWithPruning;
 import msi.gama.common.interfaces.IAttributed;
 import msi.gama.common.preferences.GamaPreferences;
@@ -29,19 +25,21 @@ import msi.gama.util.GamaListFactory;
 import msi.gama.util.GamaMapFactory;
 import msi.gama.util.IList;
 import msi.gama.util.IMap;
-import msi.gaml.types.GamaGeometryType;
 import msi.gaml.types.IType;
 import msi.gaml.types.Types;
 
 /**
- * A mutable point in 3D, deriving from JTS Coordinate, that serves muliple purposes (location of agents, of geometries
- * -- through GamaCoordinateSequence --, vectors -- see Rotation3D and AxisAngle, etc.)
+ * A mutable point in 3D, deriving from JTS Object, that serves muliple purposes (location of agents, of geometries
+ * -- through GamaObjectSequence --, vectors -- see Rotation3D and AxisAngle, etc.)
  *
  * @author drogoul 11 oct. 07
  */
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 
-public class GamaPoint extends Coordinate implements ILocation {
+public class GamaPoint implements ILocation {
+	public double x;
+	public double y;
+	public double z;
 
 	@Override
 	public GamaPoint toGamaPoint() {
@@ -62,12 +60,8 @@ public class GamaPoint extends Coordinate implements ILocation {
 		setLocation(x, y, z);
 	}
 
-	public GamaPoint(final Coordinate coord) {
-		if (coord == null) {
-			setLocation(0d, 0d, 0d);
-		} else {
-			setLocation(coord.x, coord.y, coord.z);
-		}
+	public GamaPoint(final Object coord) {
+		setLocation(0d, 0d, 0d);
 	}
 
 	@Override
@@ -88,24 +82,12 @@ public class GamaPoint extends Coordinate implements ILocation {
 		return this;
 	}
 
-	@Override
-	public void setCoordinate(final Coordinate c) {
-		setLocation(c.x, c.y, c.z);
+	public void setObject(final Object c) {
+		return;
 	}
 
-	@Override
 	public void setOrdinate(final int i, final double v) {
-		switch (i) {
-			case X:
-				setX(v);
-				break;
-			case Y:
-				setY(v);
-				break;
-			case Z:
-				setZ(v);
-				break;
-		}
+		return;
 	}
 
 	@Override
@@ -218,61 +200,45 @@ public class GamaPoint extends Coordinate implements ILocation {
 		return new GamaPoint(x, y, z);
 	}
 
-	@Override
-	public GamaShape getGeometry() {
-		return GamaGeometryType.createPoint(this);
+	public GamaShape getObject() {
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see msi.gama.interfaces.IGeometry#setGeometry(msi.gama.util.GamaGeometry)
+	 * @see msi.gama.interfaces.IObject#setObject(msi.gama.util.GamaObject)
 	 */
-	@Override
-	public void setGeometry(final IShape g) {
+	public void setObject(final IShape g) {
 		setLocation(g.getLocation());
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#getInnerGeometry()
+	 * @see msi.gama.interfaces.IObject#getInnerObject()
 	 */
-	@Override
-	public Geometry getInnerGeometry() {
-		return GeometryUtils.GEOMETRY_FACTORY.createPoint(this);
+	public Object getInnerObject() {
+		return null;
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#getEnvelope()
+	 * @see msi.gama.interfaces.IObject#getEnvelope()
 	 */
 	@Override
 	public Envelope3D getEnvelope() {
-		return Envelope3D.of((Coordinate) this);
+		return null;
 	}
 
 	@Override
 	public boolean equals(final Object o) {
-		if (o instanceof GamaPoint) {
-			final double tolerance = GamaPreferences.External.TOLERANCE_POINTS.getValue();
-			if (tolerance > 0.0) { return equalsWithTolerance((GamaPoint) o, tolerance); }
-			return equals3D((GamaPoint) o);
-		}
-		return super.equals(o);
+		return true;
 	}
 
-	@Override
-	public boolean equalsWithTolerance(final Coordinate c, final double tolerance) {
-		if (tolerance == 0.0) { return equals3D(c); }
-		if (!NumberUtil.equalsWithTolerance(this.x, c.x, tolerance)) { return false; }
-		if (!NumberUtil.equalsWithTolerance(this.y, c.y, tolerance)) { return false; }
-		if (!Double.isNaN(z) && !Double.isNaN(c.z) && !NumberUtil.equalsWithTolerance(this.z, c.z, tolerance)) {
-			return false;
-		}
-
+	public boolean equalsWithTolerance(final Object c, final double tolerance) {
 		return true;
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#covers(msi.gama.interfaces.IGeometry)
+	 * @see msi.gama.interfaces.IObject#covers(msi.gama.interfaces.IObject)
 	 */
 	@Override
 	public boolean covers(final IShape g) {
@@ -281,7 +247,7 @@ public class GamaPoint extends Coordinate implements ILocation {
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#euclidianDistanceTo(msi.gama.interfaces.IGeometry)
+	 * @see msi.gama.interfaces.IObject#euclidianDistanceTo(msi.gama.interfaces.IObject)
 	 */
 	@Override
 	public double euclidianDistanceTo(final IShape g) {
@@ -298,11 +264,11 @@ public class GamaPoint extends Coordinate implements ILocation {
 	}
 
 	public double euclidianDistanceTo(final GamaPoint p) {
-		return distance3D(p);
+		return 0.0;
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#intersects(msi.gama.interfaces.IGeometry)
+	 * @see msi.gama.interfaces.IObject#intersects(msi.gama.interfaces.IObject)
 	 */
 	@Override
 	public boolean intersects(final IShape g) {
@@ -317,7 +283,7 @@ public class GamaPoint extends Coordinate implements ILocation {
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#getAgent()
+	 * @see msi.gama.interfaces.IObject#getAgent()
 	 */
 	@Override
 	public IAgent getAgent() {
@@ -325,22 +291,20 @@ public class GamaPoint extends Coordinate implements ILocation {
 	}
 
 	/**
-	 * @see msi.gama.interfaces.IGeometry#setAgent(msi.gama.interfaces.IAgent)
+	 * @see msi.gama.interfaces.IObject#setAgent(msi.gama.interfaces.IAgent)
 	 */
 	@Override
 	public void setAgent(final IAgent agent) {}
 
 	/**
-	 * @see msi.gama.common.interfaces.IGeometry#setInnerGeometry(org.locationtech.jts.geom.Geometry)
+	 * @see msi.gama.common.interfaces.IObject#setInnerObject(org.locationtech.jts.geom.Object)
 	 */
-	@Override
-	public void setInnerGeometry(final Geometry point) {
-		final Coordinate p = point.getCoordinate();
-		setLocation(p.x, p.y, p.z);
+	public void setInnerObject(final Object point) {
+		return;
 	}
 
 	/**
-	 * @see msi.gama.common.interfaces.IGeometry#dispose()
+	 * @see msi.gama.common.interfaces.IObject#dispose()
 	 */
 	@Override
 	public void dispose() {}
@@ -406,13 +370,8 @@ public class GamaPoint extends Coordinate implements ILocation {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
-	@Override
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + hashCode(x);
-		result = 370 * result + hashCode(y);
-		result = 3700 * result + hashCode(z);
-		return result;
+		return 0;
 	}
 
 	public GamaPoint normalized() {
@@ -601,7 +560,6 @@ public class GamaPoint extends Coordinate implements ILocation {
 		return false;
 	}
 
-	@Override
 	public double getOrdinate(final int i) {
 		switch (i) {
 			case 0:
@@ -655,4 +613,33 @@ public class GamaPoint extends Coordinate implements ILocation {
 	@Override
 	public void copyAttributesOf(final IAttributed source) {}
 
+	@Override
+	public IShape getGeometry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object getInnerGeometry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setGeometry(IShape g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setInnerGeometry(Object intersection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

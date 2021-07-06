@@ -15,7 +15,6 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 
-import org.locationtech.jts.geom.Envelope;
 
 import msi.gama.common.geometry.Envelope3D;
 // import msi.gama.common.interfaces.IDisplaySurface.IZoomListener;
@@ -156,7 +155,7 @@ public interface IDisplaySurface extends DisplayDataListener, IScoped, IDisposab
 
 	Collection<IEventLayerListener> getLayerListeners();
 
-	Envelope getVisibleRegionForLayer(ILayer currentLayer);
+	Object getVisibleRegionForLayer(ILayer currentLayer);
 
 	int getFPS();
 

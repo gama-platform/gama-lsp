@@ -11,8 +11,6 @@
 package msi.gama.util.file;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang.StringUtils.join;
-import static org.apache.commons.lang.StringUtils.splitByWholeSeparatorPreserveAllTokens;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -57,18 +55,12 @@ public class GamlFileInfo extends GamaFileMetaData {
 
 	public GamlFileInfo(final String propertyString) {
 		super(propertyString);
-		final String[] values = split(propertyString);
-		int size = values.length;
-		final List<String> imports = asList(splitByWholeSeparatorPreserveAllTokens(values[1], SUB_DELIMITER));
-		this.imports = imports == null || imports.isEmpty() || imports.contains(null) ? null : imports;
-		final List<String> uses = asList(splitByWholeSeparatorPreserveAllTokens(values[2], SUB_DELIMITER));
-		this.uses = uses == null || uses.isEmpty() || uses.contains(null) ? null : uses;
-		final List<String> exps = asList(splitByWholeSeparatorPreserveAllTokens(values[3], SUB_DELIMITER));
-		this.experiments = exps == null || exps.isEmpty() || exps.contains(null) ? null : exps;
-		final List<String> tags =
-				size < 5 ? null : asList(splitByWholeSeparatorPreserveAllTokens(values[4], SUB_DELIMITER));
-		this.tags = tags == null || tags.isEmpty() || tags.contains(null) ? null : tags;
-		invalid = size > 5 ? values[5].equals("TRUE") : values[4].equals("TRUE");
+		int size = 0;
+		this.imports = null;
+		this.uses = null;
+		this.experiments = null;
+		this.tags = null;
+		this.invalid = true;
 	}
 
 	/**
@@ -105,10 +97,10 @@ public class GamlFileInfo extends GamaFileMetaData {
 	public String toPropertyString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toPropertyString()).append(DELIMITER);
-		sb.append(imports == null ? "" : join(imports, SUB_DELIMITER)).append(DELIMITER);
-		sb.append(uses == null ? "" : join(uses, SUB_DELIMITER)).append(DELIMITER);
-		sb.append(experiments == null ? "" : join(experiments, SUB_DELIMITER)).append(DELIMITER);
-		sb.append(tags == null ? "" : join(tags, SUB_DELIMITER)).append(DELIMITER);
+		sb.append(imports == null ? "" : (imports + SUB_DELIMITER)).append(DELIMITER);
+		sb.append(uses == null ? "" : (uses + SUB_DELIMITER)).append(DELIMITER);
+		sb.append(experiments == null ? "" : (experiments + SUB_DELIMITER)).append(DELIMITER);
+		sb.append(tags == null ? "" : (tags + SUB_DELIMITER)).append(DELIMITER);
 		sb.append(invalid ? "TRUE" : "FALSE").append(DELIMITER);
 		return sb.toString();
 

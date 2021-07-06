@@ -16,7 +16,6 @@ import org.eclipse.emf.common.util.URI;
 
 import msi.gama.common.preferences.GamaPreferences;
 import msi.gama.util.GamaColor;
-import one.util.streamex.StreamEx;
 
 public abstract class AbstractSummary<S extends WithTestSummary<?>> {
 	private static int COUNT = 0;
@@ -108,7 +107,7 @@ public abstract class AbstractSummary<S extends WithTestSummary<?>> {
 		// DEBUG.OUT("Comparing " + this.uri + " to " + uri);
 		// }
 		if (uri.equals(this.uri)) { return this; }
-		return StreamEx.ofValues(getSummaries()).findFirst(s -> s.getSummaryOf(uri) != null).orElse(null);
+		return null;
 	}
 
 }
