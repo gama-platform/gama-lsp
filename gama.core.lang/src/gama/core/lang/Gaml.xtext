@@ -383,8 +383,18 @@ EquationDefinition:
 	S_Equations | EquationFakeDefinition;
 
 TypeDefinition:
-	S_Species | TypeFakeDefinition;
-
+	S_Species | BuiltInTypesDefinition | TypeFakeDefinition;
+	
+BuiltInTypesDefinition:
+	'action' | 'agent' | 'attributes' | 'BDIPlan' | 'bool' | 'container' |
+	'conversation' | 'date' | 'emotion' | 'file' | 'float' | 'font' |
+	'gaml_type' | 'geometry' | 'graph' | 'int' | 'kml' | 'list' |
+	'map' | 'material' | 'matrix' | 'mental_state' | 'message' | 'Norm' |
+	'pair' | 'path' | 'point' | 'predicate' | 'regression' | 'rgb' |
+	'Sanction' | 'skill' | 'social_link' | 'species' | 'string' | 'topology' |
+	'unknown' | 'agent' | 'AgentDB' | 'base_edge' | 'experiment' | 'graph_edge' |
+	'graph_node' | 'physical_world' | 'world'
+;
 
 VarDefinition:
 	=>S_Declaration | (Model | ArgumentDefinition | DefinitionFacet | VarFakeDefinition | Import | S_Experiment);
