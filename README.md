@@ -30,7 +30,7 @@ First, install `lspconfig` package. Then, inside `.config/nvim` directory, creat
 
 ```lua
 local lspconfig = require('lspconfig')
-local configs = require('lspconfig.configs')
+local configs = require('lspconfig/configs')
 
 if "table" ~= type(lspconfig.gaml) then
     configs.gaml = {
