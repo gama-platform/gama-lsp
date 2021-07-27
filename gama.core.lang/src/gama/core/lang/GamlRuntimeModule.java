@@ -3,9 +3,17 @@
  */
 package gama.core.lang;
 
+import org.eclipse.xtext.service.SingletonBinding;
+import gama.core.lang.scoping.GamlGlobalScopeProvider;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class GamlRuntimeModule extends AbstractGamlRuntimeModule {
+	@Override
+	@SingletonBinding ()
+	public Class<? extends org.eclipse.xtext.scoping.IGlobalScopeProvider> bindIGlobalScopeProvider() {
+		return GamlGlobalScopeProvider.class;
+	}
+
 }

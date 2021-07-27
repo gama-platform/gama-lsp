@@ -2,21 +2,25 @@ package gama.core.lang.scoping;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.scoping.impl.ImportUriGlobalScopeProvider;
 
 import com.google.inject.Singleton;
 
+import gama.core.lang.common.interfaces.IGamlDescription;
+import gama.core.lang.gaml.GamlDefinition;
 import gama.core.lang.gaml.GamlPackage;
 
 @Singleton
-public class GlobalScopeProvider extends ImportUriGlobalScopeProvider {
+public class GamlGlobalScopeProvider extends ImportUriGlobalScopeProvider {
 	private static EClass eType, eVar, eSkill, eAction, eUnit, eEquation;
 	private static HashMap<EClass, Resource> resources;
 	private static HashMap<EClass, HashMap<QualifiedName, IEObjectDescription>> descriptions;
@@ -35,7 +39,17 @@ public class GlobalScopeProvider extends ImportUriGlobalScopeProvider {
 		}
 		return r;
 	}
+	
+	static {
+		// AD 15/01/16: added to make sure that the XText builder can wait
+		// until, at least, the main artefacts of GAMA have been built.
+		System.out.println("[DEBUG] GAMA building GAML artefacts in ");
+		initResources();
+	}
 
+	/*
+	 * This method should be the only entry point, merging createDescription
+	 */
 	static void initResources() {
 		eType = GamlPackage.eINSTANCE.getTypeDefinition();
 		eVar = GamlPackage.eINSTANCE.getVarDefinition();
