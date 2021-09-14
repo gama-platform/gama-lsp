@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:gaml="http://www.gama.msi/lang/gaml/Gaml">
+  <gaml:SkillFakeDefinition name="fsm"/>
+  <gaml:SkillFakeDefinition name="dynamic_body"/>
+  <gaml:SkillFakeDefinition name="skill_road_node"/>
+  <gaml:SkillFakeDefinition name="rules"/>
+  <gaml:SkillFakeDefinition name="network"/>
+  <gaml:SkillFakeDefinition name="weighted_tasks"/>
+  <gaml:SkillFakeDefinition name="music"/>
+  <gaml:SkillFakeDefinition name="static_body"/>
+  <gaml:SkillFakeDefinition name="pedestrian_road"/>
+  <gaml:SkillFakeDefinition name="user_only"/>
+  <gaml:SkillFakeDefinition name="fipa"/>
+  <gaml:SkillFakeDefinition name="moving"/>
+  <gaml:SkillFakeDefinition name="skill_road"/>
+  <gaml:SkillFakeDefinition name="probabilistic_tasks"/>
+  <gaml:SkillFakeDefinition name="user_first"/>
+  <gaml:SkillFakeDefinition name="simple_bdi"/>
+  <gaml:SkillFakeDefinition name="reflex"/>
+  <gaml:SkillFakeDefinition name="sorted_tasks"/>
+  <gaml:SkillFakeDefinition name="messaging"/>
+  <gaml:SkillFakeDefinition name="driving"/>
+  <gaml:SkillFakeDefinition name="MDXSKILL"/>
+  <gaml:SkillFakeDefinition name="user_last"/>
+  <gaml:SkillFakeDefinition name="moving3D"/>
+  <gaml:SkillFakeDefinition name="parallel_bdi"/>
+  <gaml:SkillFakeDefinition name="grid"/>
+  <gaml:SkillFakeDefinition name="advanced_driving"/>
+  <gaml:SkillFakeDefinition name="pedestrian"/>
+  <gaml:SkillFakeDefinition name="communicating"/>
+  <gaml:SkillFakeDefinition name="SQLSKILL"/>
+</xmi:XMI>

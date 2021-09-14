@@ -79,6 +79,9 @@
 						<fileset>
 							<directory>${basedir}/model/generated/</directory>
 						</fileset>
+						<fileset>
+							<directory>${basedir}/res/</directory>
+						</fileset>
 					</filesets>
 				</configuration>
 			</plugin>
