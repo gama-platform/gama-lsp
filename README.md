@@ -1,6 +1,17 @@
 # gama-lsp
 [Work in progress] Language Server for Gama Language
 
+## Current progress
+
+- [x] Detects Symbol/Symbol Types
+- [ ] Built in:
+	- [x] types
+	- [ ] actions
+	- [ ] facet
+- [ ] Better completion (current one is not very good?)
+- [ ] Auto format
+- [ ] CI/CD, I idealy when there are commit regarding the language in Gama repository, take related source code files and push them in this repo
+
 ## How to build
 
 1. Run `mvn package`
@@ -62,10 +73,3 @@ augroup END
 lua require("gaml")
 ```
 
-## Current progress
-
-- [x] Detects Symbol/Symbol Types
-- [ ] Built in type, actions, facet
-- [ ] Better completion (current one is shitty)
-- [ ] Auto format
-- [ ] CI/CD, I idealy when there are commit regarding the language in Gama repository, take related source code files and push them in this repo
