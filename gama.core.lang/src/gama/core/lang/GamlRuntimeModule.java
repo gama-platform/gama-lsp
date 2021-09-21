@@ -3,17 +3,35 @@
  */
 package gama.core.lang;
 
+import org.eclipse.xtext.linking.ILinkingService;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
+import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
+import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.service.SingletonBinding;
+import org.eclipse.xtext.validation.IResourceValidator;
+
+import com.google.inject.Binder;
+
+import gama.core.lang.linking.GamlLinkingService;
 import gama.core.lang.scoping.GamlGlobalScopeProvider;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class GamlRuntimeModule extends AbstractGamlRuntimeModule {
+	private static boolean initialized;
+
 	@Override
 	@SingletonBinding ()
 	public Class<? extends org.eclipse.xtext.scoping.IGlobalScopeProvider> bindIGlobalScopeProvider() {
 		return GamlGlobalScopeProvider.class;
 	}
+
+	@Override
+	public Class<? extends ILinkingService> bindILinkingService() {
+		return GamlLinkingService.class;
+	}
+
 
 }
