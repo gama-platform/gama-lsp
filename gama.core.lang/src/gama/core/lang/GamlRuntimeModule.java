@@ -17,6 +17,7 @@ import com.google.inject.Binder;
 
 import gama.core.lang.linking.GamlLinkingErrorMessageProvider;
 import gama.core.lang.linking.GamlLinkingService;
+import gama.core.lang.naming.GamlQualifiedNameProvider;
 import gama.core.lang.scoping.GamlGlobalScopeProvider;
 import gama.core.lang.resource.GamlResource;
 
@@ -25,6 +26,16 @@ import gama.core.lang.resource.GamlResource;
  */
 public class GamlRuntimeModule extends AbstractGamlRuntimeModule {
 	private static boolean initialized;
+
+//	public static void staticInitialize() {
+//		if (!initialized) {
+//			GamlExpressionFactory.registerParserProvider(() -> new GamlExpressionCompiler());
+//			GAML.registerInfoProvider(GamlResourceInfoProvider.INSTANCE);
+//			GAML.registerGamlEcoreUtils(EGaml.getInstance());
+//			initialized = true;
+//
+//		}
+//	}
 
 	@Override
 	@SingletonBinding ()
@@ -46,4 +57,23 @@ public class GamlRuntimeModule extends AbstractGamlRuntimeModule {
 		return GamlResource.class;
 	}
 
+//	@Override
+//	public void configure(final Binder binder) {
+//		super.configure(binder);
+//		staticInitialize();
+//		// binder.bind(ExpressionDescriptionBuilder.class);
+//		// binder.bind(IDocManager.class).to(GamlResourceDocumenter.class);
+//		// binder.bind(GamlSyntacticConverter.class);
+//		binder.bind(IDefaultResourceDescriptionStrategy.class).to(GamlResourceDescriptionStrategy.class);
+//		binder.bind(IQualifiedNameConverter.class).to(GamlNameConverter.class);
+//		binder.bind(IResourceDescription.Manager.class).to(GamlResourceDescriptionManager.class);
+//		// binder.bind(IOutputConfigurationProvider.class).to(GamlOutputConfigurationProvider.class);
+//		binder.bind(IResourceValidator.class).to(GamlResourceValidator.class);
+//		binder.bind(ErrorToDiagnoticTranslator.class);
+//	}
+	
+	@Override
+	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return GamlQualifiedNameProvider.class;
+	}
 }
