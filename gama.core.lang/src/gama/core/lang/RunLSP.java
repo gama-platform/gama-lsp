@@ -1,53 +1,53 @@
 package gama.core.lang;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Map;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.Channels;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.Function;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.eclipse.xtext.ide.server.ServerLauncher;
+import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.MessageConsumer;
+import org.eclipse.lsp4j.services.LanguageClient;
+import org.eclipse.xtext.ide.server.LanguageServerImpl;
+import org.eclipse.xtext.ide.server.ServerModule;
 
-import gama.core.lang.scoping.GamlGlobalScopeProvider;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 
 public class RunLSP {
-
-	public static void main(String[] args) {
-		ServerLauncher.main(args);
-	}
-	
-	public static void print(String a) {
-		System.out.println(a);
-	}
-	
-	public static void debugResource(String path) {
-
-		ResourceSet rs = GamlGlobalScopeProvider.rs;
-		Map<Object, Object> opt = rs.getLoadOptions();
-		XMIResource r = new XMIResourceImpl();
-		// Resource r = new ResourceImpl(URI.createFileURI(path));
-		InputStream f = GamlGlobalScopeProvider.getFileFromResourceAsStream(path);
-		try {
-			r.load(f, Collections.EMPTY_MAP);
-			print("" + r.isLoaded());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void main(String[] args) throws InterruptedException, IOException {
+		Injector injector = Guice.createInjector(new ServerModule());
+		LanguageServerImpl languageServer = injector.getInstance(LanguageServerImpl.class);
+		Function<MessageConsumer, MessageConsumer> wrapper = consumer -> {
+			MessageConsumer result = consumer;
+			return result;
+		};
+		Launcher<LanguageClient> launcher = createSocketLauncher(languageServer, LanguageClient.class, new InetSocketAddress("localhost", 50000), Executors.newCachedThreadPool(), wrapper);
+		languageServer.connect(launcher.getRemoteProxy());
+		Future<?> future = launcher.startListening();
+		while (!future.isDone()) {
+			Thread.sleep(10_000l);
 		}
-//		TreeIterator<EObject> iter = r.getAllContents();
-//		iter.forEachRemaining(c -> {
-//			print(c.getClass().getName());
-//		});
-		// Resource r = rs.getResource(URI.createFileURI(path), false);
 	}
+	
+    static <T> Launcher<T> createSocketLauncher(Object localService, Class<T> remoteInterface, SocketAddress socketAddress, ExecutorService executorService, Function<MessageConsumer, MessageConsumer> wrapper) throws IOException {
+        AsynchronousServerSocketChannel serverSocket = AsynchronousServerSocketChannel.open().bind(socketAddress);
+        AsynchronousSocketChannel socketChannel;
+        try {
+            socketChannel = serverSocket.accept().get();
+            return Launcher.createIoLauncher(localService, remoteInterface, Channels.newInputStream(socketChannel), Channels.newOutputStream(socketChannel), executorService, wrapper);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
